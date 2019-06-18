@@ -1,7 +1,7 @@
-const ImageFormStyles = {
+const ImageFormStyles = theme => ({
   container: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     flexDirection: 'row',
     margin: '0px 20px 0px 20px'
   },
@@ -24,7 +24,15 @@ const ImageFormStyles = {
     maxWidth: "600px !important",
     maxHeight: "400px !important",
     alignSelf: "center"
-  }
-}
+  },
+  inputButtonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+});
 
 export { ImageFormStyles };
