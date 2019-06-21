@@ -2,51 +2,80 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import { SnackbarContentWrapper } from '../index';
 import { ImageService } from '../../services';
 import { ImageFormStyles } from './image-form.styles';
+import { Image } from '../../models';
 
 const imageService = new ImageService();
 const useStyles = makeStyles(ImageFormStyles);
 
 /**
  * Form for manipulating a single image
- * @param {Object} props properties to render the component 
+ * @param {Object} props properties to render in the component 
  */
-const ImageForm = ({imageId}) => {
-  const [image, setImage] = useState();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(true);
-  const [error, setError] = useState(undefined);
+const ImageForm = ({routeHistory, imageId}) => {
   const classes = useStyles();
+  const [image, setImage] = useState(new Image());  // Image object being displayed
+  const [isValidImage, setIsValidImage] = useState(false);  // Are we creating a new image, or modifying an existing one?
+  const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
+  const [inputIsDisabled, setInputIsDisabled] = useState(false);  // Should input buttons be disabled?
+  const [snackbarStatus, setSnackbarStatus] = useState('success');  // Status of the snackbar
+  const [snackbarContent, setSnackbarContent] = useState(''); // Content of the snackbar
+  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);  // Visibility state of the snackbar
+
+  /**
+   * @param {string} variant of the snackbar to display
+   * @param {string} message to display in the snackbar
+   */
+  const setSnackbar = (variant, message) => {
+    setSnackbarStatus(variant);
+    setSnackbarContent(message);
+    setSnackBarIsOpen(true);
+  }
 
   /**
    * Update the image data when the imageId prop is modified
    */
   useEffect(() => {
-    async function getImage() {
-      let data = await imageService.getImage(imageId);
-      if (data) {
-        setImage(data);
-        setError(undefined);
-        setHasError(false);
-      } else {
-        setError(`Error Loading image: ${imageId}`);
-        setHasError(true);
+    async function getImageAsync() {
+      if (imageId) {
+        try {
+          setPageIsLoaded(false);
+          setImage(await imageService.getImage(imageId));
+          setIsValidImage(true);
+        } catch (error) {
+          setIsValidImage(false);
+          routeHistory.push('/dashboard/image/');
+          setSnackbar('error', error.message);
+        }
       }
-      setIsLoaded(true);
+      setPageIsLoaded(true);
     };
-    getImage();
-  }, [imageId]);
+    getImageAsync();
+  }, [imageId, routeHistory]);
 
   /**
    * Delete the current image
    */
-  const handleDelete = () => {
-    console.log('deleting image');
+  const handleDeleteAsync = async () => {
+    try {
+      setInputIsDisabled(true);
+      const result = await imageService.deleteImage(imageId);
+      image.reset();
+      setIsValidImage(false);
+      routeHistory.push('/dashboard/image/');
+      setSnackbar('success', `Deleted ${result.data} image(s): ${imageId}`);
+    } catch (error) {
+      setSnackbar('error', error.message);
+    } finally {
+      setInputIsDisabled(false);
+    }
   };
 
-  if (isLoaded && !hasError) {
+  if (pageIsLoaded) {
     return (
       <Fragment>
         <div className={classes.container}>
@@ -66,71 +95,84 @@ const ImageForm = ({imageId}) => {
             <TextField 
               id="id" 
               label="id" 
-              defaultValue={image.id} 
+              value={image.id}
               margin="normal" 
               variant="outlined" 
               disabled />      
             <TextField 
               id="thumbnail-url" 
               label="Thumbnail url" 
-              defaultValue={image.thumbnailUrl} 
+              value={image.thumbnailUrl}
               margin="normal" 
-              variant="outlined" />
+              variant="outlined" 
+              disabled={inputIsDisabled} />
             <TextField 
               id="image-url" 
               label="Image url" 
-              defaultValue={image.imageUrl} 
+              value={image.imageUrl} 
               margin="normal" 
-              variant="outlined" />
+              variant="outlined"
+              disabled={inputIsDisabled} />
             <TextField 
               id="title" 
               label="Title" 
-              defaultValue={image.title} 
+              value={image.title} 
               margin="normal" 
-              variant="outlined" />
+              variant="outlined"
+              disabled={inputIsDisabled} />
             <TextField 
               id="description" 
               label="Description" 
-              defaultValue={image.description} 
+              value={image.description} 
               margin="normal" 
               variant="outlined" 
               multiline 
-              rows="4" />
+              rows="4"
+              disabled={inputIsDisabled} />
             <TextField 
               id="location" 
               label="location" 
-              defaultValue={image.location} 
+              value={image.location} 
               margin="normal" 
-              variant="outlined" />
+              variant="outlined"
+              disabled={inputIsDisabled} />
             <div className={classes.inputButtonGroup}>
-              <Button 
+              {isValidImage ? <Button
+                  id="btn-delete"
+                  variant="contained" 
+                  color="secondary" 
+                  className={classes.button} 
+                  onClick={handleDeleteAsync}
+                  disabled={inputIsDisabled}
+                  hidden>
+                  Delete
+                </Button> : undefined
+              }
+              <Button
+                id="btn-update"
                 variant="contained" 
-                color="secondary" 
                 className={classes.button} 
-                onClick={handleDelete}>
-                Delete
-              </Button>              
-              <Button 
-                variant="contained" 
-                className={classes.button} 
-                disabled>
+                disabled={inputIsDisabled}>
                 Update
               </Button>
             </div>
           </form>
         </div>
+        <Snackbar
+          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+          open={snackbarIsOpen}>
+          <SnackbarContentWrapper
+            className={classes.snackbarMargin}
+            onClose={() => setSnackBarIsOpen(false)}
+            variant={snackbarStatus}
+            message={snackbarContent}/>
+        </Snackbar>
       </Fragment>
-    );
-  } else if (isLoaded && hasError) {
-    return (
-      <div className={classes.container}>
-        <p>{error}</p>
-      </div>
     );
   } else {
     return (
-      <div className={classes.container}>
-        <CircularProgress />
+      <div className={classes.progressBarContainer}>
+        <LinearProgress />
       </div>
     );
   }

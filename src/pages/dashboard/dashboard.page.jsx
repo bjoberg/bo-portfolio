@@ -5,9 +5,11 @@ import { ImageForm } from '../../components';
  * Page for interacting with portfolio data
  * @param {Object} props properties to render the page
  */
-function DashboardPage({match}) {
+function DashboardPage({history, match}) {
   return (
-    <ImageForm imageId={match.params.id} />
+    <ImageForm 
+      routeHistory={history}
+      imageId={match.params.id} />
   );
 };
 

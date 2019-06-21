@@ -4,7 +4,13 @@ import { DashboardPage } from './pages'
 
 const Routes = () => (
   <Switch>
-    <Route path="/dashboard/image/:id" component={DashboardPage} />
+    <Route
+      exact
+      path="/dashboard/image"
+      component={DashboardPage} />
+    <Route
+      path="/dashboard/image/:id"
+      component={DashboardPage} />
   </Switch>
 );
 

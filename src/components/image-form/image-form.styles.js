@@ -30,9 +30,15 @@ const ImageFormStyles = theme => ({
     flexDirection: 'row',
     justifyContent: 'flex-end'
   },
+  progressBarContainer: {
+    flexGrow: 1,
+  },
   button: {
     margin: theme.spacing(1),
   },
+  snackbarMargin: {
+    margin: theme.spacing(1),
+  }
 });
 
 export { ImageFormStyles };
