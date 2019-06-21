@@ -75,6 +75,18 @@ const ImageForm = ({routeHistory, imageId}) => {
     }
   };
 
+  const handleUpdateImage = async (e) => {
+    setImage({
+      ...image,
+      [e.target.id]: e.target.value
+    });
+    console.log(image);
+  }
+
+  const handleSaveAsync = async () => {
+    console.log(image);
+  }
+
   if (pageIsLoaded) {
     return (
       <Fragment>
@@ -104,7 +116,8 @@ const ImageForm = ({routeHistory, imageId}) => {
               label="Thumbnail url" 
               value={image.thumbnailUrl}
               margin="normal" 
-              variant="outlined" 
+              variant="outlined"
+              onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <TextField 
               id="image-url" 
@@ -112,6 +125,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               value={image.imageUrl} 
               margin="normal" 
               variant="outlined"
+              onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <TextField 
               id="title" 
@@ -119,6 +133,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               value={image.title} 
               margin="normal" 
               variant="outlined"
+              onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <TextField 
               id="description" 
@@ -128,6 +143,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               variant="outlined" 
               multiline 
               rows="4"
+              onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <TextField 
               id="location" 
@@ -135,6 +151,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               value={image.location} 
               margin="normal" 
               variant="outlined"
+              onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <div className={classes.inputButtonGroup}>
               {isValidImage ? <Button
@@ -151,7 +168,8 @@ const ImageForm = ({routeHistory, imageId}) => {
               <Button
                 id="btn-update"
                 variant="contained" 
-                className={classes.button} 
+                className={classes.button}
+                onClick={handleSaveAsync}
                 disabled={inputIsDisabled}>
                 Update
               </Button>
