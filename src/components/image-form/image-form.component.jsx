@@ -7,10 +7,17 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { SnackbarContentWrapper } from '../index';
 import { ImageService } from '../../services';
 import { ImageFormStyles } from './image-form.styles';
-import { Image } from '../../models';
 
 const imageService = new ImageService();
 const routeBase = '/dashboard/image/';
+const ImageObj = {
+  id: "",
+  thumbnailUrl: "",
+  imageUrl: "",
+  title: "",
+  description: "",
+  location: ""
+};
 const useStyles = makeStyles(ImageFormStyles);
 
 /**
@@ -19,7 +26,7 @@ const useStyles = makeStyles(ImageFormStyles);
  */
 const ImageForm = ({routeHistory, imageId}) => {
   const classes = useStyles();
-  const [image, setImage] = useState(new Image()); // Image object being displayed
+  const [image, setImage] = useState(ImageObj); // Image object being displayed
   const [isValidImage, setIsValidImage] = useState(false);  // Are we creating a new image, or modifying an existing one?
   const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
   const [inputIsDisabled, setInputIsDisabled] = useState(false);  // Should input buttons be disabled?
@@ -66,7 +73,7 @@ const ImageForm = ({routeHistory, imageId}) => {
     try {
       setInputIsDisabled(true);
       const result = await imageService.deleteImage(imageId);
-      image.reset();
+      setImage(ImageObj);
       setIsValidImage(false);
       routeHistory.push(routeBase);
       openSnackbar('success', `Deleted ${result.data} image(s): ${imageId}`);
@@ -82,7 +89,6 @@ const ImageForm = ({routeHistory, imageId}) => {
    * @param {SyntheticEvent} e event triggered by user input
    */
   const handleUpdateImage = async (e) => {
-    console.log(e);
     setImage({
       ...image,
       [e.target.id]: e.target.value
@@ -102,15 +108,15 @@ const ImageForm = ({routeHistory, imageId}) => {
         <div className={classes.container}>
           <div className={classes.main}>
             <img 
+              id="thumbnail" 
+              className={classes.photo} 
+              src={image.thumbnailUrl} 
+              alt="thumbnail" />            
+            <img 
               id="image" 
               className={classes.photo} 
               src={image.imageUrl} 
               alt="img" />
-            <img 
-              id="thumbnail" 
-              className={classes.photo} 
-              src={image.thumbnailUrl} 
-              alt="thumbnail" />
           </div>
           <form className={classes.details} autoComplete="off">
             <TextField 

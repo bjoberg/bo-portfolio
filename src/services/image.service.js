@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiError, Image } from '../models';
+import { ApiError } from '../models';
 
 /**
  * Service for reading, updating, and creating images
@@ -18,7 +18,7 @@ export default class ImageService {
         url: `/image/${id}`
       });
 
-      return new Image(response.data);
+      return response.data;
     } catch (error) {
       throw new ApiError(404, `Error retrieving image: ${id}`);
     }
