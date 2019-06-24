@@ -10,6 +10,7 @@ import { ImageFormStyles } from './image-form.styles';
 import { Image } from '../../models';
 
 const imageService = new ImageService();
+const routeBase = '/dashboard/image/';
 const useStyles = makeStyles(ImageFormStyles);
 
 /**
@@ -18,7 +19,7 @@ const useStyles = makeStyles(ImageFormStyles);
  */
 const ImageForm = ({routeHistory, imageId}) => {
   const classes = useStyles();
-  const [image, setImage] = useState(new Image());  // Image object being displayed
+  const [image, setImage] = useState(new Image()); // Image object being displayed
   const [isValidImage, setIsValidImage] = useState(false);  // Are we creating a new image, or modifying an existing one?
   const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
   const [inputIsDisabled, setInputIsDisabled] = useState(false);  // Should input buttons be disabled?
@@ -27,10 +28,11 @@ const ImageForm = ({routeHistory, imageId}) => {
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);  // Visibility state of the snackbar
 
   /**
+   * Open the snackbar as a notification
    * @param {string} variant of the snackbar to display
    * @param {string} message to display in the snackbar
    */
-  const setSnackbar = (variant, message) => {
+  const openSnackbar = (variant, message) => {
     setSnackbarStatus(variant);
     setSnackbarContent(message);
     setSnackBarIsOpen(true);
@@ -48,8 +50,8 @@ const ImageForm = ({routeHistory, imageId}) => {
           setIsValidImage(true);
         } catch (error) {
           setIsValidImage(false);
-          routeHistory.push('/dashboard/image/');
-          setSnackbar('error', error.message);
+          routeHistory.push(routeBase);
+          openSnackbar('error', error.message);
         }
       }
       setPageIsLoaded(true);
@@ -66,23 +68,30 @@ const ImageForm = ({routeHistory, imageId}) => {
       const result = await imageService.deleteImage(imageId);
       image.reset();
       setIsValidImage(false);
-      routeHistory.push('/dashboard/image/');
-      setSnackbar('success', `Deleted ${result.data} image(s): ${imageId}`);
+      routeHistory.push(routeBase);
+      openSnackbar('success', `Deleted ${result.data} image(s): ${imageId}`);
     } catch (error) {
-      setSnackbar('error', error.message);
+      openSnackbar('error', error.message);
     } finally {
       setInputIsDisabled(false);
     }
   };
 
+  /**
+   * Update the image object based on a change of a specific input field's value
+   * @param {SyntheticEvent} e event triggered by user input
+   */
   const handleUpdateImage = async (e) => {
+    console.log(e);
     setImage({
       ...image,
       [e.target.id]: e.target.value
     });
-    console.log(image);
   }
 
+  /**
+   * Save the image based on the values in the input fields
+   */
   const handleSaveAsync = async () => {
     console.log(image);
   }
@@ -112,7 +121,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               variant="outlined" 
               disabled />      
             <TextField 
-              id="thumbnail-url" 
+              id="thumbnailUrl" 
               label="Thumbnail url" 
               value={image.thumbnailUrl}
               margin="normal" 
@@ -120,7 +129,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               onChange={handleUpdateImage}
               disabled={inputIsDisabled} />
             <TextField 
-              id="image-url" 
+              id="imageUrl" 
               label="Image url" 
               value={image.imageUrl} 
               margin="normal" 
