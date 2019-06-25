@@ -1,10 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import { SnackbarContentWrapper } from '../index';
+import { ImageFormContent, ImageFormActions, SnackbarContentWrapper } from '../index';
 import { ImageService } from '../../services';
 import { ImageFormStyles } from './image-form.styles';
 
@@ -85,10 +83,10 @@ const ImageForm = ({routeHistory, imageId}) => {
   };
 
   /**
-   * Update the image object based on a change of a specific input field's value
+   * Update the image object state based on a change of a specific input field's value
    * @param {SyntheticEvent} e event triggered by user input
    */
-  const handleUpdateImage = async (e) => {
+  const handleTextFieldChange = (e) => {
     setImage({
       ...image,
       [e.target.id]: e.target.value
@@ -96,10 +94,21 @@ const ImageForm = ({routeHistory, imageId}) => {
   }
 
   /**
-   * Save the image based on the values in the input fields
+   * Update the image based on the values in the input fields
    */
-  const handleSaveAsync = async () => {
-    console.log(image);
+  const handleUpdateAsync = async () => {
+    try {
+      setInputIsDisabled(true);
+      const result = await imageService.updateImage(image);
+      const updateCount = result.count;
+      const id = result.data.id;
+      setIsValidImage(true);
+      openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setInputIsDisabled(false);
+    }
   }
 
   if (pageIsLoaded) {
@@ -111,83 +120,24 @@ const ImageForm = ({routeHistory, imageId}) => {
               id="thumbnail" 
               className={classes.photo} 
               src={image.thumbnailUrl} 
-              alt="thumbnail" />            
-            <img 
-              id="image" 
-              className={classes.photo} 
-              src={image.imageUrl} 
+              alt="thumbnail" />         
+            <img
+              id="image"
+              className={classes.photo}
+              src={image.imageUrl}
               alt="img" />
           </div>
           <form className={classes.details} autoComplete="off">
-            <TextField 
-              id="id" 
-              label="id" 
-              value={image.id}
-              margin="normal" 
-              variant="outlined" 
-              disabled />      
-            <TextField 
-              id="thumbnailUrl" 
-              label="Thumbnail url" 
-              value={image.thumbnailUrl}
-              margin="normal" 
-              variant="outlined"
-              onChange={handleUpdateImage}
-              disabled={inputIsDisabled} />
-            <TextField 
-              id="imageUrl" 
-              label="Image url" 
-              value={image.imageUrl} 
-              margin="normal" 
-              variant="outlined"
-              onChange={handleUpdateImage}
-              disabled={inputIsDisabled} />
-            <TextField 
-              id="title" 
-              label="Title" 
-              value={image.title} 
-              margin="normal" 
-              variant="outlined"
-              onChange={handleUpdateImage}
-              disabled={inputIsDisabled} />
-            <TextField 
-              id="description" 
-              label="Description" 
-              value={image.description} 
-              margin="normal" 
-              variant="outlined" 
-              multiline 
-              rows="4"
-              onChange={handleUpdateImage}
-              disabled={inputIsDisabled} />
-            <TextField 
-              id="location" 
-              label="location" 
-              value={image.location} 
-              margin="normal" 
-              variant="outlined"
-              onChange={handleUpdateImage}
-              disabled={inputIsDisabled} />
+            <ImageFormContent 
+              image={image}
+              isDisabled={inputIsDisabled}
+              textFieldHandler={handleTextFieldChange} />
             <div className={classes.inputButtonGroup}>
-              {isValidImage ? <Button
-                  id="btn-delete"
-                  variant="contained" 
-                  color="secondary" 
-                  className={classes.button} 
-                  onClick={handleDeleteAsync}
-                  disabled={inputIsDisabled}
-                  hidden>
-                  Delete
-                </Button> : undefined
-              }
-              <Button
-                id="btn-update"
-                variant="contained" 
-                className={classes.button}
-                onClick={handleSaveAsync}
-                disabled={inputIsDisabled}>
-                Update
-              </Button>
+              <ImageFormActions
+                imageExists={isValidImage}
+                isDisabled={inputIsDisabled}
+                handleDelete={handleDeleteAsync}
+                handleUpdate={handleUpdateAsync} />
             </div>
           </form>
         </div>

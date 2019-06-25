@@ -8,8 +8,8 @@ export default class ImageService {
   /**
    * Retrieve a single image based on id
    * @param {string} id of the image to retrieve
-   * @returns {Image} image object; otherwise undefined
-   * @throws {ApiError}
+   * @returns {JSON} image object
+   * @throws ApiError
    */
   async getImage(id) {
     try {
@@ -41,4 +41,29 @@ export default class ImageService {
       throw new ApiError(500, `Error deleting image: ${id}`);
     }
   }
+
+  /**
+   * Update a single image based on id
+   * @param {JSON} image object to be updated
+   * @returns {JSON} image object
+   * @throws ApiError
+   */
+  async updateImage(image) {
+    try {
+      const response = await axios({
+        method: 'put',
+        url: `/image/${image.id}`,
+        data: {
+          ...image
+        }
+      });
+
+      return {
+        count: response.data[0],
+        data: response.data[1][0]
+      }
+    } catch (error) {
+      throw new ApiError(500, `Error updating image: ${image.id}`);
+    }
+  }  
 }
