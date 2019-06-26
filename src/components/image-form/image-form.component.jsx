@@ -142,7 +142,7 @@ const ImageForm = ({routeHistory, imageId}) => {
             <img 
               id="thumbnail" 
               className={classes.photo} 
-              src={image.thumbnailUrl} 
+              src={image.thumbnailUrl}
               alt="thumbnail" />         
             <img
               id="image"
