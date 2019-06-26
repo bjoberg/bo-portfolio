@@ -118,6 +118,22 @@ const ImageForm = ({routeHistory, imageId}) => {
     }
   }
 
+  /**
+   * Create a new image based on the values in the input fields
+   */
+  const handleCreateAsync = async () => {
+    try {
+      setInputIsDisabled(true);
+      const response = await imageService.createImage(image);
+      routeHistory.push(response.id);
+      openSnackbar('success', `Created image: ${response.id}`);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setInputIsDisabled(false);
+    }
+  }
+
   if (pageIsLoaded) {
     return (
       <Fragment>
@@ -144,7 +160,8 @@ const ImageForm = ({routeHistory, imageId}) => {
                 imageExists={isValidImage}
                 isDisabled={inputIsDisabled}
                 handleDelete={() => setAlertIsOpen(true)}
-                handleUpdate={handleUpdateAsync} />
+                handleUpdate={handleUpdateAsync}
+                handleCreate={handleCreateAsync} />
             </div>
           </form>
         </div>

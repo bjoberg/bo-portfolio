@@ -8,7 +8,13 @@ const useStyles = makeStyles(ImageFormActionStyles);
 
 const ImageFormActions = (props) => {
   const classes = useStyles();
-  const { imageExists, isDisabled, handleDelete, handleUpdate } = props;
+  const {
+    imageExists,
+    isDisabled,
+    handleDelete,
+    handleUpdate,
+    handleCreate 
+  } = props;
 
   return (
   <Fragment>
@@ -39,7 +45,7 @@ const ImageFormActions = (props) => {
         variant="contained"
         color="primary"
         className={classes.button}
-        onClick={() => console.log('save')}
+        onClick={handleCreate}
         disabled={isDisabled}>
         Create
       </Button>
@@ -52,7 +58,8 @@ ImageFormActions.propTypes = {
   imageExists: PropTypes.bool,
   isDisabled: PropTypes.bool,
   handleDelete: PropTypes.func,
-  handleUpdate: PropTypes.func
+  handleUpdate: PropTypes.func,
+  handleCreate: PropTypes.func,
 };
 
 export default ImageFormActions;

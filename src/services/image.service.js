@@ -65,5 +65,32 @@ export default class ImageService {
     } catch (error) {
       throw new ApiError(500, `Error updating image: ${image.id}`);
     }
+  }
+
+  /**
+   * Create a single image
+   * @param {JSON} image object to be created
+   * @returns {JSON} image object
+   * @throws ApiError
+   */
+  async createImage(image) {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `/image/`,
+        data: {
+          thumbnailUrl: image.thumbnailUrl,
+          imageUrl: image.imageUrl,
+          title: image.title,
+          description: image.description,
+          location: image.location
+        }
+      });
+
+      // console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw new ApiError(500, `Error creating image`);
+    }
   }  
 }
