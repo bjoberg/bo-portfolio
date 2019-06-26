@@ -2,7 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import { ImageFormContent, ImageFormActions, SnackbarContentWrapper } from '../index';
+import {
+  ImageFormContent,
+  ImageFormActions,
+  SnackbarContentWrapper,
+  AlertDialog
+} from '../index';
 import { ImageService } from '../../services';
 import { ImageFormStyles } from './image-form.styles';
 
@@ -28,6 +33,7 @@ const ImageForm = ({routeHistory, imageId}) => {
   const [isValidImage, setIsValidImage] = useState(false);  // Are we creating a new image, or modifying an existing one?
   const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
   const [inputIsDisabled, setInputIsDisabled] = useState(false);  // Should input buttons be disabled?
+  const [alertIsOpen, setAlertIsOpen] = useState(false); // Visibility state of the alert dialog
   const [snackbarStatus, setSnackbarStatus] = useState('success');  // Status of the snackbar
   const [snackbarContent, setSnackbarContent] = useState(''); // Content of the snackbar
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);  // Visibility state of the snackbar
@@ -78,6 +84,7 @@ const ImageForm = ({routeHistory, imageId}) => {
     } catch (error) {
       openSnackbar('error', error.message);
     } finally {
+      setAlertIsOpen(false);
       setInputIsDisabled(false);
     }
   };
@@ -136,7 +143,7 @@ const ImageForm = ({routeHistory, imageId}) => {
               <ImageFormActions
                 imageExists={isValidImage}
                 isDisabled={inputIsDisabled}
-                handleDelete={handleDeleteAsync}
+                handleDelete={() => setAlertIsOpen(true)}
                 handleUpdate={handleUpdateAsync} />
             </div>
           </form>
@@ -148,8 +155,14 @@ const ImageForm = ({routeHistory, imageId}) => {
             className={classes.snackbarMargin}
             onClose={() => setSnackBarIsOpen(false)}
             variant={snackbarStatus}
-            message={snackbarContent}/>
+            message={snackbarContent} />
         </Snackbar>
+        <AlertDialog
+          isOpen={alertIsOpen}
+          handleClose={() => setAlertIsOpen(false)}
+          title={'Delete Image'}
+          body={'You are about to delete this image. Are you sure you want to continue?'}
+          handleConfirm={handleDeleteAsync} />
       </Fragment>
     );
   } else {
