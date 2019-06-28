@@ -51,15 +51,20 @@ function ImageList() {
   if (pageIsLoaded) {
     return (
       <Fragment>
-        {images.map((image, i) => {
-          return (
-            <Image
-              key={i}
-              id={image.id}
-              imageUrl={image.imageUrl}
-              title={image.title} />
-          );
-        })}
+        <div className={classes.container}>
+          {images.map((image, i) => {
+            return (
+              <div 
+                className={classes.imageItem}
+                key={i} >
+                <Image
+                  id={image.id}
+                  imageUrl={image.imageUrl}
+                  title={image.title} />
+              </div>
+            );
+          })}
+        </div>
         <Snackbar
           anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
           open={snackbarIsOpen}>
