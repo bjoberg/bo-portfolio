@@ -12,7 +12,7 @@ import { ImageService } from '../../services';
 import { ImageFormStyles } from './image-form.styles';
 
 const imageService = new ImageService();
-const routeBase = '/dashboard/image/';
+const routeBase = '/dashboard/image';
 const ImageObj = {
   id: "",
   thumbnailUrl: "",
@@ -125,7 +125,7 @@ const ImageForm = ({routeHistory, imageId}) => {
     try {
       setInputIsDisabled(true);
       const response = await imageService.createImage(image);
-      routeHistory.push(response.id);
+      routeHistory.push(`${routeBase}/${response.id}`);
       openSnackbar('success', `Created image: ${response.id}`);
     } catch (error) {
       openSnackbar('error', error.message);
