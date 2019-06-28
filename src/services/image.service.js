@@ -25,6 +25,24 @@ export default class ImageService {
   }
 
   /**
+   * Retrieve a list of images
+   * @returns {JSON} object of images
+   * @throws ApiError
+   */
+  async getImages() {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: '/images'
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new ApiError(404, 'Unable to retrieve images');
+    }
+  }
+
+  /**
    * Delete a single image based on id
    * @param {string} id of the image to delete
    * @returns number of rows destroyed
