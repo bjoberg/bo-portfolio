@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiError, Image } from '../models';
+import { ApiError } from '../models';
 
 /**
  * Service for reading, updating, and creating images
@@ -8,8 +8,8 @@ export default class ImageService {
   /**
    * Retrieve a single image based on id
    * @param {string} id of the image to retrieve
-   * @returns {Image} image object; otherwise undefined
-   * @throws {ApiError}
+   * @returns {JSON} image object
+   * @throws ApiError
    */
   async getImage(id) {
     try {
@@ -18,9 +18,27 @@ export default class ImageService {
         url: `/image/${id}`
       });
 
-      return new Image(response.data);
+      return response.data;
     } catch (error) {
       throw new ApiError(404, `Error retrieving image: ${id}`);
+    }
+  }
+
+  /**
+   * Retrieve a list of images
+   * @returns {JSON} object of images
+   * @throws ApiError
+   */
+  async getImages() {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: '/images'
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new ApiError(404, 'Unable to retrieve images');
     }
   }
 
@@ -41,4 +59,56 @@ export default class ImageService {
       throw new ApiError(500, `Error deleting image: ${id}`);
     }
   }
+
+  /**
+   * Update a single image based on id
+   * @param {JSON} image object to be updated
+   * @returns {JSON} image object
+   * @throws ApiError
+   */
+  async updateImage(image) {
+    try {
+      const response = await axios({
+        method: 'put',
+        url: `/image/${image.id}`,
+        data: {
+          ...image
+        }
+      });
+
+      return {
+        count: response.data[0],
+        data: response.data[1][0]
+      }
+    } catch (error) {
+      throw new ApiError(500, `Error updating image: ${image.id}`);
+    }
+  }
+
+  /**
+   * Create a single image
+   * @param {JSON} image object to be created
+   * @returns {JSON} image object
+   * @throws ApiError
+   */
+  async createImage(image) {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `/image/`,
+        data: {
+          thumbnailUrl: image.thumbnailUrl,
+          imageUrl: image.imageUrl,
+          title: image.title,
+          description: image.description,
+          location: image.location
+        }
+      });
+
+      // console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw new ApiError(500, `Error creating image`);
+    }
+  }  
 }

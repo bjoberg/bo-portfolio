@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route} from 'react-router-dom'
-import { DashboardPage } from './pages'
+import { DashboardPage, ImagesListPage } from './pages'
 
 const Routes = () => (
   <Switch>
@@ -8,6 +8,9 @@ const Routes = () => (
       exact
       path="/dashboard/image"
       component={DashboardPage} />
+    <Route
+      path="/dashboard/images"
+      component={ImagesListPage} />      
     <Route
       path="/dashboard/image/:id"
       component={DashboardPage} />
