@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,19 +17,22 @@ const useStyles = makeStyles(HeaderStlyes);
  */
 const Header = (props) => {
   const classes = useStyles();
-  const { title } = props;
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const { title, drawerIsOpen, handleToggleDrawer } = props;
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: drawerIsOpen,
+        })} >
         <Toolbar>
           <IconButton
             edge="start"
-            className={classes.menuButton}
+            className={clsx(classes.menuButton, drawerIsOpen && classes.hide)}
             color="inherit"
             aria-label="Menu"
-            onClick={() => setDrawerIsOpen(true)} >
+            onClick={handleToggleDrawer} >
             <MenuIcon />
           </IconButton>
           <Typography
@@ -40,13 +44,15 @@ const Header = (props) => {
       </AppBar>
       <HeaderDrawer 
         isOpen={drawerIsOpen}
-        handleClose={() => setDrawerIsOpen(false)}/>
+        handleClose={handleToggleDrawer}/>
     </div>
   );
 };
 
 Header.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  drawerIsOpen: PropTypes.bool,
+  handleToggleDrawer: PropTypes.func
 };
 
 export default Header;

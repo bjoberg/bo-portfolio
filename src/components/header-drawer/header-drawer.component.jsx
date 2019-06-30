@@ -46,7 +46,7 @@ const HeaderDrawer = (props) => {
           <ListItem
             button
             key={'Images'}
-            onClick={handleClose} >
+             >
               <ListItemIcon>
                 <PhotoIcon />
               </ListItemIcon>
@@ -59,7 +59,7 @@ const HeaderDrawer = (props) => {
           <ListItem
             button
             key={'Add Image'}
-            onClick={handleClose} >
+             >
               <ListItemIcon>
                 <AddPhotoIcon />
               </ListItemIcon>
@@ -72,7 +72,7 @@ const HeaderDrawer = (props) => {
         <ListItem
           button
           key={'Groups'}
-          onClick={handleClose} >
+           >
             <ListItemIcon>
               <PhotoLibraryIcon />
             </ListItemIcon>
@@ -81,7 +81,7 @@ const HeaderDrawer = (props) => {
         <ListItem
           button 
           key={'Add Group'}
-          onClick={handleClose} >
+           >
             <ListItemIcon>
               <AddToPhotosIcon />
             </ListItemIcon>
@@ -93,7 +93,7 @@ const HeaderDrawer = (props) => {
         <ListItem
           button
           key={'Tags'}
-          onClick={handleClose} >
+           >
             <ListItemIcon>
               <InsertDriveFileIcon />
             </ListItemIcon>
@@ -102,7 +102,7 @@ const HeaderDrawer = (props) => {
         <ListItem
           button
           key={'Add Tag'}
-          onClick={handleClose} >
+           >
             <ListItemIcon>
               <NoteAddIcon />
             </ListItemIcon>
