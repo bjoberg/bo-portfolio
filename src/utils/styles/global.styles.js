@@ -1,3 +1,7 @@
-const HeaderHeight = '64px';
+const DrawerWidth = 240;
+const HeaderHeight = 64;
 
-export { HeaderHeight };
+export {
+  DrawerWidth,
+  HeaderHeight
+};
