@@ -2,23 +2,29 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import { Image, SnackbarContentWrapper } from '../../components';
-import { ImageService } from '../../services';
-import { ImageListStyles } from './image-list.styles';
+import Image from '../image/image.component';
+import SnackbarContentWrapper from '../snackbar-content/snackbar-content.component';
+import ImageService from '../../services/image.service';
+import ImageListStyles from './image-list.styles';
 
 const imageService = new ImageService();
 const useStyles = makeStyles(ImageListStyles);
 
-/**
- * List for displaying a group of images
- */
 function ImageList() {
   const classes = useStyles();
   const [images, setImages] = useState([{}]);
-  const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
-  const [snackbarStatus, setSnackbarStatus] = useState('success');  // Status of the snackbar
-  const [snackbarContent, setSnackbarContent] = useState(''); // Content of the snackbar
-  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);  // Visibility state of the snackbar
+
+  // Page loading status
+  const [pageIsLoaded, setPageIsLoaded] = useState(false);
+
+  // Status of the snackbar
+  const [snackbarStatus, setSnackbarStatus] = useState('success');
+
+  // Content of the snackbar
+  const [snackbarContent, setSnackbarContent] = useState('');
+
+  // Visibility state of the snackbar
+  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
   /**
    * Open the snackbar as a notification
@@ -29,7 +35,7 @@ function ImageList() {
     setSnackbarStatus(variant);
     setSnackbarContent(message);
     setSnackBarIsOpen(true);
-  }
+  };
 
   /**
    * Get a list of images
@@ -52,37 +58,38 @@ function ImageList() {
     return (
       <Fragment>
         <div className={classes.container}>
-          {images.map((image, i) => {
-            return (
-              <div 
-                className={classes.imageItem}
-                key={i} >
-                <Image
-                  id={image.id}
-                  imageUrl={image.imageUrl}
-                  title={image.title} />
-              </div>
-            );
-          })}
+          {images.map(image => (
+            <div
+              className={classes.imageItem}
+              key={image.id}
+            >
+              <Image
+                id={image.id}
+                imageUrl={image.imageUrl}
+                title={image.title}
+              />
+            </div>
+          ))}
         </div>
         <Snackbar
-          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-          open={snackbarIsOpen}>
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={snackbarIsOpen}
+        >
           <SnackbarContentWrapper
             className={classes.snackbarMargin}
             onClose={() => setSnackBarIsOpen(false)}
             variant={snackbarStatus}
-            message={snackbarContent} />
-        </Snackbar>        
+            message={snackbarContent}
+          />
+        </Snackbar>
       </Fragment>
     );
-  } else {
-    return (
-      <div className={classes.progressBarContainer}>
-        <LinearProgress />
-      </div>
-    );
   }
-};
+  return (
+    <div className={classes.progressBarContainer}>
+      <LinearProgress />
+    </div>
+  );
+}
 
 export default ImageList;

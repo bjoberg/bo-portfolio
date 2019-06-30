@@ -1,9 +1,9 @@
 import { HeaderHeight } from '../../utils/styles/global.styles';
 
-const DashboardStyles = theme => ({
+const DashboardStyles = {
   container: {
-    marginTop: HeaderHeight
-  }
-});
+    marginTop: HeaderHeight,
+  },
+};
 
 export default DashboardStyles;

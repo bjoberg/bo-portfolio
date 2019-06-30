@@ -10,7 +10,7 @@ const ImageListStyles = theme => ({
   },
   progressBarContainer: {
     flexGrow: 1,
-  }
+  },
 });
 
-export { ImageListStyles };
+export default ImageListStyles;

@@ -1,42 +1,57 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import {
-  ImageFormContent,
-  ImageFormActions,
-  SnackbarContentWrapper,
-  AlertDialog
-} from '../index';
-import { ImageService } from '../../services';
-import { ImageFormStyles } from './image-form.styles';
+import AlertDialog from '../alert-dialog/alert-dialog.component';
+import ImageFormContent from '../image-form-content/image-form-content.component';
+import ImageFormActions from '../image-form-actions/image-form-actions.component';
+import SnackbarContentWrapper from '../snackbar-content/snackbar-content.component';
+import ImageService from '../../services/image.service';
+import ImageFormStyles from './image-form.styles';
 
 const imageService = new ImageService();
 const routeBase = '/dashboard/image';
 const ImageObj = {
-  id: "",
-  thumbnailUrl: "",
-  imageUrl: "",
-  title: "",
-  description: "",
-  location: ""
+  id: '',
+  thumbnailUrl: '',
+  imageUrl: '',
+  title: '',
+  description: '',
+  location: '',
 };
 const useStyles = makeStyles(ImageFormStyles);
 
-/**
- * Form for manipulating a single image
- * @param {Object} props properties to render in the component 
- */
-const ImageForm = ({routeHistory, imageId}) => {
+const ImageForm = (props) => {
   const classes = useStyles();
-  const [image, setImage] = useState(ImageObj); // Image object being displayed
-  const [isValidImage, setIsValidImage] = useState(false);  // Are we creating a new image, or modifying an existing one?
-  const [pageIsLoaded, setPageIsLoaded] = useState(false);  // Page loading status
-  const [inputIsDisabled, setInputIsDisabled] = useState(false);  // Should input buttons be disabled?
-  const [alertIsOpen, setAlertIsOpen] = useState(false); // Visibility state of the alert dialog
-  const [snackbarStatus, setSnackbarStatus] = useState('success');  // Status of the snackbar
-  const [snackbarContent, setSnackbarContent] = useState(''); // Content of the snackbar
-  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);  // Visibility state of the snackbar
+  const {
+    routeHistory,
+    imageId,
+  } = props;
+
+  // Image object being displayed
+  const [image, setImage] = useState(ImageObj);
+
+  // Are we creating a new image, or modifying an existing one?
+  const [isValidImage, setIsValidImage] = useState(false);
+
+  // Page loading status
+  const [pageIsLoaded, setPageIsLoaded] = useState(false);
+
+  // Should input buttons be disabled?
+  const [inputIsDisabled, setInputIsDisabled] = useState(false);
+
+  // Visibility state of the alert dialog
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
+
+  // Status of the snackbar
+  const [snackbarStatus, setSnackbarStatus] = useState('success');
+
+  // Content of the snackbar
+  const [snackbarContent, setSnackbarContent] = useState('');
+
+  // Visibility state of the snackbar
+  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
   /**
    * Open the snackbar as a notification
@@ -47,7 +62,7 @@ const ImageForm = ({routeHistory, imageId}) => {
     setSnackbarStatus(variant);
     setSnackbarContent(message);
     setSnackBarIsOpen(true);
-  }
+  };
 
   /**
    * Update the image data when the imageId prop is modified
@@ -66,7 +81,7 @@ const ImageForm = ({routeHistory, imageId}) => {
         }
       }
       setPageIsLoaded(true);
-    };
+    }
     getImageAsync();
   }, [imageId, routeHistory]);
 
@@ -96,9 +111,9 @@ const ImageForm = ({routeHistory, imageId}) => {
   const handleTextFieldChange = (e) => {
     setImage({
       ...image,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
-  }
+  };
 
   /**
    * Update the image based on the values in the input fields
@@ -108,7 +123,7 @@ const ImageForm = ({routeHistory, imageId}) => {
       setInputIsDisabled(true);
       const result = await imageService.updateImage(image);
       const updateCount = result.count;
-      const id = result.data.id;
+      const { id } = result.data;
       setIsValidImage(true);
       openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
     } catch (error) {
@@ -116,7 +131,7 @@ const ImageForm = ({routeHistory, imageId}) => {
     } finally {
       setInputIsDisabled(false);
     }
-  }
+  };
 
   /**
    * Create a new image based on the values in the input fields
@@ -132,63 +147,96 @@ const ImageForm = ({routeHistory, imageId}) => {
     } finally {
       setInputIsDisabled(false);
     }
-  }
+  };
 
   if (pageIsLoaded) {
     return (
       <Fragment>
         <div className={classes.container}>
           <div className={classes.main}>
-            <img 
-              id="thumbnail" 
-              className={classes.photo} 
+            <img
+              id="thumbnail"
+              className={classes.photo}
               src={image.thumbnailUrl}
-              alt="thumbnail" />         
+              alt="thumbnail"
+            />
             <img
               id="image"
               className={classes.photo}
               src={image.imageUrl}
-              alt="img" />
+              alt="img"
+            />
           </div>
           <form className={classes.details} autoComplete="off">
-            <ImageFormContent 
+            <ImageFormContent
               image={image}
               isDisabled={inputIsDisabled}
-              textFieldHandler={handleTextFieldChange} />
+              textFieldHandler={handleTextFieldChange}
+            />
             <div className={classes.inputButtonGroup}>
               <ImageFormActions
                 imageExists={isValidImage}
                 isDisabled={inputIsDisabled}
                 handleDelete={() => setAlertIsOpen(true)}
                 handleUpdate={handleUpdateAsync}
-                handleCreate={handleCreateAsync} />
+                handleCreate={handleCreateAsync}
+              />
             </div>
           </form>
         </div>
         <Snackbar
-          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-          open={snackbarIsOpen}>
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={snackbarIsOpen}
+        >
           <SnackbarContentWrapper
             className={classes.snackbarMargin}
             onClose={() => setSnackBarIsOpen(false)}
             variant={snackbarStatus}
-            message={snackbarContent} />
+            message={snackbarContent}
+          />
         </Snackbar>
         <AlertDialog
           isOpen={alertIsOpen}
           handleClose={() => setAlertIsOpen(false)}
-          title={'Delete Image'}
-          body={'You are about to delete this image. Are you sure you want to continue?'}
-          handleConfirm={handleDeleteAsync} />
+          title="Delete Image"
+          body="You are about to delete this image. Are you sure you want to continue?"
+          handleConfirm={handleDeleteAsync}
+        />
       </Fragment>
     );
-  } else {
-    return (
-      <div className={classes.progressBarContainer}>
-        <LinearProgress />
-      </div>
-    );
   }
+  return (
+    <div className={classes.progressBarContainer}>
+      <LinearProgress />
+    </div>
+  );
+};
+
+ImageForm.propTypes = {
+  routeHistory: PropTypes.shape({
+    action: PropTypes.string,
+    block: PropTypes.func,
+    createHref: PropTypes.func,
+    go: PropTypes.func,
+    goBack: PropTypes.func,
+    goForward: PropTypes.func,
+    length: PropTypes.number,
+    listen: PropTypes.func,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+      hash: PropTypes.string,
+      state: PropTypes.string,
+      key: PropTypes.string,
+    }),
+    push: PropTypes.func,
+    replace: PropTypes.func,
+  }).isRequired,
+  imageId: PropTypes.string,
+};
+
+ImageForm.defaultProps = {
+  imageId: '',
 };
 
 export default ImageForm;

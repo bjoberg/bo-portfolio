@@ -1,9 +1,9 @@
 import { HeaderHeight } from '../../utils/styles/global.styles';
 
-const ImageListStyles = theme => ({
+const ImageListStyles = {
   container: {
-    marginTop: HeaderHeight
-  }
-});
+    marginTop: HeaderHeight,
+  },
+};
 
 export default ImageListStyles;

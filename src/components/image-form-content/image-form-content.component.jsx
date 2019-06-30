@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
 const ImageFormContent = (props) => {
-  const { image, isDisabled, textFieldHandler } = props;
+  const {
+    image,
+    isDisabled,
+    textFieldHandler,
+  } = props;
 
   return (
     <Fragment>
@@ -13,7 +17,8 @@ const ImageFormContent = (props) => {
         margin="normal"
         variant="outlined"
         value={image.id}
-        disabled={true} />      
+        disabled
+      />
       <TextField
         id="thumbnailUrl"
         label="Thumbnail url"
@@ -21,7 +26,8 @@ const ImageFormContent = (props) => {
         variant="outlined"
         value={image.thumbnailUrl}
         onChange={textFieldHandler}
-        disabled={isDisabled} />
+        disabled={isDisabled}
+      />
       <TextField
         id="imageUrl"
         label="Image url"
@@ -29,7 +35,8 @@ const ImageFormContent = (props) => {
         variant="outlined"
         value={image.imageUrl}
         onChange={textFieldHandler}
-        disabled={isDisabled} />
+        disabled={isDisabled}
+      />
       <TextField
         id="title"
         label="Title"
@@ -37,7 +44,8 @@ const ImageFormContent = (props) => {
         variant="outlined"
         value={image.title}
         onChange={textFieldHandler}
-        disabled={isDisabled} />
+        disabled={isDisabled}
+      />
       <TextField
         multiline
         id="description"
@@ -45,9 +53,10 @@ const ImageFormContent = (props) => {
         margin="normal"
         variant="outlined"
         rows="4"
-        value={image.description} 
+        value={image.description}
         onChange={textFieldHandler}
-        disabled={isDisabled} />
+        disabled={isDisabled}
+      />
       <TextField
         id="location"
         label="location"
@@ -55,7 +64,8 @@ const ImageFormContent = (props) => {
         variant="outlined"
         value={image.location}
         onChange={textFieldHandler}
-        disabled={isDisabled} />
+        disabled={isDisabled}
+      />
     </Fragment>
   );
 };

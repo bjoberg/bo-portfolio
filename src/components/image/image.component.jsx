@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-/**
- * A singular image object
- * @param {Object} props properties that define a speicific image
- */
-function Image(props) {
-  const { id, imageUrl, title } = props
+const Image = (props) => {
+  const {
+    id,
+    imageUrl,
+    title,
+  } = props;
 
   return (
     <Fragment>
@@ -14,10 +15,17 @@ function Image(props) {
         <img
           id={id}
           src={imageUrl}
-          alt={title} />
+          alt={title}
+        />
       </Link>
     </Fragment>
   );
+};
+
+Image.propTypes = {
+  id: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default Image;
