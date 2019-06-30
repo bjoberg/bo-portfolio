@@ -1,4 +1,6 @@
 import AlertDialog from './alert-dialog/alert-dialog.component';
+import Header from './header/header.component';
+import HeaderDrawer from './header-drawer/header-drawer.component';
 import Image from './image/image.component';
 import ImageForm from './image-form/image-form.component';
 import ImageFormContent from './image-form-content/image-form-content.component';
@@ -8,6 +10,8 @@ import SnackbarContentWrapper from './snackbar-content/snackbar-content.componen
 
 export {
   AlertDialog,
+  Header,
+  HeaderDrawer,
   Image,
   ImageForm,
   ImageFormContent,

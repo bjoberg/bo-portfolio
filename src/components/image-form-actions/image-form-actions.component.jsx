@@ -26,8 +26,7 @@ const ImageFormActions = (props) => {
           color="secondary" 
           className={classes.button} 
           onClick={handleDelete}
-          disabled={isDisabled}
-          hidden>
+          disabled={isDisabled}>
           Delete
         </Button>
         <Button

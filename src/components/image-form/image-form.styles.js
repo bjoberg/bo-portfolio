@@ -3,24 +3,22 @@ const ImageFormStyles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
-    margin: '0px 20px 0px 20px'
+    margin: theme.spacing(2),
   },
   main: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    padding: '0px 20px 0px 20px'
+    padding: theme.spacing(1)
   },
   details: {
     flex: 2,
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    padding: '0px 20px 0px 20px'
+    padding: theme.spacing(1)
   },
   photo: {
-    margin: "20px 0px 20px 0px",
+    margin: theme.spacing(2),
     maxWidth: "600px !important",
     maxHeight: "400px !important",
     alignSelf: "center"

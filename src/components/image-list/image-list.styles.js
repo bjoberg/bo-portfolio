@@ -3,10 +3,10 @@ const ImageListStyles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    margin: '20px'
+    marginTop: theme.spacing(9),
   },
   imageItem: {
-    margin: '0px 10px 0px 10px'
+    marginLeft: theme.spacing(1),
   },
   progressBarContainer: {
     flexGrow: 1,
