@@ -18,7 +18,7 @@ const ImageFormStyles = theme => ({
     padding: theme.spacing(1)
   },
   photo: {
-    margin: "20px 0px 20px 0px",
+    margin: theme.spacing(2),
     maxWidth: "600px !important",
     maxHeight: "400px !important",
     alignSelf: "center"
