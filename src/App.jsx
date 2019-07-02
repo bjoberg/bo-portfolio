@@ -9,7 +9,7 @@ const useStyles = makeStyles(AppStyles);
 
 function App() {
   const classes = useStyles();
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [drawerIsOpen, setDrawerIsOpen] = useState(true);
 
   /**
    * Toggle the state of the drawer
