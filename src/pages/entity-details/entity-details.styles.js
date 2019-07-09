@@ -1,9 +1,9 @@
 import { HeaderHeight } from '../../utils/styles/global.styles';
 
-const DashboardStyles = {
+const EntityDetailsStyles = {
   container: {
     marginTop: HeaderHeight,
   },
 };
 
-export default DashboardStyles;
+export default EntityDetailsStyles;

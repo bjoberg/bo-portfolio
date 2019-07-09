@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import ImageForm from '../../components/image-form/image-form.component';
-import DashboardStyles from './dashboard.styles';
+import EntityDetailsStyles from './entity-details.styles';
 
-const useStyles = makeStyles(DashboardStyles);
+const useStyles = makeStyles(EntityDetailsStyles);
 
-const DashboardPage = (props) => {
+const EntityDetailsPage = (props) => {
   const classes = useStyles();
   const {
     history,
@@ -23,7 +23,7 @@ const DashboardPage = (props) => {
   );
 };
 
-DashboardPage.propTypes = {
+EntityDetailsPage.propTypes = {
   history: PropTypes.shape({
     action: PropTypes.string,
     block: PropTypes.func,
@@ -53,4 +53,4 @@ DashboardPage.propTypes = {
   }).isRequired,
 };
 
-export default DashboardPage;
+export default EntityDetailsPage;
