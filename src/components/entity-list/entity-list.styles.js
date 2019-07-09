@@ -1,16 +1,13 @@
-const ImageListStyles = theme => ({
+const EntityListStyles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     marginTop: theme.spacing(9),
   },
-  imageItem: {
+  entityItem: {
     marginLeft: theme.spacing(1),
-  },
-  progressBarContainer: {
-    flexGrow: 1,
   },
 });
 
-export default ImageListStyles;
+export default EntityListStyles;

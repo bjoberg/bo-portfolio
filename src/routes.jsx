@@ -17,7 +17,7 @@ const Routes = () => (
     <Route
       exact
       path="/dashboard/images"
-      component={EntityListPage}
+      component={routeProps => <EntityListPage {...routeProps} type="image" />}
     />
     <Route
       exact

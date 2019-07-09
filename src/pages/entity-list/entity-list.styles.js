@@ -4,6 +4,10 @@ const EntityListStyles = {
   container: {
     marginTop: HeaderHeight,
   },
+  progressBarContainer: {
+    marginTop: HeaderHeight,
+    flexGrow: 1,
+  },
 };
 
 export default EntityListStyles;
