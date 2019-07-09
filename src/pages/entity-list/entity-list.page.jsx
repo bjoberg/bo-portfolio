@@ -1,11 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import ImageList from '../../components/image-list/image-list.component';
-import ImageListStyles from './images-list.styles';
+import EntityListStyles from './entity-list.styles';
 
-const useStyles = makeStyles(ImageListStyles);
+const useStyles = makeStyles(EntityListStyles);
 
-const ImagesListPage = () => {
+const EntityListPage = () => {
   const classes = useStyles();
 
   return (
@@ -15,4 +15,4 @@ const ImagesListPage = () => {
   );
 };
 
-export default ImagesListPage;
+export default EntityListPage;

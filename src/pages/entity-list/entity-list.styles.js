@@ -1,9 +1,9 @@
 import { HeaderHeight } from '../../utils/styles/global.styles';
 
-const ImageListStyles = {
+const EntityListStyles = {
   container: {
     marginTop: HeaderHeight,
   },
 };
 
-export default ImageListStyles;
+export default EntityListStyles;
