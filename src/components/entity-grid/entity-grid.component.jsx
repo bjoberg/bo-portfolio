@@ -2,11 +2,11 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import EntityListStyles from './entity-list.styles';
+import EntityListStyles from './entity-grid.styles';
 
 const useStyles = makeStyles(EntityListStyles);
 
-const EntityList = (props) => {
+const EntityGrid = (props) => {
   const classes = useStyles();
   const { type, data } = props;
 
@@ -32,7 +32,7 @@ const EntityList = (props) => {
   );
 };
 
-EntityList.propTypes = {
+EntityGrid.propTypes = {
   type: PropTypes.oneOf(['image', 'group']).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
@@ -42,8 +42,8 @@ EntityList.propTypes = {
   })),
 };
 
-EntityList.defaultProps = {
+EntityGrid.defaultProps = {
   data: [],
 };
 
-export default EntityList;
+export default EntityGrid;

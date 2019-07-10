@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import EntityList from '../../components/entity-list/entity-list.component';
+import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import ImageService from '../../services/image.service';
 import EntityListStyles from './entity-list.styles';
@@ -71,7 +71,7 @@ const EntityListPage = (props) => {
   return (
     <Fragment>
       <div className={classes.container}>
-        <EntityList type={type} data={entityData} />
+        <EntityGrid type={type} data={entityData} />
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
