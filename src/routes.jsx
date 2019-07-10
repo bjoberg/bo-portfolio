@@ -1,19 +1,34 @@
 import React from 'react';
-import { Switch, Route} from 'react-router-dom'
-import { DashboardPage, ImagesListPage } from './pages'
+import { Switch, Route } from 'react-router-dom';
+import EntityDetailsPage from './pages/entity-details/entity-details.page';
+import EntityListPage from './pages/entity-list/entity-list.page';
+import ErrorPage from './pages/error/error.page';
 
 const Routes = () => (
+  // /dashboard/groups => EntityListPage
+  // /dashboard/group => EntityDetailsPage
+  // /dashboard/group/:id => EntityDetailsPage
+
+  // /dashboard/tags => EntityListPage
+  // /dashboard/tag => EntityDetailsPage
+  // /dashboard/tag/:id => EntityDetailsPage
+
   <Switch>
     <Route
       exact
-      path="/dashboard/image"
-      component={DashboardPage} />
-    <Route
       path="/dashboard/images"
-      component={ImagesListPage} />      
+      component={routeProps => <EntityListPage {...routeProps} type="image" />}
+    />
+    <Route
+      exact
+      path="/dashboard/image"
+      component={EntityDetailsPage}
+    />
     <Route
       path="/dashboard/image/:id"
-      component={DashboardPage} />
+      component={EntityDetailsPage}
+    />
+    <Route component={ErrorPage} />
   </Switch>
 );
 

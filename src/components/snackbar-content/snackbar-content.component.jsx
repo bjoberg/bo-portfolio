@@ -19,36 +19,45 @@ const variantIcon = {
   info: InfoIcon,
 };
 
-function SnackbarContentWrapper(props) {
+const SnackbarContentWrapper = (props) => {
   const classes = useStyles();
-  const { className, message, onClose, variant, ...other } = props;
+  const {
+    className,
+    message,
+    onClose,
+    variant,
+  } = props;
   const Icon = variantIcon[variant];
 
   return (
     <SnackbarContent
       className={clsx(classes[variant], className)}
       aria-describedby="client-snackbar"
-      message={
+      message={(
         <span id="client-snackbar" className={classes.message}>
           <Icon className={clsx(classes.icon, classes.iconVariant)} />
           {message}
         </span>
-      }
+      )}
       action={[
         <IconButton key="close" aria-label="Close" color="inherit" onClick={onClose}>
           <CloseIcon className={classes.icon} />
         </IconButton>,
       ]}
-      {...other}
     />
   );
-}
+};
 
 SnackbarContentWrapper.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
   className: PropTypes.string,
   message: PropTypes.node,
-  onClose: PropTypes.func,
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+SnackbarContentWrapper.defaultProps = {
+  className: '',
+  message: 'Default message -- set the message prop to set this value',
 };
 
 export default SnackbarContentWrapper;

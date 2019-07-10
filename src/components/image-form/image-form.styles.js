@@ -9,24 +9,24 @@ const ImageFormStyles = theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   details: {
     flex: 2,
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   photo: {
     margin: theme.spacing(2),
-    maxWidth: "600px !important",
-    maxHeight: "400px !important",
-    alignSelf: "center"
+    maxWidth: '600px !important',
+    maxHeight: '400px !important',
+    alignSelf: 'center',
   },
   inputButtonGroup: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   progressBarContainer: {
     flexGrow: 1,
@@ -36,7 +36,7 @@ const ImageFormStyles = theme => ({
   },
   snackbarMargin: {
     margin: theme.spacing(1),
-  }
+  },
 });
 
-export { ImageFormStyles };
+export default ImageFormStyles;

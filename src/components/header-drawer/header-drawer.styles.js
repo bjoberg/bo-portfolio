@@ -17,8 +17,8 @@ const HeaderDrawerStyles = theme => ({
   },
   Link: {
     textDecoration: 'none',
-    color: 'inherit'
-  }
+    color: 'inherit',
+  },
 });
 
 export default HeaderDrawerStyles;

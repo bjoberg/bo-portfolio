@@ -3,5 +3,5 @@ const HeaderHeight = 64;
 
 export {
   DrawerWidth,
-  HeaderHeight
+  HeaderHeight,
 };

@@ -22,7 +22,10 @@ const useStyles = makeStyles(HeaderDrawerStyles);
 
 const HeaderDrawer = (props) => {
   const classes = useStyles();
-  const { isOpen, handleClose } = props;
+  const {
+    isOpen,
+    handleClose,
+  } = props;
 
   return (
     <Drawer
@@ -32,90 +35,113 @@ const HeaderDrawer = (props) => {
       open={isOpen}
       classes={{
         paper: classes.drawerPaper,
-      }} >
+      }}
+    >
       <div className={classes.drawerHeader}>
         <IconButton onClick={handleClose}>
           <ChevronLeftIcon />
         </IconButton>
       </div>
       <Divider />
-      <List>
-        <Link
-          to={'/dashboard/images'}
-          className={classes.Link} >
-          <ListItem
-            button
-            key={'Images'}
-             >
-              <ListItemIcon>
-                <PhotoIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Images'} />
-          </ListItem>
-        </Link>
-        <Link
-          to={'/dashboard/image'}
-          className={classes.Link} >
-          <ListItem
-            button
-            key={'Add Image'}
-             >
-              <ListItemIcon>
-                <AddPhotoIcon />
-              </ListItemIcon>
-              <ListItemText primary={'Add Image'} />
-          </ListItem>        
-        </Link>
-      </List>
+      <ImageList classes={classes} />
       <Divider />
-      <List>
-        <ListItem
-          button
-          key={'Groups'}
-           >
-            <ListItemIcon>
-              <PhotoLibraryIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Groups'} />
-        </ListItem>
-        <ListItem
-          button 
-          key={'Add Group'}
-           >
-            <ListItemIcon>
-              <AddToPhotosIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Add Group'} />
-        </ListItem>
-      </List>
+      <GroupList />
       <Divider />
-      <List>
-        <ListItem
-          button
-          key={'Tags'}
-           >
-            <ListItemIcon>
-              <InsertDriveFileIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Tags'} />
-        </ListItem>
-        <ListItem
-          button
-          key={'Add Tag'}
-           >
-            <ListItemIcon>
-              <NoteAddIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Add Tag'} />
-        </ListItem>
-      </List>
+      <TagList />
     </Drawer>
   );
 };
 
 HeaderDrawer.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+};
+
+HeaderDrawer.defaultProps = {
+  isOpen: false,
 };
 
 export default HeaderDrawer;
+
+const ImageList = () => {
+  const classes = useStyles();
+
+  return (
+    <List>
+      <Link
+        to="/dashboard/images"
+        className={classes.Link}
+      >
+        <ListItem
+          button
+          key="Images"
+        >
+          <ListItemIcon>
+            <PhotoIcon />
+          </ListItemIcon>
+          <ListItemText primary="Images" />
+        </ListItem>
+      </Link>
+      <Link
+        to="/dashboard/image"
+        className={classes.Link}
+      >
+        <ListItem
+          button
+          key="Add Image"
+        >
+          <ListItemIcon>
+            <AddPhotoIcon />
+          </ListItemIcon>
+          <ListItemText primary="Add Image" />
+        </ListItem>
+      </Link>
+    </List>
+  );
+};
+
+const GroupList = () => (
+  <List>
+    <ListItem
+      button
+      key="Groups"
+    >
+      <ListItemIcon>
+        <PhotoLibraryIcon />
+      </ListItemIcon>
+      <ListItemText primary="Groups" />
+    </ListItem>
+    <ListItem
+      button
+      key="Add Group"
+    >
+      <ListItemIcon>
+        <AddToPhotosIcon />
+      </ListItemIcon>
+      <ListItemText primary="Add Group" />
+    </ListItem>
+  </List>
+);
+
+const TagList = () => (
+  <List>
+    <ListItem
+      button
+      key="Tags"
+    >
+      <ListItemIcon>
+        <InsertDriveFileIcon />
+      </ListItemIcon>
+      <ListItemText primary="Tags" />
+    </ListItem>
+    <ListItem
+      button
+      key="Add Tag"
+    >
+      <ListItemIcon>
+        <NoteAddIcon />
+      </ListItemIcon>
+      <ListItemText primary="Add Tag" />
+    </ListItem>
+  </List>
+);

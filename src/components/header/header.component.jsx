@@ -7,52 +7,60 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { HeaderDrawer } from '../';
+import HeaderDrawer from '../header-drawer/header-drawer.component';
 import HeaderStlyes from './header.styles';
 
 const useStyles = makeStyles(HeaderStlyes);
 
-/**
- * Page Header component
- */
 const Header = (props) => {
   const classes = useStyles();
-  const { title, drawerIsOpen, handleToggleDrawer } = props;
+  const {
+    title,
+    drawerIsOpen,
+    handleToggleDrawer,
+  } = props;
 
   return (
     <div className={classes.root}>
       <AppBar
         position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: drawerIsOpen,
-        })} >
+        className={clsx(classes.appBar, { [classes.appBarShift]: drawerIsOpen })}
+      >
         <Toolbar>
           <IconButton
             edge="start"
             className={clsx(classes.menuButton, drawerIsOpen && classes.hide)}
             color="inherit"
             aria-label="Menu"
-            onClick={handleToggleDrawer} >
+            onClick={handleToggleDrawer}
+          >
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
-            className={classes.title}>
+            className={classes.title}
+          >
             {title}
           </Typography>
         </Toolbar>
       </AppBar>
-      <HeaderDrawer 
+      <HeaderDrawer
         isOpen={drawerIsOpen}
-        handleClose={handleToggleDrawer}/>
+        handleClose={handleToggleDrawer}
+      />
     </div>
   );
 };
 
 Header.propTypes = {
+  handleToggleDrawer: PropTypes.func.isRequired,
   title: PropTypes.string,
   drawerIsOpen: PropTypes.bool,
-  handleToggleDrawer: PropTypes.func
+};
+
+Header.defaultProps = {
+  title: 'Default title',
+  drawerIsOpen: false,
 };
 
 export default Header;
