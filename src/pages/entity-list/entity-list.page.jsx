@@ -6,9 +6,11 @@ import Snackbar from '@material-ui/core/Snackbar';
 import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import ImageService from '../../services/image.service';
+import GroupService from '../../services/group.service';
 import EntityListStyles from './entity-list.styles';
 
 const imageService = new ImageService();
+const groupService = new GroupService();
 const useStyles = makeStyles(EntityListStyles);
 
 const EntityListPage = (props) => {
@@ -55,8 +57,22 @@ const EntityListPage = (props) => {
         setPageIsLoaded(true);
       }
     }
+    async function getGroupsAsync() {
+      try {
+        setPageIsLoaded(false);
+        setEntityData(await groupService.getGroups());
+      } catch (error) {
+        openSnackbar('error', error.message);
+      } finally {
+        setPageIsLoaded(true);
+      }
+    }
     if (type === 'image') {
       getImagesAsync();
+    } else if (type === 'group') {
+      getGroupsAsync();
+    } else {
+      openSnackbar('error', `${type} is an invalid type.`);
     }
   }, [type]);
 

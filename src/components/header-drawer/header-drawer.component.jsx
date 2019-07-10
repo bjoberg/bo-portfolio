@@ -100,28 +100,37 @@ const ImageList = () => {
   );
 };
 
-const GroupList = () => (
-  <List>
-    <ListItem
-      button
-      key="Groups"
-    >
-      <ListItemIcon>
-        <PhotoLibraryIcon />
-      </ListItemIcon>
-      <ListItemText primary="Groups" />
-    </ListItem>
-    <ListItem
-      button
-      key="Add Group"
-    >
-      <ListItemIcon>
-        <AddToPhotosIcon />
-      </ListItemIcon>
-      <ListItemText primary="Add Group" />
-    </ListItem>
-  </List>
-);
+const GroupList = () => {
+  const classes = useStyles();
+
+  return (
+    <List>
+      <Link
+        to="/dashboard/groups"
+        className={classes.Link}
+      >
+        <ListItem
+          button
+          key="Groups"
+        >
+          <ListItemIcon>
+            <PhotoLibraryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Groups" />
+        </ListItem>
+      </Link>
+      <ListItem
+        button
+        key="Add Group"
+      >
+        <ListItemIcon>
+          <AddToPhotosIcon />
+        </ListItemIcon>
+        <ListItemText primary="Add Group" />
+      </ListItem>
+    </List>
+  );
+};
 
 const TagList = () => (
   <List>

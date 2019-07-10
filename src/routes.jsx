@@ -5,7 +5,6 @@ import EntityListPage from './pages/entity-list/entity-list.page';
 import ErrorPage from './pages/error/error.page';
 
 const Routes = () => (
-  // /dashboard/groups => EntityListPage
   // /dashboard/group => EntityDetailsPage
   // /dashboard/group/:id => EntityDetailsPage
 
@@ -27,6 +26,11 @@ const Routes = () => (
     <Route
       path="/dashboard/image/:id"
       component={EntityDetailsPage}
+    />
+    <Route
+      exact
+      path="/dashboard/groups"
+      component={routeProps => <EntityListPage {...routeProps} type="group" />}
     />
     <Route component={ErrorPage} />
   </Switch>
