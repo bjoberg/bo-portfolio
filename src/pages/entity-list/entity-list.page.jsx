@@ -47,6 +47,11 @@ const EntityListPage = (props) => {
    * Get a list of images
    */
   useEffect(() => {
+    /**
+     * 1. Start loading the page
+     * 2. Get a list of images
+     * 3. Load the page
+     */
     async function getImagesAsync() {
       try {
         setPageIsLoaded(false);
@@ -57,6 +62,12 @@ const EntityListPage = (props) => {
         setPageIsLoaded(true);
       }
     }
+
+    /**
+     * 1. Start loading the page
+     * 2. Get a list of groups
+     * 3. Load the page
+     */
     async function getGroupsAsync() {
       try {
         setPageIsLoaded(false);
@@ -67,6 +78,7 @@ const EntityListPage = (props) => {
         setPageIsLoaded(true);
       }
     }
+
     if (type === 'image') {
       getImagesAsync();
     } else if (type === 'group') {
