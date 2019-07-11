@@ -10,7 +10,7 @@ const useStyles = makeStyles(EntityListStyles);
 
 const EntityGrid = (props) => {
   const classes = useStyles();
-  const { type, data } = props;
+  const { entityType, data } = props;
 
   return (
     <Fragment>
@@ -20,9 +20,9 @@ const EntityGrid = (props) => {
             className={classes.entityItem}
             key={item.id}
           >
-            <Link to={`/dashboard/${type}/${item.id}`}>
+            <Link to={`/dashboard/${entityType}/${item.id}`}>
               {(() => {
-                switch (type) {
+                switch (entityType) {
                   case 'image': return (
                     <Image
                       id={item.id}
@@ -49,7 +49,7 @@ const EntityGrid = (props) => {
 };
 
 EntityGrid.propTypes = {
-  type: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf(['image', 'group']).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     thumbnailUrl: PropTypes.string,

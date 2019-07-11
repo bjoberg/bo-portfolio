@@ -16,21 +16,21 @@ const Routes = () => (
     <Route
       exact
       path="/dashboard/images"
-      component={routeProps => <EntityListPage {...routeProps} type="image" />}
+      component={routeProps => <EntityListPage {...routeProps} entityType="image" />}
     />
     <Route
       exact
       path="/dashboard/image"
-      component={EntityDetailsPage}
+      component={routeProps => <EntityDetailsPage {...routeProps} entityType="image" />}
     />
     <Route
       path="/dashboard/image/:id"
-      component={EntityDetailsPage}
+      component={routeProps => <EntityDetailsPage {...routeProps} entityType="image" />}
     />
     <Route
       exact
       path="/dashboard/groups"
-      component={routeProps => <EntityListPage {...routeProps} type="group" />}
+      component={routeProps => <EntityListPage {...routeProps} entityType="group" />}
     />
     <Route component={ErrorPage} />
   </Switch>

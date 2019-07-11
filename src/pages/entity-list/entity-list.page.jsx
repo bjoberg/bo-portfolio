@@ -15,7 +15,7 @@ const useStyles = makeStyles(EntityListStyles);
 
 const EntityListPage = (props) => {
   const classes = useStyles();
-  const { type } = props;
+  const { entityType } = props;
 
   // Entity data to be displayed
   const [entityData, setEntityData] = useState([{}]);
@@ -43,9 +43,6 @@ const EntityListPage = (props) => {
     setSnackBarIsOpen(true);
   };
 
-  /**
-   * Get a list of images
-   */
   useEffect(() => {
     /**
      * 1. Start loading the page
@@ -79,14 +76,14 @@ const EntityListPage = (props) => {
       }
     }
 
-    if (type === 'image') {
+    if (entityType === 'image') {
       getImagesAsync();
-    } else if (type === 'group') {
+    } else if (entityType === 'group') {
       getGroupsAsync();
     } else {
-      openSnackbar('error', `${type} is an invalid type.`);
+      openSnackbar('error', `${entityType} is an invalid entityType.`);
     }
-  }, [type]);
+  }, [entityType]);
 
   if (!pageIsLoaded) {
     return (
@@ -99,7 +96,7 @@ const EntityListPage = (props) => {
   return (
     <Fragment>
       <div className={classes.container}>
-        <EntityGrid type={type} data={entityData} />
+        <EntityGrid entityType={entityType} data={entityData} />
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -117,7 +114,7 @@ const EntityListPage = (props) => {
 };
 
 EntityListPage.propTypes = {
-  type: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf(['image', 'group']).isRequired,
 };
 
 export default EntityListPage;
