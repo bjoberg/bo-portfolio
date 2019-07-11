@@ -10,35 +10,21 @@ import ImageFormContent from '../../components/image-form-content/image-form-con
 import ImageFormActions from '../../components/image-form-actions/image-form-actions.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
+import imageObj from '../../models/image.model';
+import groupObj from '../../models/group.model';
 import EntityType from '../../utils/enums/entity-type.enum';
 import EntityDetailsStyles from './entity-details.styles';
 
 const imageService = new ImageService();
 const groupService = new GroupService();
 const useStyles = makeStyles(EntityDetailsStyles);
-const imageObj = {
-  id: '',
-  thumbnailUrl: '',
-  imageUrl: '',
-  title: '',
-  description: '',
-  location: '',
-};
-
-const groupObj = {
-  id: '',
-  thumbnailUrl: '',
-  imageUrl: '',
-  title: '',
-  description: '',
-};
 
 const EntityDetailsPage = (props) => {
   const classes = useStyles();
   const { entityType, history, match } = props;
   const routeId = match.params.id;
 
-  // Image object being displayed
+  // Entity object being displayed
   const entityObj = entityType === 'image' ? imageObj : groupObj;
   const [entity, setEntity] = useState(entityObj);
 
@@ -75,40 +61,50 @@ const EntityDetailsPage = (props) => {
   };
 
   useEffect(() => {
-    async function getImageAsync() {
+    /**
+     * Get an image with the provided id
+     * @param {string} id is the id of the image to fetch
+     */
+    const getImageAsync = async (id) => {
       try {
         setPageIsLoaded(false);
-        setEntity(await imageService.getImage(routeId));
+        setEntity(await imageService.getImage(id));
       } catch (error) {
         openSnackbar('error', error.message);
       } finally {
         setPageIsLoaded(true);
       }
-    }
+    };
 
-    async function getGroupAsync() {
+    /**
+     * Get a group with the provided id
+     * @param {string} id is the id of the group to fetch
+     */
+    const getGroupAsync = async (id) => {
       try {
         setPageIsLoaded(false);
-        setEntity(await groupService.getGroup(routeId));
+        setEntity(await groupService.getGroup(id));
       } catch (error) {
         openSnackbar('error', error.message);
       } finally {
         setPageIsLoaded(true);
       }
-    }
+    };
 
+    // Make the request for entity data
+    // Determine what request to make based on the type of entity being displayed
     switch (entityType) {
       case EntityType.IMAGE:
-        getImageAsync();
+        getImageAsync(routeId);
         break;
       case EntityType.GROUP:
-        getGroupAsync();
+        getGroupAsync(routeId);
         break;
       default:
         openSnackbar('error', `${entityType} is an invalid entityType.`);
         break;
     }
-  }, [entityType]);
+  }, [entityType, routeId]);
 
   const handleDeleteAsync = async () => {
     console.log('deleting...');
@@ -198,8 +194,8 @@ const EntityDetailsPage = (props) => {
       <AlertDialog
         isOpen={alertIsOpen}
         handleClose={() => setAlertIsOpen(false)}
-        title="Delete Image"
-        body="You are about to delete this entity. Are you sure you want to continue?"
+        title={`Delete ${entityType}`}
+        body={`You are about to delete this ${entityType}. Are you sure you want to continue?`}
         handleConfirm={handleDeleteAsync}
       />
     </Fragment>
