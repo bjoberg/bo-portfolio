@@ -5,16 +5,18 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import AlertDialog from '../../components/alert-dialog/alert-dialog.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
+import GroupFormContent from '../../components/group-form-content/group-form-content.component';
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
 import ImageFormActions from '../../components/image-form-actions/image-form-actions.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
+import EntityType from '../../utils/enums/entity-type.enum';
 import EntityDetailsStyles from './entity-details.styles';
 
 const imageService = new ImageService();
 const groupService = new GroupService();
 const useStyles = makeStyles(EntityDetailsStyles);
-const ImageObj = {
+const imageObj = {
   id: '',
   thumbnailUrl: '',
   imageUrl: '',
@@ -23,13 +25,22 @@ const ImageObj = {
   location: '',
 };
 
+const groupObj = {
+  id: '',
+  thumbnailUrl: '',
+  imageUrl: '',
+  title: '',
+  description: '',
+};
+
 const EntityDetailsPage = (props) => {
   const classes = useStyles();
   const { entityType, history, match } = props;
   const routeId = match.params.id;
 
   // Image object being displayed
-  const [entity, setEntity] = useState(ImageObj);
+  const entityObj = entityType === 'image' ? imageObj : groupObj;
+  const [entity, setEntity] = useState(entityObj);
 
   // Are we creating a new image, or modifying an existing one?
   const [isValidEntity, setIsValidEntity] = useState(false);
@@ -86,12 +97,16 @@ const EntityDetailsPage = (props) => {
       }
     }
 
-    if (entityType === 'image') {
-      getImageAsync();
-    } else if (entityType === 'group') {
-      getGroupAsync();
-    } else {
-      openSnackbar('error', `${entityType} is an invalid entityType.`);
+    switch (entityType) {
+      case EntityType.IMAGE:
+        getImageAsync();
+        break;
+      case EntityType.GROUP:
+        getGroupAsync();
+        break;
+      default:
+        openSnackbar('error', `${entityType} is an invalid entityType.`);
+        break;
     }
   }, [entityType]);
 
@@ -139,11 +154,25 @@ const EntityDetailsPage = (props) => {
           />
         </div>
         <form className={classes.details} autoComplete="off">
-          <ImageFormContent
-            image={entity}
-            isDisabled={inputIsDisabled}
-            textFieldHandler={handleTextFieldChange}
-          />
+          {(() => {
+            switch (entityType) {
+              case EntityType.IMAGE: return (
+                <ImageFormContent
+                  image={entity}
+                  isDisabled={inputIsDisabled}
+                  textFieldHandler={handleTextFieldChange}
+                />
+              );
+              case EntityType.GROUP: return (
+                <GroupFormContent
+                  group={entity}
+                  isDisabled={inputIsDisabled}
+                  textFieldHandler={handleTextFieldChange}
+                />
+              );
+              default: return 'Error';
+            }
+          })()}
           <div className={classes.inputButtonGroup}>
             <ImageFormActions
               imageExists={isValidEntity}
@@ -175,27 +204,10 @@ const EntityDetailsPage = (props) => {
       />
     </Fragment>
   );
-
-
-  // TODO: Make network request for entity details
-
-  // This page should build the form
-  // Create form container
-  // Left side is for imageUrl and thumbnailUrl
-  // Right side is for content
-  // Botton of right side is for action buttons
-  // return (
-  //   <div className={classes.container}>
-  //     <ImageForm
-  //       routeHistory={history}
-  //       imageId={match.params.id}
-  //     />
-  //   </div>
-  // );
 };
 
 EntityDetailsPage.propTypes = {
-  entityType: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf([EntityType.IMAGE, EntityType.GROUP]).isRequired,
   history: PropTypes.shape({
     action: PropTypes.string,
     block: PropTypes.func,

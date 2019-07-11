@@ -7,6 +7,7 @@ import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
+import EntityType from '../../utils/enums/entity-type.enum';
 import EntityListStyles from './entity-list.styles';
 
 const imageService = new ImageService();
@@ -76,12 +77,16 @@ const EntityListPage = (props) => {
       }
     }
 
-    if (entityType === 'image') {
-      getImagesAsync();
-    } else if (entityType === 'group') {
-      getGroupsAsync();
-    } else {
-      openSnackbar('error', `${entityType} is an invalid entityType.`);
+    switch (entityType) {
+      case EntityType.IMAGE:
+        getImagesAsync();
+        break;
+      case EntityType.GROUP:
+        getGroupsAsync();
+        break;
+      default:
+        openSnackbar('error', `${entityType} is an invalid entityType.`);
+        break;
     }
   }, [entityType]);
 
@@ -96,7 +101,10 @@ const EntityListPage = (props) => {
   return (
     <Fragment>
       <div className={classes.container}>
-        <EntityGrid entityType={entityType} data={entityData} />
+        <EntityGrid
+          entityType={entityType}
+          data={entityData}
+        />
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -114,7 +122,7 @@ const EntityListPage = (props) => {
 };
 
 EntityListPage.propTypes = {
-  entityType: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf([EntityType.IMAGE, EntityType.GROUP]).isRequired,
 };
 
 export default EntityListPage;
