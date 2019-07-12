@@ -6,9 +6,6 @@ import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/enums/entity-type.enum';
 
 const Routes = () => (
-  // /dashboard/group => EntityDetailsPage
-  // /dashboard/group/:id => EntityDetailsPage
-
   // /dashboard/tags => EntityListPage
   // /dashboard/tag => EntityDetailsPage
   // /dashboard/tag/:id => EntityDetailsPage
@@ -48,6 +45,16 @@ const Routes = () => (
       path="/dashboard/groups"
       component={routeProps => (
         <EntityListPage
+          {...routeProps}
+          entityType={EntityType.GROUP}
+        />
+      )}
+    />
+    <Route
+      exact
+      path="/dashboard/group"
+      component={routeProps => (
+        <EntityDetailsPage
           {...routeProps}
           entityType={EntityType.GROUP}
         />

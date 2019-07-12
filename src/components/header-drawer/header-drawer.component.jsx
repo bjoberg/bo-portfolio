@@ -119,15 +119,20 @@ const GroupList = () => {
           <ListItemText primary="Groups" />
         </ListItem>
       </Link>
-      <ListItem
-        button
-        key="Add Group"
+      <Link
+        to="/dashboard/group"
+        className={classes.Link}
       >
-        <ListItemIcon>
-          <AddToPhotosIcon />
-        </ListItemIcon>
-        <ListItemText primary="Add Group" />
-      </ListItem>
+        <ListItem
+          button
+          key="Add Group"
+        >
+          <ListItemIcon>
+            <AddToPhotosIcon />
+          </ListItemIcon>
+          <ListItemText primary="Add Group" />
+        </ListItem>
+      </Link>
     </List>
   );
 };

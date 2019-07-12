@@ -42,4 +42,71 @@ export default class GroupService {
       throw new ApiError(404, 'Unable to retrieve groups');
     }
   }
+
+  /**
+   * Delete a single group based on id
+   * @param {string} id of the group to delete
+   * @returns number of rows destroyed
+   * @throws ApiError
+   */
+  async deleteGroup(id) {
+    try {
+      return await this.service({
+        method: 'delete',
+        url: `/group/${id}`,
+      });
+    } catch (error) {
+      throw new ApiError(500, `Error deleting group: ${id}`);
+    }
+  }
+
+  /**
+   * Update a single group based on id
+   * @param {JSON} group object to be updated
+   * @returns {JSON} group object
+   * @throws ApiError
+   */
+  async updateGroup(group) {
+    try {
+      const response = await this.service({
+        method: 'put',
+        url: `/group/${group.id}`,
+        data: {
+          ...group,
+        },
+      });
+
+      return {
+        count: response.data[0],
+        data: response.data[1][0],
+      };
+    } catch (error) {
+      throw new ApiError(500, `Error updating group: ${group.id}`);
+    }
+  }
+
+  /**
+   * Create a single group
+   * @param {JSON} group object to be created
+   * @returns {JSON} group object
+   * @throws ApiError
+   */
+  async createGroup(group) {
+    try {
+      const response = await this.service({
+        method: 'post',
+        url: '/group',
+        data: {
+          thumbnailUrl: group.thumbnailUrl,
+          imageUrl: group.imageUrl,
+          title: group.title,
+          description: group.description,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new ApiError(500, 'Error creating group');
+    }
+  }
 }

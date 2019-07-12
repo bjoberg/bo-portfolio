@@ -3,21 +3,17 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
+
 import AlertDialog from '../../components/alert-dialog/alert-dialog.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import GroupFormContent from '../../components/group-form-content/group-form-content.component';
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
 import ImageFormActions from '../../components/image-form-actions/image-form-actions.component';
-import ImageService from '../../services/image.service';
-import GroupService from '../../services/group.service';
-import imageObj from '../../models/image.model';
-import groupObj from '../../models/group.model';
+import EntityService from '../../services/entity.service';
 import EntityType from '../../utils/enums/entity-type.enum';
 import EntityDetailsStyles from './entity-details.styles';
-import ApiError from '../../models/api-error.model';
 
-const imageService = new ImageService();
-const groupService = new GroupService();
+const entityService = new EntityService();
 const useStyles = makeStyles(EntityDetailsStyles);
 
 const EntityDetailsPage = (props) => {
@@ -25,32 +21,13 @@ const EntityDetailsPage = (props) => {
   const { entityType, history, match } = props;
   const routeId = match.params.id;
   const routeBase = `/dashboard/${entityType}`;
-
-  const getNewEntityObj = type => (type === 'image' ? imageObj : groupObj);
-
-  // Entity object being displayed
-  const entityObj = getNewEntityObj(entityType);
-  const [entity, setEntity] = useState(entityObj);
-
-  // Are we creating a new image, or modifying an existing one?
+  const [entity, setEntity] = useState(entityService.getNewEntityObject(entityType));
   const [isValidEntity, setIsValidEntity] = useState(false);
-
-  // Page loading status
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
-
-  // Should input buttons be disabled?
   const [inputIsDisabled, setInputIsDisabled] = useState(false);
-
-  // Visibility state of the alert dialog
   const [alertIsOpen, setAlertIsOpen] = useState(false);
-
-  // Status of the snackbar
   const [snackbarStatus, setSnackbarStatus] = useState('success');
-
-  // Content of the snackbar
   const [snackbarContent, setSnackbarContent] = useState('');
-
-  // Visibility state of the snackbar
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
   /**
@@ -66,29 +43,15 @@ const EntityDetailsPage = (props) => {
 
   useEffect(() => {
     /**
-     * Get an entity based on its type and id.
-     * @param {string} type of entity to get
-     * @param {string} id of the entity to get
-     */
-    const getEntityAsync = async (type, id) => {
-      switch (type) {
-        case EntityType.IMAGE:
-          return imageService.getImage(id);
-        case EntityType.GROUP:
-          return groupService.getGroup(id);
-        default:
-          throw new ApiError(500, `Error getting ${type} with id: ${id}`);
-      }
-    };
-
-    /**
      * Perform UI logic for getting the entity
      */
     const handleGetAsync = async (type, id) => {
       try {
         setPageIsLoaded(false);
-        setEntity(await getEntityAsync(type, id));
-        setIsValidEntity(true);
+        if (routeId) {
+          setEntity(await entityService.getEntityAsync(type, id));
+          setIsValidEntity(true);
+        }
       } catch (error) {
         openSnackbar('error', error.message);
       } finally {
@@ -99,30 +62,11 @@ const EntityDetailsPage = (props) => {
     handleGetAsync(entityType, routeId);
   }, [entityType, routeId]);
 
-  /**
-   * Delete an entity based on its type and id.
-   * @param {string} type of entity to delete
-   * @param {string} id of the entity to delete
-   */
-  const deleteEntityAsync = (type, id) => {
-    switch (type) {
-      case EntityType.IMAGE:
-        return imageService.deleteImage(id);
-      case EntityType.GROUP:
-        return groupService.deleteGroup(id);
-      default:
-        throw new ApiError(500, `Error deleting ${type} with id: ${id}`);
-    }
-  };
-
-  /**
-   * Perform UI logic for deleting the entity
-   */
   const handleDeleteAsync = async () => {
     try {
       setInputIsDisabled(true);
-      const result = await deleteEntityAsync(entityType, routeId);
-      setEntity(getNewEntityObj(entityType));
+      const result = await entityService.deleteEntityAsync(entityType, routeId);
+      setEntity(entityService.getNewEntityObject(entityType));
       setIsValidEntity(false);
       history.push(routeBase);
       openSnackbar('success', `Deleted ${result.data} ${entityType}(s): ${routeId}`);
@@ -135,11 +79,31 @@ const EntityDetailsPage = (props) => {
   };
 
   const handleUpdateAsync = async () => {
-    console.log('updating...');
+    try {
+      setInputIsDisabled(true);
+      const result = await entityService.updateEntityAsync(entityType, entity);
+      const updateCount = result.count;
+      const { id } = result.data;
+      setIsValidEntity(true);
+      openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setInputIsDisabled(false);
+    }
   };
 
   const handleCreateAsync = async () => {
-    console.log('creating...');
+    try {
+      setInputIsDisabled(true);
+      const result = await entityService.createEntityAsync(entityType, entity);
+      history.push(`${routeBase}/${result.id}`);
+      openSnackbar('success', `Created ${entityType}: ${result.id}`);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setInputIsDisabled(false);
+    }
   };
 
   const handleTextFieldChange = (e) => {
