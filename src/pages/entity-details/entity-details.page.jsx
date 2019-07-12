@@ -14,6 +14,7 @@ import imageObj from '../../models/image.model';
 import groupObj from '../../models/group.model';
 import EntityType from '../../utils/enums/entity-type.enum';
 import EntityDetailsStyles from './entity-details.styles';
+import ApiError from '../../models/api-error.model';
 
 const imageService = new ImageService();
 const groupService = new GroupService();
@@ -23,9 +24,12 @@ const EntityDetailsPage = (props) => {
   const classes = useStyles();
   const { entityType, history, match } = props;
   const routeId = match.params.id;
+  const routeBase = `/dashboard/${entityType}`;
+
+  const getNewEntityObj = type => (type === 'image' ? imageObj : groupObj);
 
   // Entity object being displayed
-  const entityObj = entityType === 'image' ? imageObj : groupObj;
+  const entityObj = getNewEntityObj(entityType);
   const [entity, setEntity] = useState(entityObj);
 
   // Are we creating a new image, or modifying an existing one?
@@ -62,28 +66,29 @@ const EntityDetailsPage = (props) => {
 
   useEffect(() => {
     /**
-     * Get an image with the provided id
-     * @param {string} id is the id of the image to fetch
+     * Get an entity based on its type and id.
+     * @param {string} type of entity to get
+     * @param {string} id of the entity to get
      */
-    const getImageAsync = async (id) => {
-      try {
-        setPageIsLoaded(false);
-        setEntity(await imageService.getImage(id));
-      } catch (error) {
-        openSnackbar('error', error.message);
-      } finally {
-        setPageIsLoaded(true);
+    const getEntityAsync = async (type, id) => {
+      switch (type) {
+        case EntityType.IMAGE:
+          return imageService.getImage(id);
+        case EntityType.GROUP:
+          return groupService.getGroup(id);
+        default:
+          throw new ApiError(500, `Error getting ${type} with id: ${id}`);
       }
     };
 
     /**
-     * Get a group with the provided id
-     * @param {string} id is the id of the group to fetch
+     * Perform UI logic for getting the entity
      */
-    const getGroupAsync = async (id) => {
+    const handleGetAsync = async (type, id) => {
       try {
         setPageIsLoaded(false);
-        setEntity(await groupService.getGroup(id));
+        setEntity(await getEntityAsync(type, id));
+        setIsValidEntity(true);
       } catch (error) {
         openSnackbar('error', error.message);
       } finally {
@@ -91,23 +96,42 @@ const EntityDetailsPage = (props) => {
       }
     };
 
-    // Make the request for entity data
-    // Determine what request to make based on the type of entity being displayed
-    switch (entityType) {
-      case EntityType.IMAGE:
-        getImageAsync(routeId);
-        break;
-      case EntityType.GROUP:
-        getGroupAsync(routeId);
-        break;
-      default:
-        openSnackbar('error', `${entityType} is an invalid entityType.`);
-        break;
-    }
+    handleGetAsync(entityType, routeId);
   }, [entityType, routeId]);
 
+  /**
+   * Delete an entity based on its type and id.
+   * @param {string} type of entity to delete
+   * @param {string} id of the entity to delete
+   */
+  const deleteEntityAsync = (type, id) => {
+    switch (type) {
+      case EntityType.IMAGE:
+        return imageService.deleteImage(id);
+      case EntityType.GROUP:
+        return groupService.deleteGroup(id);
+      default:
+        throw new ApiError(500, `Error deleting ${type} with id: ${id}`);
+    }
+  };
+
+  /**
+   * Perform UI logic for deleting the entity
+   */
   const handleDeleteAsync = async () => {
-    console.log('deleting...');
+    try {
+      setInputIsDisabled(true);
+      const result = await deleteEntityAsync(entityType, routeId);
+      setEntity(getNewEntityObj(entityType));
+      setIsValidEntity(false);
+      history.push(routeBase);
+      openSnackbar('success', `Deleted ${result.data} ${entityType}(s): ${routeId}`);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setAlertIsOpen(false);
+      setInputIsDisabled(false);
+    }
   };
 
   const handleUpdateAsync = async () => {
