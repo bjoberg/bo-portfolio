@@ -65,16 +65,10 @@ const EntityDetailsPage = (props) => {
   const handleDeleteAsync = async () => {
     try {
       setInputIsDisabled(true);
-      const result = await entityService.deleteEntityAsync(entityType, routeId);
-      setEntity(entityService.getNewEntityObject(entityType));
-      setIsValidEntity(false);
+      await entityService.deleteEntityAsync(entityType, routeId);
       history.push(routeBase);
-      openSnackbar('success', `Deleted ${result.data} ${entityType}(s): ${routeId}`);
     } catch (error) {
       openSnackbar('error', error.message);
-    } finally {
-      setAlertIsOpen(false);
-      setInputIsDisabled(false);
     }
   };
 
@@ -98,11 +92,8 @@ const EntityDetailsPage = (props) => {
       setInputIsDisabled(true);
       const result = await entityService.createEntityAsync(entityType, entity);
       history.push(`${routeBase}/${result.id}`);
-      openSnackbar('success', `Created ${entityType}: ${result.id}`);
     } catch (error) {
       openSnackbar('error', error.message);
-    } finally {
-      setInputIsDisabled(false);
     }
   };
 

@@ -35,6 +35,8 @@ export default class EntityService {
    * Get an entity based on its type and id.
    * @param {string} type of entity to get
    * @param {string} id of the entity to get
+   * @returns Promise that resolves to the defined entity
+   * @throws API Error
    */
   async getEntityAsync(type, id) {
     switch (type) {
@@ -51,6 +53,8 @@ export default class EntityService {
    * Create an entity based on its type and object definition
    * @param {string} type of entity to create
    * @param {string} entity object representing entity to create
+   * @returns Promise that creates the defined entity
+   * @throws API Error
    */
   async createEntityAsync(type, entity) {
     switch (type) {
@@ -67,6 +71,8 @@ export default class EntityService {
    * Update an entity based on its type and object definition
    * @param {string} type of entity to update
    * @param {string} entity object representing entity to update
+   * @returns Promise that updates the defined entity
+   * @throws API Error
    */
   async updateEntityAsync(type, entity) {
     switch (type) {
@@ -83,6 +89,8 @@ export default class EntityService {
    * Delete an entity based on its type and id.
    * @param {string} type of entity to delete
    * @param {string} id of the entity to delete
+   * @returns Promise that deletes the defined entity
+   * @throws API Error
    */
   async deleteEntityAsync(type, id) {
     switch (type) {
