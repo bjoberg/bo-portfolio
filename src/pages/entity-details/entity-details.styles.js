@@ -38,9 +38,6 @@ const EntityDetailsStyles = theme => ({
   button: {
     margin: theme.spacing(1),
   },
-  snackbarMargin: {
-    margin: theme.spacing(1),
-  },
 });
 
 export default EntityDetailsStyles;

@@ -16,6 +16,9 @@ const AppStyles = theme => ({
     }),
     marginLeft: DrawerWidth,
   },
+  snackbarMargin: {
+    margin: theme.spacing(1),
+  },
 });
 
 export default AppStyles;

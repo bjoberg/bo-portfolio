@@ -2,10 +2,10 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Snackbar from '@material-ui/core/Snackbar';
+// import Snackbar from '@material-ui/core/Snackbar';
 
 import AlertDialog from '../../components/alert-dialog/alert-dialog.component';
-import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
+// import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import GroupFormContent from '../../components/group-form-content/group-form-content.component';
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
 import ImageFormActions from '../../components/image-form-actions/image-form-actions.component';
@@ -18,7 +18,9 @@ const useStyles = makeStyles(EntityDetailsStyles);
 
 const EntityDetailsPage = (props) => {
   const classes = useStyles();
-  const { entityType, history, match } = props;
+  const {
+    entityType, history, match, openSnackbar,
+  } = props;
   const routeId = match.params.id;
   const routeBase = `/dashboard/${entityType}`;
   const [entity, setEntity] = useState(entityService.getNewEntityObject(entityType));
@@ -26,22 +28,9 @@ const EntityDetailsPage = (props) => {
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [inputIsDisabled, setInputIsDisabled] = useState(false);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
-  const [snackbarStatus, setSnackbarStatus] = useState('success');
-  const [snackbarContent, setSnackbarContent] = useState('');
-  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
-
-  /**
-   * Open the snackbar as a notification
-   * @param {string} variant of the snackbar to display
-   * @param {string} message to display in the snackbar
-   */
-  const openSnackbar = (variant, message) => {
-    setSnackbarStatus(variant);
-    setSnackbarContent(message);
-    setSnackBarIsOpen(true);
-  };
 
   useEffect(() => {
+    console.log('loading...');
     /**
      * Perform UI logic for getting the entity
      */
@@ -53,7 +42,7 @@ const EntityDetailsPage = (props) => {
           setIsValidEntity(true);
         }
       } catch (error) {
-        openSnackbar('error', error.message);
+        // openSnackbar('error', error.message);
       } finally {
         setPageIsLoaded(true);
       }
@@ -65,9 +54,11 @@ const EntityDetailsPage = (props) => {
   const handleDeleteAsync = async () => {
     try {
       setInputIsDisabled(true);
-      await entityService.deleteEntityAsync(entityType, routeId);
+      const result = await entityService.deleteEntityAsync(entityType, routeId);
       history.push(routeBase);
+      openSnackbar('success', `Deleted ${result.data} ${entityType}(s): ${routeId}`);
     } catch (error) {
+      setInputIsDisabled(false);
       openSnackbar('error', error.message);
     }
   };
@@ -78,11 +69,11 @@ const EntityDetailsPage = (props) => {
       const result = await entityService.updateEntityAsync(entityType, entity);
       const updateCount = result.count;
       const { id } = result.data;
-      setIsValidEntity(true);
-      openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
+      // openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
     } catch (error) {
       openSnackbar('error', error.message);
     } finally {
+      setIsValidEntity(true);
       setInputIsDisabled(false);
     }
   };
@@ -92,7 +83,9 @@ const EntityDetailsPage = (props) => {
       setInputIsDisabled(true);
       const result = await entityService.createEntityAsync(entityType, entity);
       history.push(`${routeBase}/${result.id}`);
+      openSnackbar('success', `Created ${entityType}: ${result.id}`);
     } catch (error) {
+      setInputIsDisabled(false);
       openSnackbar('error', error.message);
     }
   };
@@ -159,17 +152,6 @@ const EntityDetailsPage = (props) => {
           </div>
         </form>
       </div>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={snackbarIsOpen}
-      >
-        <SnackbarContentWrapper
-          className={classes.snackbarMargin}
-          onClose={() => setSnackBarIsOpen(false)}
-          variant={snackbarStatus}
-          message={snackbarContent}
-        />
-      </Snackbar>
       <AlertDialog
         isOpen={alertIsOpen}
         handleClose={() => setAlertIsOpen(false)}
@@ -210,6 +192,7 @@ EntityDetailsPage.propTypes = {
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
+  openSnackbar: PropTypes.func.isRequired,
 };
 
 export default EntityDetailsPage;
