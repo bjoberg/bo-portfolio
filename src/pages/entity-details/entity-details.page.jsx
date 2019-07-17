@@ -6,7 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import AlertDialog from '../../components/alert-dialog/alert-dialog.component';
 import GroupFormContent from '../../components/group-form-content/group-form-content.component';
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
-import ImageFormActions from '../../components/image-form-actions/image-form-actions.component';
+import EntityFormActionButtons from '../../components/entity-form-action-buttons/entity-form-action-buttons.component';
 import EntityService from '../../services/entity.service';
 import EntityType from '../../utils/enums/entity-type.enum';
 import EntityDetailsStyles from './entity-details.styles';
@@ -142,8 +142,8 @@ const EntityDetailsPage = (props) => {
             }
           })()}
           <div className={classes.inputButtonGroup}>
-            <ImageFormActions
-              imageExists={isValidEntity}
+            <EntityFormActionButtons
+              entityExists={isValidEntity}
               isDisabled={inputIsDisabled}
               handleDelete={() => setAlertIsOpen(true)}
               handleUpdate={handleUpdateAsync}
