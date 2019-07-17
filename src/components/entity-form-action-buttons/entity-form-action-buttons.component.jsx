@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import ImageFormActionStyles from './image-form-actions.styles';
+import EntityFormActionButtonsStyles from './entity-form-action-buttons.styles';
 
-const useStyles = makeStyles(ImageFormActionStyles);
+const useStyles = makeStyles(EntityFormActionButtonsStyles);
 
-const ImageFormActions = (props) => {
+const EntityFormActionButtons = (props) => {
   const classes = useStyles();
   const {
-    imageExists,
+    entityExists,
     isDisabled,
     handleDelete,
     handleUpdate,
@@ -21,7 +21,7 @@ const ImageFormActions = (props) => {
 
   return (
     <Fragment>
-      {imageExists
+      {entityExists
         ? (
           <Fragment>
             <Button
@@ -63,23 +63,23 @@ const ImageFormActions = (props) => {
   );
 };
 
-ImageFormActions.propTypes = {
+EntityFormActionButtons.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleCreate: PropTypes.func.isRequired,
-  imageExists: PropTypes.bool,
+  entityExists: PropTypes.bool,
   isDisabled: PropTypes.bool,
   deleteButtonText: PropTypes.string,
   updateButtonText: PropTypes.string,
   createButtonText: PropTypes.string,
 };
 
-ImageFormActions.defaultProps = {
-  imageExists: false,
+EntityFormActionButtons.defaultProps = {
+  entityExists: false,
   isDisabled: false,
   deleteButtonText: 'Delete',
   updateButtonText: 'Update',
   createButtonText: 'Create',
 };
 
-export default ImageFormActions;
+export default EntityFormActionButtons;

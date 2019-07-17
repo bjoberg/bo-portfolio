@@ -7,6 +7,7 @@ import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
+import EntityType from '../../utils/enums/entity-type.enum';
 import EntityListStyles from './entity-list.styles';
 
 const imageService = new ImageService();
@@ -15,7 +16,7 @@ const useStyles = makeStyles(EntityListStyles);
 
 const EntityListPage = (props) => {
   const classes = useStyles();
-  const { type } = props;
+  const { entityType } = props;
 
   // Entity data to be displayed
   const [entityData, setEntityData] = useState([{}]);
@@ -43,9 +44,6 @@ const EntityListPage = (props) => {
     setSnackBarIsOpen(true);
   };
 
-  /**
-   * Get a list of images
-   */
   useEffect(() => {
     /**
      * 1. Start loading the page
@@ -79,14 +77,18 @@ const EntityListPage = (props) => {
       }
     }
 
-    if (type === 'image') {
-      getImagesAsync();
-    } else if (type === 'group') {
-      getGroupsAsync();
-    } else {
-      openSnackbar('error', `${type} is an invalid type.`);
+    switch (entityType) {
+      case EntityType.IMAGE:
+        getImagesAsync();
+        break;
+      case EntityType.GROUP:
+        getGroupsAsync();
+        break;
+      default:
+        openSnackbar('error', `${entityType} is an invalid entityType.`);
+        break;
     }
-  }, [type]);
+  }, [entityType]);
 
   if (!pageIsLoaded) {
     return (
@@ -99,7 +101,10 @@ const EntityListPage = (props) => {
   return (
     <Fragment>
       <div className={classes.container}>
-        <EntityGrid type={type} data={entityData} />
+        <EntityGrid
+          entityType={entityType}
+          data={entityData}
+        />
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -117,7 +122,7 @@ const EntityListPage = (props) => {
 };
 
 EntityListPage.propTypes = {
-  type: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf([EntityType.IMAGE, EntityType.GROUP]).isRequired,
 };
 
 export default EntityListPage;

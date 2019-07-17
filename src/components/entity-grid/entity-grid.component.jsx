@@ -4,13 +4,14 @@ import { makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Image from '../image/image.component';
 import Group from '../group/group.component';
+import EntityType from '../../utils/enums/entity-type.enum';
 import EntityListStyles from './entity-grid.styles';
 
 const useStyles = makeStyles(EntityListStyles);
 
 const EntityGrid = (props) => {
   const classes = useStyles();
-  const { type, data } = props;
+  const { entityType, data } = props;
 
   return (
     <Fragment>
@@ -20,17 +21,17 @@ const EntityGrid = (props) => {
             className={classes.entityItem}
             key={item.id}
           >
-            <Link to={`/dashboard/${type}/${item.id}`}>
+            <Link to={`/dashboard/${entityType}/${item.id}`}>
               {(() => {
-                switch (type) {
-                  case 'image': return (
+                switch (entityType) {
+                  case EntityType.IMAGE: return (
                     <Image
                       id={item.id}
                       title={item.title}
                       imageUrl={item.imageUrl}
                     />
                   );
-                  case 'group': return (
+                  case EntityType.GROUP: return (
                     <Group
                       id={item.id}
                       title={item.title}
@@ -49,7 +50,7 @@ const EntityGrid = (props) => {
 };
 
 EntityGrid.propTypes = {
-  type: PropTypes.oneOf(['image', 'group']).isRequired,
+  entityType: PropTypes.oneOf([EntityType.IMAGE, EntityType.GROUP]).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     thumbnailUrl: PropTypes.string,

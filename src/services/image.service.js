@@ -95,7 +95,7 @@ export default class ImageService {
     try {
       const response = await this.service({
         method: 'post',
-        url: '/image/',
+        url: '/image',
         data: {
           thumbnailUrl: image.thumbnailUrl,
           imageUrl: image.imageUrl,
