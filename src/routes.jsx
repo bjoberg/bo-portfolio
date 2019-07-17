@@ -18,7 +18,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/dashboard/images"
-        component={routeProps => (
+        render={routeProps => (
           <EntityListPage
             {...routeProps}
             entityType={EntityType.IMAGE}
@@ -29,7 +29,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/dashboard/image"
-        component={routeProps => (
+        render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.IMAGE}
@@ -39,7 +39,7 @@ const Routes = (props) => {
       />
       <Route
         path="/dashboard/image/:id"
-        component={routeProps => (
+        render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.IMAGE}
@@ -50,7 +50,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/dashboard/groups"
-        component={routeProps => (
+        render={routeProps => (
           <EntityListPage
             {...routeProps}
             entityType={EntityType.GROUP}
@@ -61,7 +61,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/dashboard/group"
-        component={routeProps => (
+        render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.GROUP}
@@ -71,7 +71,7 @@ const Routes = (props) => {
       />
       <Route
         path="/dashboard/group/:id"
-        component={routeProps => (
+        render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.GROUP}
