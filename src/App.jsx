@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from './components/header/header.component';
 import Routes from './routes';
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <Fragment>
+      <CssBaseline />
       <Header
         title="Portfolio Manager"
         drawerIsOpen={drawerIsOpen}
