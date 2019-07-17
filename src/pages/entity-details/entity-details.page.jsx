@@ -48,9 +48,12 @@ const EntityDetailsPage = (props) => {
 
   const handleDeleteAsync = async () => {
     try {
+      setAlertIsOpen(false);
       setInputIsDisabled(true);
       const result = await entityService.deleteEntityAsync(entityType, match.params.id);
       setInputIsDisabled(false);
+      setIsValidEntity(false);
+      setEntity(entityService.getNewEntityObject(entityType));
       history.push(routeBase);
       openSnackbar('success', `Deleted ${result.data} ${entityType}(s): ${match.params.id}`);
     } catch (error) {
