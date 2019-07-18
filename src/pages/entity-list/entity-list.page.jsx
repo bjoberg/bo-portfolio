@@ -2,9 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Snackbar from '@material-ui/core/Snackbar';
+
+import capitalizeFirstLetter from '../../utils/helpers/string.helpers';
 import EntityGrid from '../../components/entity-grid/entity-grid.component';
-import SnackbarContentWrapper from '../../components/snackbar-content/snackbar-content.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
 import EntityType from '../../utils/enums/entity-type.enum';
@@ -16,33 +16,11 @@ const useStyles = makeStyles(EntityListStyles);
 
 const EntityListPage = (props) => {
   const classes = useStyles();
-  const { entityType } = props;
-
-  // Entity data to be displayed
+  const { entityType, history, setTitle } = props;
   const [entityData, setEntityData] = useState([{}]);
-
-  // Page loading status
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
 
-  // Status of the snackbar
-  const [snackbarStatus, setSnackbarStatus] = useState('success');
-
-  // Content of the snackbar
-  const [snackbarContent, setSnackbarContent] = useState('');
-
-  // Visibility state of the snackbar
-  const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
-
-  /**
-   * Open the snackbar as a notification
-   * @param {string} variant of the snackbar to display
-   * @param {string} message to display in the snackbar
-   */
-  const openSnackbar = (variant, message) => {
-    setSnackbarStatus(variant);
-    setSnackbarContent(message);
-    setSnackBarIsOpen(true);
-  };
+  setTitle(`${capitalizeFirstLetter(entityType)}s`);
 
   useEffect(() => {
     /**
@@ -55,7 +33,7 @@ const EntityListPage = (props) => {
         setPageIsLoaded(false);
         setEntityData(await imageService.getImages());
       } catch (error) {
-        openSnackbar('error', error.message);
+        history.push('/error');
       } finally {
         setPageIsLoaded(true);
       }
@@ -71,7 +49,7 @@ const EntityListPage = (props) => {
         setPageIsLoaded(false);
         setEntityData(await groupService.getGroups());
       } catch (error) {
-        openSnackbar('error', error.message);
+        history.push('/error');
       } finally {
         setPageIsLoaded(true);
       }
@@ -85,10 +63,10 @@ const EntityListPage = (props) => {
         getGroupsAsync();
         break;
       default:
-        openSnackbar('error', `${entityType} is an invalid entityType.`);
+        history.push('/error');
         break;
     }
-  }, [entityType]);
+  }, [history, entityType]);
 
   if (!pageIsLoaded) {
     return (
@@ -106,23 +84,32 @@ const EntityListPage = (props) => {
           data={entityData}
         />
       </div>
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={snackbarIsOpen}
-      >
-        <SnackbarContentWrapper
-          className={classes.snackbarMargin}
-          onClose={() => setSnackBarIsOpen(false)}
-          variant={snackbarStatus}
-          message={snackbarContent}
-        />
-      </Snackbar>
     </Fragment>
   );
 };
 
 EntityListPage.propTypes = {
   entityType: PropTypes.oneOf([EntityType.IMAGE, EntityType.GROUP]).isRequired,
+  history: PropTypes.shape({
+    action: PropTypes.string,
+    block: PropTypes.func,
+    createHref: PropTypes.func,
+    go: PropTypes.func,
+    goBack: PropTypes.func,
+    goForward: PropTypes.func,
+    length: PropTypes.number,
+    listen: PropTypes.func,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+      hash: PropTypes.string,
+      state: PropTypes.string,
+      key: PropTypes.string,
+    }),
+    push: PropTypes.func,
+    replace: PropTypes.func,
+  }).isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
 export default EntityListPage;
