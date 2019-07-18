@@ -13,6 +13,7 @@ const useStyles = makeStyles(AppStyles);
 
 function App() {
   const classes = useStyles();
+  const [title, setTitle] = useState('Portfolio Manager');
   const [drawerIsOpen, setDrawerIsOpen] = useState(true);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
@@ -40,7 +41,7 @@ function App() {
     <Fragment>
       <CssBaseline />
       <Header
-        title="Portfolio Manager"
+        title={title}
         drawerIsOpen={drawerIsOpen}
         handleToggleDrawer={toggleDrawer}
       />
@@ -49,7 +50,10 @@ function App() {
           [classes.contentShift]: drawerIsOpen,
         })}
       >
-        <Routes openSnackbar={openSnackbar} />
+        <Routes
+          openSnackbar={openSnackbar}
+          setTitle={val => setTitle(val)}
+        />
       </main>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

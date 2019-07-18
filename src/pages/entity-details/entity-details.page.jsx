@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import capitalizeFirstLetter from '../../utils/helpers/string.helpers';
 import AlertDialog from '../../components/alert-dialog/alert-dialog.component';
 import GroupFormContent from '../../components/group-form-content/group-form-content.component';
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
@@ -17,7 +18,7 @@ const useStyles = makeStyles(EntityDetailsStyles);
 const EntityDetailsPage = (props) => {
   const classes = useStyles();
   const {
-    entityType, history, match, openSnackbar,
+    entityType, history, match, openSnackbar, setTitle,
   } = props;
   const routeBase = `/dashboard/${entityType}`;
   const [entity, setEntity] = useState(entityService.getNewEntityObject(entityType));
@@ -25,6 +26,8 @@ const EntityDetailsPage = (props) => {
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [inputIsDisabled, setInputIsDisabled] = useState(false);
   const [alertIsOpen, setAlertIsOpen] = useState(false);
+
+  setTitle(`${capitalizeFirstLetter(entityType)} Details: ${entity.title}`);
 
   useEffect(() => {
     /**
@@ -193,6 +196,7 @@ EntityDetailsPage.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
   openSnackbar: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
 export default EntityDetailsPage;

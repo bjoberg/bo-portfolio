@@ -11,7 +11,7 @@ const Routes = (props) => {
 // /dashboard/tags => EntityListPage
 // /dashboard/tag => EntityDetailsPage
 // /dashboard/tag/:id => EntityDetailsPage
-  const { openSnackbar } = props;
+  const { openSnackbar, setTitle } = props;
 
   return (
     <Switch>
@@ -22,7 +22,7 @@ const Routes = (props) => {
           <EntityListPage
             {...routeProps}
             entityType={EntityType.IMAGE}
-            openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -34,6 +34,7 @@ const Routes = (props) => {
             {...routeProps}
             entityType={EntityType.IMAGE}
             openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -44,6 +45,7 @@ const Routes = (props) => {
             {...routeProps}
             entityType={EntityType.IMAGE}
             openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -54,7 +56,7 @@ const Routes = (props) => {
           <EntityListPage
             {...routeProps}
             entityType={EntityType.GROUP}
-            openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -66,6 +68,7 @@ const Routes = (props) => {
             {...routeProps}
             entityType={EntityType.GROUP}
             openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -76,6 +79,7 @@ const Routes = (props) => {
             {...routeProps}
             entityType={EntityType.GROUP}
             openSnackbar={openSnackbar}
+            setTitle={setTitle}
           />
         )}
       />
@@ -85,6 +89,7 @@ const Routes = (props) => {
 };
 Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
 export default Routes;
