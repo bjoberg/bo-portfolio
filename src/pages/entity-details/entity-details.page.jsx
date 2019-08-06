@@ -71,7 +71,7 @@ const EntityDetailsPage = (props) => {
       const result = await entityService.updateEntityAsync(entityType, entity);
       const updateCount = result.count;
       const { id } = result.data;
-      openSnackbar('success', `Updated ${updateCount} image(s): ${id}`);
+      openSnackbar('success', `Updated ${updateCount} ${entityType}(s): ${id}`);
     } catch (error) {
       openSnackbar('error', error.message);
     } finally {
