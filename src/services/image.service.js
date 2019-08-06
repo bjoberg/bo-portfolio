@@ -37,7 +37,7 @@ export default class ImageService {
         url: '/images',
       });
 
-      return response.data;
+      return response.data.rows;
     } catch (error) {
       throw new ApiError(404, 'Unable to retrieve images');
     }
