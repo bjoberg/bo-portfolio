@@ -9,7 +9,7 @@ import GroupFormContent from '../../components/group-form-content/group-form-con
 import ImageFormContent from '../../components/image-form-content/image-form-content.component';
 import EntityFormActionButtons from '../../components/entity-form-action-buttons/entity-form-action-buttons.component';
 import EntityService from '../../services/entity.service';
-import EntityType from '../../utils/enums/entity-type.enum';
+import EntityType from '../../utils/constants';
 import EntityDetailsStyles from './entity-details.styles';
 
 const entityService = new EntityService();

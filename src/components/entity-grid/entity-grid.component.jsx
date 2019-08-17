@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Image from '../image/image.component';
 import Group from '../group/group.component';
-import EntityType from '../../utils/enums/entity-type.enum';
+import EntityType from '../../utils/constants';
 import EntityListStyles from './entity-grid.styles';
 
 const useStyles = makeStyles(EntityListStyles);

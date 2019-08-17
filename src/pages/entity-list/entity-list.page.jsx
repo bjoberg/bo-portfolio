@@ -7,7 +7,7 @@ import capitalizeFirstLetter from '../../utils/helpers/string.helpers';
 import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
-import EntityType from '../../utils/enums/entity-type.enum';
+import EntityType from '../../utils/constants';
 import EntityListStyles from './entity-list.styles';
 
 const imageService = new ImageService();

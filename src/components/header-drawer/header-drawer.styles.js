@@ -1,4 +1,4 @@
-import { drawerWidth } from '../../utils/styles/theme';
+import { drawerWidth } from '../../utils/theme';
 
 const HeaderDrawerStyles = theme => ({
   drawer: {
@@ -7,13 +7,14 @@ const HeaderDrawerStyles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    boxShadow: theme.shadows[2],
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   Link: {
     textDecoration: 'none',

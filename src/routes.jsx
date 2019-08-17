@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import EntityListPage from './pages/entity-list/entity-list.page';
 import ErrorPage from './pages/error/error.page';
-import EntityType from './utils/enums/entity-type.enum';
+import EntityType from './utils/constants';
 
 const Routes = (props) => {
 // /dashboard/tags => EntityListPage
@@ -17,7 +17,7 @@ const Routes = (props) => {
     <Switch>
       <Route
         exact
-        path="/dashboard/images"
+        path="/images"
         render={routeProps => (
           <EntityListPage
             {...routeProps}
@@ -28,7 +28,7 @@ const Routes = (props) => {
       />
       <Route
         exact
-        path="/dashboard/image"
+        path="/image"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
@@ -39,7 +39,7 @@ const Routes = (props) => {
         )}
       />
       <Route
-        path="/dashboard/image/:id"
+        path="/image/:id"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
@@ -51,7 +51,7 @@ const Routes = (props) => {
       />
       <Route
         exact
-        path="/dashboard/groups"
+        path="/groups"
         render={routeProps => (
           <EntityListPage
             {...routeProps}
@@ -62,7 +62,7 @@ const Routes = (props) => {
       />
       <Route
         exact
-        path="/dashboard/group"
+        path="/group"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
@@ -73,7 +73,7 @@ const Routes = (props) => {
         )}
       />
       <Route
-        path="/dashboard/group/:id"
+        path="/group/:id"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}

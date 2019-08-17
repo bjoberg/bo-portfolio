@@ -1,4 +1,4 @@
-import { headerHeight, theme } from '../../utils/styles/theme';
+import { headerHeight, theme } from '../../utils/theme';
 
 const ErrorStyles = {
   container: {

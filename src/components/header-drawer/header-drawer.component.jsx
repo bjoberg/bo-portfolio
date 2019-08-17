@@ -16,6 +16,7 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import PhotoIcon from '@material-ui/icons/Photo';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import { Typography } from '@material-ui/core';
 import HeaderDrawerStyles from './header-drawer.styles';
 
 const useStyles = makeStyles(HeaderDrawerStyles);
@@ -38,6 +39,12 @@ const HeaderDrawer = (props) => {
       }}
     >
       <div className={classes.drawerHeader}>
+        <Typography
+          variant="h6"
+          className={classes.title}
+        >
+              Brett Oberg
+        </Typography>
         <IconButton onClick={handleClose}>
           <ChevronLeftIcon />
         </IconButton>

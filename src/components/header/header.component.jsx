@@ -11,6 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ElevationScroll from '../elevation-scroll/elevation-scroll.component';
 import HeaderDrawer from '../header-drawer/header-drawer.component';
 import HeaderStlyes from './header.styles';
+import MiniDrawer from '../mini-drawer/mini-drawer.component';
 
 const useStyles = makeStyles(HeaderStlyes);
 
@@ -28,7 +29,7 @@ const Header = (props) => {
           <Toolbar>
             <IconButton
               edge="start"
-              className={clsx(classes.menuButton, drawerIsOpen && classes.hide)}
+              className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
               onClick={handleToggleDrawer}
@@ -48,6 +49,7 @@ const Header = (props) => {
         isOpen={drawerIsOpen}
         handleClose={handleToggleDrawer}
       />
+      <MiniDrawer />
     </div>
   );
 };

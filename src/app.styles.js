@@ -1,4 +1,4 @@
-import { drawerWidth } from './utils/styles/theme';
+import { drawerWidth } from './utils/theme';
 
 const AppStyles = theme => ({
   content: {
@@ -9,13 +9,13 @@ const AppStyles = theme => ({
     }),
     marginLeft: 0,
   },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: drawerWidth,
-  },
+  // contentShift: {
+  //   transition: theme.transitions.create('margin', {
+  //     easing: theme.transitions.easing.easeOut,
+  //     duration: theme.transitions.duration.enteringScreen,
+  //   }),
+  //   marginLeft: drawerWidth,
+  // },
   snackbarMargin: {
     margin: theme.spacing(1),
   },

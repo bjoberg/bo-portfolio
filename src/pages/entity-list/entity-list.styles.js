@@ -1,4 +1,4 @@
-import { headerHeight } from '../../utils/styles/theme';
+import { headerHeight } from '../../utils/theme';
 
 const EntityListStyles = {
   container: {

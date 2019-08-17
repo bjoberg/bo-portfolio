@@ -9,7 +9,7 @@ import Header from './components/header/header.component';
 import Routes from './routes';
 import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
 import AppStyles from './app.styles';
-import { theme } from './utils/styles/theme';
+import { theme } from './utils/theme';
 
 const useStyles = makeStyles(AppStyles);
 

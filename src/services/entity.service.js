@@ -1,5 +1,5 @@
 import ApiError from '../models/api-error.model';
-import EntityType from '../utils/enums/entity-type.enum';
+import EntityType from '../utils/constants';
 import GroupService from './group.service';
 import ImageService from './image.service';
 import imageObj from '../models/image.model';
