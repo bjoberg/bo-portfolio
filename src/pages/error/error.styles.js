@@ -1,11 +1,11 @@
-import { HeaderHeight } from '../../utils/styles/global.styles';
+import { headerHeight, theme } from '../../utils/styles/theme';
 
 const ErrorStyles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: HeaderHeight + 100,
-    marginLeft: 50,
+    marginTop: headerHeight + theme.spacing(5),
+    marginLeft: theme.spacing(5),
   },
 };
 

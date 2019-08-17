@@ -1,12 +1,12 @@
-import { DrawerWidth } from '../../utils/styles/global.styles';
+import { drawerWidth } from '../../utils/styles/theme';
 
 const HeaderDrawerStyles = theme => ({
   drawer: {
-    width: DrawerWidth,
+    width: drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: DrawerWidth,
+    width: drawerWidth,
   },
   drawerHeader: {
     display: 'flex',

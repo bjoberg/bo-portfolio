@@ -1,20 +1,22 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
+import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from './components/header/header.component';
 import Routes from './routes';
 import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
 import AppStyles from './app.styles';
+import { theme } from './utils/styles/theme';
 
 const useStyles = makeStyles(AppStyles);
 
 function App() {
   const classes = useStyles();
-  const [title, setTitle] = useState('Portfolio Manager');
-  const [drawerIsOpen, setDrawerIsOpen] = useState(true);
+  const [title, setTitle] = useState('Brett Oberg');
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -38,7 +40,7 @@ function App() {
   };
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header
         title={title}
@@ -66,7 +68,7 @@ function App() {
           message={snackbarContent}
         />
       </Snackbar>
-    </Fragment>
+    </ThemeProvider>
   );
 }
 

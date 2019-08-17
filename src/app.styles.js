@@ -1,4 +1,4 @@
-import { DrawerWidth } from './utils/styles/global.styles';
+import { drawerWidth } from './utils/styles/theme';
 
 const AppStyles = theme => ({
   content: {
@@ -14,7 +14,7 @@ const AppStyles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: DrawerWidth,
+    marginLeft: drawerWidth,
   },
   snackbarMargin: {
     margin: theme.spacing(1),
