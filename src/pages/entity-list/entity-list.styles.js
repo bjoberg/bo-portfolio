@@ -1,11 +1,11 @@
-import { HeaderHeight } from '../../utils/styles/global.styles';
+import { headerHeight } from '../../utils/theme';
 
 const EntityListStyles = {
   container: {
-    marginTop: HeaderHeight,
+    marginTop: headerHeight,
   },
   progressBarContainer: {
-    marginTop: HeaderHeight,
+    marginTop: headerHeight,
     flexGrow: 1,
   },
 };

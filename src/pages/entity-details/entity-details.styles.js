@@ -1,8 +1,7 @@
-import { HeaderHeight } from '../../utils/styles/global.styles';
+import { headerHeight } from '../../utils/theme';
 
 const EntityDetailsStyles = theme => ({
   container: {
-    marginTop: HeaderHeight,
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -32,7 +31,7 @@ const EntityDetailsStyles = theme => ({
     justifyContent: 'flex-end',
   },
   progressBarContainer: {
-    marginTop: HeaderHeight,
+    marginTop: headerHeight,
     flexGrow: 1,
   },
   button: {

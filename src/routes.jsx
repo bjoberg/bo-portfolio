@@ -5,81 +5,75 @@ import PropTypes from 'prop-types';
 import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import EntityListPage from './pages/entity-list/entity-list.page';
 import ErrorPage from './pages/error/error.page';
-import EntityType from './utils/enums/entity-type.enum';
+import EntityType from './utils/constants';
 
 const Routes = (props) => {
 // /dashboard/tags => EntityListPage
 // /dashboard/tag => EntityDetailsPage
 // /dashboard/tag/:id => EntityDetailsPage
-  const { openSnackbar, setTitle } = props;
+  const { openSnackbar } = props;
 
   return (
     <Switch>
       <Route
         exact
-        path="/dashboard/images"
+        path="/images"
         render={routeProps => (
           <EntityListPage
             {...routeProps}
             entityType={EntityType.IMAGE}
-            setTitle={setTitle}
           />
         )}
       />
       <Route
         exact
-        path="/dashboard/image"
+        path="/image"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.IMAGE}
             openSnackbar={openSnackbar}
-            setTitle={setTitle}
           />
         )}
       />
       <Route
-        path="/dashboard/image/:id"
+        path="/image/:id"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.IMAGE}
             openSnackbar={openSnackbar}
-            setTitle={setTitle}
           />
         )}
       />
       <Route
         exact
-        path="/dashboard/groups"
+        path="/groups"
         render={routeProps => (
           <EntityListPage
             {...routeProps}
             entityType={EntityType.GROUP}
-            setTitle={setTitle}
           />
         )}
       />
       <Route
         exact
-        path="/dashboard/group"
+        path="/group"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.GROUP}
             openSnackbar={openSnackbar}
-            setTitle={setTitle}
           />
         )}
       />
       <Route
-        path="/dashboard/group/:id"
+        path="/group/:id"
         render={routeProps => (
           <EntityDetailsPage
             {...routeProps}
             entityType={EntityType.GROUP}
             openSnackbar={openSnackbar}
-            setTitle={setTitle}
           />
         )}
       />
@@ -89,7 +83,6 @@ const Routes = (props) => {
 };
 Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
-  setTitle: PropTypes.func.isRequired,
 };
 
 export default Routes;

@@ -1,20 +1,19 @@
-import { DrawerWidth } from './utils/styles/global.styles';
+import { miniDrawerWidth, headerHeight } from './utils/theme';
 
 const AppStyles = theme => ({
-  content: {
+  container: {
     flexGrow: 1,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: 0,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: DrawerWidth,
+    marginLeft: miniDrawerWidth + theme.spacing(2),
+    marginTop: headerHeight + theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(2),
+    },
   },
   snackbarMargin: {
     margin: theme.spacing(1),

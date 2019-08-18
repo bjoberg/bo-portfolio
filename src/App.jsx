@@ -1,29 +1,40 @@
-import React, { Fragment, useState } from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
+import { ThemeProvider } from '@material-ui/styles';
+import { ClickAwayListener } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from './components/header/header.component';
 import Routes from './routes';
 import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
+import FullDrawer from './components/full-drawer/full-drawer.component';
+import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
+import { theme } from './utils/theme';
 
 const useStyles = makeStyles(AppStyles);
 
 function App() {
   const classes = useStyles();
-  const [title, setTitle] = useState('Portfolio Manager');
-  const [drawerIsOpen, setDrawerIsOpen] = useState(true);
+  const title = 'Brett Oberg';
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
   /**
-   * Toggle the state of the drawer
+   * Toggle the application's drawer
    */
   const toggleDrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
+  };
+
+  /**
+   * Close the application's drawer
+   */
+  const closeDrawer = () => {
+    setDrawerIsOpen(false);
   };
 
   /**
@@ -38,21 +49,24 @@ function App() {
   };
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header
-        title={title}
-        drawerIsOpen={drawerIsOpen}
-        handleToggleDrawer={toggleDrawer}
-      />
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: drawerIsOpen,
-        })}
-      >
+      <ClickAwayListener onClickAway={closeDrawer}>
+        {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
+        <div>
+          <Header
+            title={title}
+            drawerIsOpen={drawerIsOpen}
+            handleToggle={toggleDrawer}
+            handleClose={closeDrawer}
+          />
+          <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
+          <MiniDrawer />
+        </div>
+      </ClickAwayListener>
+      <main className={classes.container}>
         <Routes
           openSnackbar={openSnackbar}
-          setTitle={val => setTitle(val)}
         />
       </main>
       <Snackbar
@@ -66,7 +80,7 @@ function App() {
           message={snackbarContent}
         />
       </Snackbar>
-    </Fragment>
+    </ThemeProvider>
   );
 }
 
