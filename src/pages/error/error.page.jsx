@@ -20,48 +20,6 @@ const ErrorPage = (props) => {
       <Typography variant="h3">
         {body}
       </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
     </div>
   );
 };
