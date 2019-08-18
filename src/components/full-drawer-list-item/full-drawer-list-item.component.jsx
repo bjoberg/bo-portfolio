@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 
-import MiniDrawerListItemStyles from './mini-drawer-list-item.styles';
+import FullDrawerListItemStyles from './full-drawer-list-item.styles';
 
-const useStyles = makeStyles(MiniDrawerListItemStyles);
+const useStyles = makeStyles(FullDrawerListItemStyles);
 
-const MiniDrawerListItem = (props) => {
+const FullDrawerListItem = (props) => {
   const classes = useStyles();
   const { item } = props;
 
@@ -19,15 +19,17 @@ const MiniDrawerListItem = (props) => {
       to={item.route}
       exact
     >
-      {item.icon}
-      <Typography variant="caption">
-        {item.text}
-      </Typography>
+      <ListItem button className={classes.listItem}>
+        <ListItemIcon className={classes.listIcon}>
+          {item.icon}
+        </ListItemIcon>
+        <ListItemText primary={item.text} />
+      </ListItem>
     </NavLink>
   );
 };
 
-MiniDrawerListItem.propTypes = {
+FullDrawerListItem.propTypes = {
   item: PropTypes.shape({
     identifier: PropTypes.string,
     text: PropTypes.string,
@@ -36,4 +38,4 @@ MiniDrawerListItem.propTypes = {
   }).isRequired,
 };
 
-export default MiniDrawerListItem;
+export default FullDrawerListItem;

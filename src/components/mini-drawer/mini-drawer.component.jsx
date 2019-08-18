@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
 
 import NavigationItems from '../../utils/navigation-items';
 import MiniDrawerListItem from '../mini-drawer-list-item/mini-drawer-list-item.component';
@@ -26,15 +25,7 @@ const MiniDrawer = (props) => {
     >
       <div className={classes.drawerHeader} />
       {items.map(item => (
-        <NavLink
-          key={item.identifier}
-          activeClassName={classes.linkIsActive}
-          className={classes.link}
-          to={item.route}
-          exact
-        >
-          <MiniDrawerListItem item={item} />
-        </NavLink>
+        <MiniDrawerListItem key={item.identifier} item={item} />
       ))}
     </Drawer>
   );
@@ -42,7 +33,7 @@ const MiniDrawer = (props) => {
 
 MiniDrawer.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    identifer: PropTypes.string,
+    identifier: PropTypes.string,
     text: PropTypes.string,
     icon: PropTypes.element,
     route: PropTypes.string,

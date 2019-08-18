@@ -1,7 +1,7 @@
 import { miniDrawerWidth } from '../../utils/theme';
 
 const MiniDrawerListItemStyles = theme => ({
-  root: {
+  link: {
     minWidth: miniDrawerWidth,
     minHeight: miniDrawerWidth,
     display: 'flex',
@@ -13,7 +13,12 @@ const MiniDrawerListItemStyles = theme => ({
       backgroundColor: theme.palette.action.hover,
       borderRadius: miniDrawerWidth,
     },
-    color: 'inherit',
+    textDecoration: 'none',
+    color: theme.palette.grey[700],
+  },
+  linkIsActive: {
+    textDecoration: 'none',
+    color: theme.palette.primary.contrastText,
   },
 });
 

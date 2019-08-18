@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  AppBar, Toolbar, Typography, IconButton,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import ElevationScroll from '../elevation-scroll/elevation-scroll.component';
-import HeaderDrawer from '../header-drawer/header-drawer.component';
-import HeaderStlyes from './header.styles';
+import FullDrawer from '../full-drawer/full-drawer.component';
 import MiniDrawer from '../mini-drawer/mini-drawer.component';
+import HeaderStlyes from './header.styles';
 
 const useStyles = makeStyles(HeaderStlyes);
 
@@ -24,7 +22,7 @@ const Header = (props) => {
       <ElevationScroll>
         <AppBar
           position="fixed"
-          className={clsx(classes.appBar, { [classes.appBarShift]: drawerIsOpen })}
+          className={classes.appBar}
         >
           <Toolbar>
             <IconButton
@@ -45,7 +43,7 @@ const Header = (props) => {
           </Toolbar>
         </AppBar>
       </ElevationScroll>
-      <HeaderDrawer
+      <FullDrawer
         isOpen={drawerIsOpen}
         handleClose={handleToggleDrawer}
       />

@@ -1,3 +1,4 @@
+import React from 'react';
 import HomeIcon from '@material-ui/icons/Home';
 import PhotoIcon from '@material-ui/icons/Photo';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
@@ -6,22 +7,22 @@ import NavigationItem from './navigation-item';
 
 const home = new NavigationItem({
   identifier: 'home',
-  text: 'home',
-  icon: HomeIcon,
+  text: 'Home',
+  icon: <HomeIcon />,
   route: '/',
 });
 
 const images = new NavigationItem({
   identifier: 'images',
-  text: 'images',
-  icon: PhotoIcon,
+  text: 'Images',
+  icon: <PhotoIcon />,
   route: '/images',
 });
 
 const groups = new NavigationItem({
   identifier: 'groups',
-  text: 'groups',
-  icon: PhotoLibraryIcon,
+  text: 'Groups',
+  icon: <PhotoLibraryIcon />,
   route: '/groups',
 });
 

@@ -17,14 +17,6 @@ const MiniDrawerStyles = theme => ({
   drawerHeader: {
     ...theme.mixins.toolbar,
   },
-  link: {
-    textDecoration: 'none',
-    color: theme.palette.grey[700],
-  },
-  linkIsActive: {
-    textDecoration: 'none',
-    color: theme.palette.primary.main,
-  },
 });
 
 export default MiniDrawerStyles;
