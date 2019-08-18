@@ -1,13 +1,15 @@
-const EntityListStyles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    marginTop: theme.spacing(9),
+const EntityGridStyles = theme => ({
+  root: {
+    flexGrow: 1,
   },
-  entityItem: {
-    marginLeft: theme.spacing(1),
+  grid: {
+    width: '100%',
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
 });
 
-export default EntityListStyles;
+export default EntityGridStyles;

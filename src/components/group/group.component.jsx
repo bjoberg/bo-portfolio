@@ -1,21 +1,34 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import {
+  makeStyles, Typography,
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
+import GroupStyles from './group.styles';
+
+const useStyles = makeStyles(GroupStyles);
 
 const Group = (props) => {
+  const classes = useStyles();
   const { id, imageUrl, title } = props;
 
   return (
-    <Fragment>
-      <img
-        id={id}
-        src={imageUrl}
-        alt={title}
-      />
-      <Typography variant="body1">
-        {title}
-      </Typography>
-    </Fragment>
+    <Link to={`/group/${id}`} className={classes.link}>
+      <div className={classes.imgContainer}>
+        <img
+          id={id}
+          src={imageUrl}
+          alt={title}
+          className={classes.img}
+        />
+      </div>
+      <div className={classes.textContainer}>
+        <Typography variant="body1">
+          {title}
+        </Typography>
+      </div>
+    </Link>
   );
 };
 
