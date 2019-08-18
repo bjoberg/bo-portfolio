@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import EntityListPage from './pages/entity-list/entity-list.page';
+import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/constants';
 
@@ -49,12 +50,13 @@ const Routes = (props) => {
       <Route
         exact
         path="/groups"
-        render={routeProps => (
-          <EntityListPage
-            {...routeProps}
-            entityType={EntityType.GROUP}
-          />
-        )}
+        component={GroupListPage}
+        // render={routeProps => (
+        //   <EntityListPage
+        //     {...routeProps}
+        //     entityType={EntityType.GROUP}
+        //   />
+        // )}
       />
       <Route
         exact

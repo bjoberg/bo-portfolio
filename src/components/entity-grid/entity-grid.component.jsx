@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { makeStyles, Grid } from '@material-ui/core';
 import Image from '../image/image.component';
 import Group from '../group/group.component';
 import EntityType from '../../utils/constants';
-import EntityListStyles from './entity-grid.styles';
+import EntityGridStyles from './entity-grid.styles';
 
-const useStyles = makeStyles(EntityListStyles);
+const useStyles = makeStyles(EntityGridStyles);
 
 const EntityGrid = (props) => {
   const classes = useStyles();
@@ -15,35 +14,52 @@ const EntityGrid = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.container}>
-        {data.map(item => (
-          <div
-            className={classes.entityItem}
-            key={item.id}
-          >
-            <Link to={`/${entityType}/${item.id}`}>
-              {(() => {
-                switch (entityType) {
-                  case EntityType.IMAGE: return (
+      <div className={classes.root}>
+        <Grid container spacing={3}>
+          {data.map(item => (
+            (() => {
+              switch (entityType) {
+                case EntityType.IMAGE: return (
+                  <Grid
+                    key={item.id}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={2}
+                    xl={2}
+                    className={classes.grid}
+                  >
                     <Image
                       id={item.id}
                       title={item.title}
                       imageUrl={item.imageUrl}
                     />
-                  );
-                  case EntityType.GROUP: return (
+                  </Grid>
+                );
+                case EntityType.GROUP: return (
+                  <Grid
+                    key={item.id}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={6}
+                    lg={2}
+                    xl={2}
+                    className={classes.grid}
+                  >
                     <Group
                       id={item.id}
                       title={item.title}
                       imageUrl={item.imageUrl}
                     />
-                  );
-                  default: return 'Error';
-                }
-              })()}
-            </Link>
-          </div>
-        ))}
+                  </Grid>
+                );
+                default: return 'Error';
+              }
+            })()
+          ))}
+        </Grid>
       </div>
     </Fragment>
   );
