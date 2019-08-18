@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import capitalizeFirstLetter from '../../utils/helpers/string.helpers';
 import EntityGrid from '../../components/entity-grid/entity-grid.component';
 import ImageService from '../../services/image.service';
 import GroupService from '../../services/group.service';
@@ -16,11 +15,9 @@ const useStyles = makeStyles(EntityListStyles);
 
 const EntityListPage = (props) => {
   const classes = useStyles();
-  const { entityType, history, setTitle } = props;
+  const { entityType, history } = props;
   const [entityData, setEntityData] = useState([{}]);
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
-
-  setTitle(`${capitalizeFirstLetter(entityType)}s`);
 
   useEffect(() => {
     /**
@@ -109,7 +106,6 @@ EntityListPage.propTypes = {
     push: PropTypes.func,
     replace: PropTypes.func,
   }).isRequired,
-  setTitle: PropTypes.func.isRequired,
 };
 
 export default EntityListPage;

@@ -17,7 +17,7 @@ const useStyles = makeStyles(AppStyles);
 
 function App() {
   const classes = useStyles();
-  const [title, setTitle] = useState('Brett Oberg');
+  const title = 'Brett Oberg';
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
@@ -67,7 +67,6 @@ function App() {
       <main className={classes.container}>
         <Routes
           openSnackbar={openSnackbar}
-          setTitle={val => setTitle(val)}
         />
       </main>
       <Snackbar
