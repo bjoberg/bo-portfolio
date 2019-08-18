@@ -9,9 +9,6 @@ import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/constants';
 
 const Routes = (props) => {
-// /dashboard/tags => EntityListPage
-// /dashboard/tag => EntityDetailsPage
-// /dashboard/tag/:id => EntityDetailsPage
   const { openSnackbar } = props;
 
   return (
@@ -51,12 +48,6 @@ const Routes = (props) => {
         exact
         path="/groups"
         component={GroupListPage}
-        // render={routeProps => (
-        //   <EntityListPage
-        //     {...routeProps}
-        //     entityType={EntityType.GROUP}
-        //   />
-        // )}
       />
       <Route
         exact
