@@ -2,17 +2,18 @@ import { miniDrawerWidth } from '../../utils/theme';
 
 const MiniDrawerListItemStyles = theme => ({
   root: {
-    color: theme.palette.grey[800],
-    width: miniDrawerWidth,
+    minWidth: miniDrawerWidth,
+    minHeight: miniDrawerWidth,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    padding: theme.spacing(2),
+    margin: theme.spacing(0.5),
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
       borderRadius: miniDrawerWidth,
     },
+    color: 'inherit',
   },
 });
 

@@ -2,29 +2,28 @@ import { miniDrawerWidth } from '../../utils/theme';
 
 const MiniDrawerStyles = theme => ({
   drawer: {
-    width: miniDrawerWidth,
+    minWidth: miniDrawerWidth,
     flexShrink: 0,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
   },
   drawerPaper: {
     zIndex: theme.zIndex.appBar - 1,
-    width: miniDrawerWidth,
+    minWidth: miniDrawerWidth,
     backgroundColor: theme.palette.common.white,
     border: 0,
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
   },
   link: {
     textDecoration: 'none',
-    color: 'inherit',
+    color: theme.palette.grey[700],
   },
   linkIsActive: {
     textDecoration: 'none',
-    color: 'yellow',
+    color: theme.palette.primary.main,
   },
 });
 

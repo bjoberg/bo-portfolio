@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Drawer, Typography, List,
-} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import MiniDrawerListItemStyles from './mini-drawer-list-item.styles';
 
@@ -21,6 +19,15 @@ const MiniDrawerListItem = (props) => {
       </Typography>
     </div>
   );
+};
+
+MiniDrawerListItem.propTypes = {
+  item: PropTypes.shape({
+    identifer: PropTypes.string,
+    text: PropTypes.string,
+    icon: PropTypes.element,
+    route: PropTypes.string,
+  }).isRequired,
 };
 
 export default MiniDrawerListItem;

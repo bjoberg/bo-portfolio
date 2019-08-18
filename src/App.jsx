@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ThemeProvider } from '@material-ui/styles';
@@ -47,11 +46,7 @@ function App() {
         drawerIsOpen={drawerIsOpen}
         handleToggleDrawer={toggleDrawer}
       />
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: drawerIsOpen,
-        })}
-      >
+      <main className={classes.container}>
         <Routes
           openSnackbar={openSnackbar}
           setTitle={val => setTitle(val)}

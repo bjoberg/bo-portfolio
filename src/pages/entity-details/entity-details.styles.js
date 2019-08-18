@@ -2,7 +2,6 @@ import { headerHeight } from '../../utils/theme';
 
 const EntityDetailsStyles = theme => ({
   container: {
-    marginTop: headerHeight,
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
