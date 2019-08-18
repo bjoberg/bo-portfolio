@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ThemeProvider } from '@material-ui/styles';
+import { ClickAwayListener } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from './components/header/header.component';
 import Routes from './routes';
 import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
+import FullDrawer from './components/full-drawer/full-drawer.component';
+import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
 import { theme } from './utils/theme';
 
@@ -21,10 +24,17 @@ function App() {
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
   /**
-   * Toggle the state of the drawer
+   * Toggle the application's drawer
    */
   const toggleDrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
+  };
+
+  /**
+   * Close the application's drawer
+   */
+  const closeDrawer = () => {
+    setDrawerIsOpen(false);
   };
 
   /**
@@ -41,11 +51,19 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header
-        title={title}
-        drawerIsOpen={drawerIsOpen}
-        handleToggleDrawer={toggleDrawer}
-      />
+      <ClickAwayListener onClickAway={closeDrawer}>
+        {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
+        <div>
+          <Header
+            title={title}
+            drawerIsOpen={drawerIsOpen}
+            handleToggle={toggleDrawer}
+            handleClose={closeDrawer}
+          />
+          <FullDrawer isOpen={drawerIsOpen} />
+          <MiniDrawer />
+        </div>
+      </ClickAwayListener>
       <main className={classes.container}>
         <Routes
           openSnackbar={openSnackbar}

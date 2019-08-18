@@ -7,15 +7,15 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 
 import ElevationScroll from '../elevation-scroll/elevation-scroll.component';
-import FullDrawer from '../full-drawer/full-drawer.component';
-import MiniDrawer from '../mini-drawer/mini-drawer.component';
 import HeaderStlyes from './header.styles';
 
 const useStyles = makeStyles(HeaderStlyes);
 
 const Header = (props) => {
   const classes = useStyles();
-  const { title, drawerIsOpen, handleToggleDrawer } = props;
+  const {
+    title, handleToggle,
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -30,7 +30,7 @@ const Header = (props) => {
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
-              onClick={handleToggleDrawer}
+              onClick={handleToggle}
             >
               <MenuIcon />
             </IconButton>
@@ -43,24 +43,18 @@ const Header = (props) => {
           </Toolbar>
         </AppBar>
       </ElevationScroll>
-      <FullDrawer
-        isOpen={drawerIsOpen}
-        handleClose={handleToggleDrawer}
-      />
-      <MiniDrawer />
     </div>
   );
 };
 
 Header.propTypes = {
-  handleToggleDrawer: PropTypes.func.isRequired,
   title: PropTypes.string,
-  drawerIsOpen: PropTypes.bool,
+  handleToggle: PropTypes.func,
 };
 
 Header.defaultProps = {
   title: '',
-  drawerIsOpen: false,
+  handleToggle: () => {},
 };
 
 export default Header;
