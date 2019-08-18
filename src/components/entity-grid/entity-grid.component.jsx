@@ -21,7 +21,7 @@ const EntityGrid = (props) => {
             className={classes.entityItem}
             key={item.id}
           >
-            <Link to={`/dashboard/${entityType}/${item.id}`}>
+            <Link to={`/${entityType}/${item.id}`}>
               {(() => {
                 switch (entityType) {
                   case EntityType.IMAGE: return (
