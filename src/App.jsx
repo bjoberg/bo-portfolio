@@ -60,7 +60,7 @@ function App() {
             handleToggle={toggleDrawer}
             handleClose={closeDrawer}
           />
-          <FullDrawer isOpen={drawerIsOpen} />
+          <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
           <MiniDrawer />
         </div>
       </ClickAwayListener>

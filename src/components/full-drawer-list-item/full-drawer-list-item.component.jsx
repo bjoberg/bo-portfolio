@@ -10,13 +10,14 @@ const useStyles = makeStyles(FullDrawerListItemStyles);
 
 const FullDrawerListItem = (props) => {
   const classes = useStyles();
-  const { item } = props;
+  const { item, handleClose } = props;
 
   return (
     <NavLink
       activeClassName={classes.linkIsActive}
       className={classes.link}
       to={item.route}
+      onClick={handleClose}
       exact
     >
       <ListItem button className={classes.listItem}>
@@ -36,6 +37,11 @@ FullDrawerListItem.propTypes = {
     icon: PropTypes.element,
     route: PropTypes.string,
   }).isRequired,
+  handleClose: PropTypes.func,
+};
+
+FullDrawerListItem.defaultProps = {
+  handleClose: () => {},
 };
 
 export default FullDrawerListItem;

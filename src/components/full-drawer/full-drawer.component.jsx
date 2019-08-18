@@ -12,7 +12,7 @@ const useStyles = makeStyles(FullDrawerStyles);
 
 const FullDrawer = (props) => {
   const classes = useStyles();
-  const { items, isOpen } = props;
+  const { items, isOpen, handleClose } = props;
 
   return (
     <Drawer
@@ -27,7 +27,7 @@ const FullDrawer = (props) => {
       <FullDrawerHeader />
       <List className={classes.list}>
         {items.map(item => (
-          <FullDrawerListItem key={item.identifier} item={item} />
+          <FullDrawerListItem key={item.identifier} item={item} handleClose={handleClose} />
         ))}
       </List>
     </Drawer>
@@ -42,11 +42,13 @@ FullDrawer.propTypes = {
     route: PropTypes.string,
   })),
   isOpen: PropTypes.bool,
+  handleClose: PropTypes.func,
 };
 
 FullDrawer.defaultProps = {
   items: NavigationItems,
   isOpen: false,
+  handleClose: () => {},
 };
 
 export default FullDrawer;
