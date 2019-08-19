@@ -3,10 +3,11 @@ import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import EntityDetailsPage from './pages/entity-details/entity-details.page';
-import EntityListPage from './pages/entity-list/entity-list.page';
+// import EntityListPage from './pages/entity-list/entity-list.page';
 import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/constants';
+import ImageListPage from './pages/image-list/image-list.component';
 
 const Routes = (props) => {
   const { openSnackbar } = props;
@@ -16,12 +17,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/images"
-        render={routeProps => (
-          <EntityListPage
-            {...routeProps}
-            entityType={EntityType.IMAGE}
-          />
-        )}
+        component={ImageListPage}
       />
       <Route
         exact
