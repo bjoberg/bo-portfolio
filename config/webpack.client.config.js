@@ -19,7 +19,7 @@ module.exports = {
   module: {
     rules: [
       {
-        exclue: /(node_modules)/,
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
         options: {
           cacheDirectory: true,
@@ -90,7 +90,7 @@ module.exports = {
     splitChunks: isProduction ? { chunks: 'all', maxInitialRequests: Infinity, minSize: 0 } : {},
   },
   output: {
-    chunkFilename: 'static/js/[name].[hash:8].chunkc.js',
+    chunkFilename: 'static/js/[name].[hash:8].chunk.js',
     filename: 'static/js/[name].[hash:8].js',
     path: path.resolve(__dirname, buildPath),
   },
@@ -124,7 +124,7 @@ module.exports = {
       filename: 'static/css/[name].[contenthash:8].css',
     }),
   ],
-  resolove: {
+  resolve: {
     extensions: ['*', '.js', '.jsx'],
   },
 };
@@ -144,10 +144,10 @@ if (isProduction) {
       importWorkboxFrom: 'cdn',
     }),
     new CompressionPlugin({
-      algoright: 'gzip',
+      algorithm: 'gzip',
       cache: true,
       deleteOriginalAssets: true,
-      minRation: 0.8,
+      minRatio: 0.8,
       test: /\.js$|\.css$/,
     }),
   );

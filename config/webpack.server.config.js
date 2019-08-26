@@ -12,7 +12,7 @@ module.exports = {
   module: {
     rules: [
       {
-        exclue: /(node_modules)/,
+        exclude: /(node_modules)/,
         use: 'ts-loader',
         test: /\.tsx?$/,
       },
@@ -22,7 +22,7 @@ module.exports = {
     filename: 'server.js',
     path: path.resolve(__dirname, buildPath),
   },
-  resolove: {
+  resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
   },
 };
