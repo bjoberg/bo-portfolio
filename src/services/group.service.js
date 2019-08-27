@@ -16,7 +16,7 @@ export default class GroupService {
     try {
       const response = await this.service({
         method: 'get',
-        url: `/group/${id}`,
+        url: `/api/v1/group/${id}`,
       });
 
       return response.data;
@@ -34,7 +34,7 @@ export default class GroupService {
     try {
       const response = await this.service({
         method: 'get',
-        url: '/groups',
+        url: '/api/v1/groups',
       });
 
       return response.data.rows;
@@ -53,7 +53,7 @@ export default class GroupService {
     try {
       return await this.service({
         method: 'delete',
-        url: `/group/${id}`,
+        url: `/api/v1/group/${id}`,
       });
     } catch (error) {
       throw new ApiError(500, `Error deleting group: ${id}`);
@@ -70,7 +70,7 @@ export default class GroupService {
     try {
       const response = await this.service({
         method: 'put',
-        url: `/group/${group.id}`,
+        url: `/api/v1/group/${group.id}`,
         data: {
           ...group,
         },
@@ -95,7 +95,7 @@ export default class GroupService {
     try {
       const response = await this.service({
         method: 'post',
-        url: '/group',
+        url: '/api/v1/group',
         data: {
           thumbnailUrl: group.thumbnailUrl,
           imageUrl: group.imageUrl,

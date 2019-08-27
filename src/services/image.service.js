@@ -34,7 +34,7 @@ export default class ImageService {
     try {
       const response = await this.service({
         method: 'get',
-        url: '/images',
+        url: '/api/v1/images',
       });
 
       return response.data.rows;
@@ -70,7 +70,7 @@ export default class ImageService {
     try {
       const response = await this.service({
         method: 'put',
-        url: `/image/${image.id}`,
+        url: `/api/v1/image/${image.id}`,
         data: {
           ...image,
         },
@@ -95,7 +95,7 @@ export default class ImageService {
     try {
       const response = await this.service({
         method: 'post',
-        url: '/image',
+        url: '/api/v1/image',
         data: {
           thumbnailUrl: image.thumbnailUrl,
           imageUrl: image.imageUrl,
