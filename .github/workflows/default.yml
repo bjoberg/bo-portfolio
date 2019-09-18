@@ -34,14 +34,14 @@ jobs:
       env:
         CI: true                
 
-  # build:
+  build:
   
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - name: Build the Docker image
-  #     env:
-  #       ORG: bjoberg
-  #       REPO: portfolio-dashboard
-  #     run: docker build . --file Dockerfile --tag $ORG/$REPO:$(date +%s)
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      env:
+        ORG: bjoberg
+        REPO: portfolio-dashboard
+      run: docker build . --file Dockerfile --tag $ORG/$REPO:$(date +%s)
