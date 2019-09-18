@@ -10,9 +10,9 @@
     "build:webpack:client": "NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.client.config.js",
     "build:webpack:server": "NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.server.config.js",
     "dev": "./node_modules/.bin/tsc && concurrently \"./node_modules/.bin/tsc -w\" \"./node_modules/.bin/nodemon ./server/dist/server.js\"",
-    "lint": "npm run lint:client && npm run linst:server",
+    "lint": "npm run lint:client && npm run lint:server",
     "lint:client": "./node_modules/.bin/eslint src",
-    "lint:server": "./node_modules/.bin/tslint --config ./tslint.json --project /.tsconfig.json",
+    "lint:server": "./node_modules/.bin/tslint --config ./tslint.json --project ./tsconfig.json",
     "start": "node ./build/server.js"
   },
   "browserslist": {
@@ -147,6 +147,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-react": "^7.14.2",
     "nodemon": "^1.19.1",
+    "tslint": "^5.20.0",
     "uuid": "^3.3.2",
     "webpack-cli": "^3.3.7"
   },
