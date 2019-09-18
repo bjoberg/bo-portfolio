@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Lint the application
+      run: npm install
       run: npm run lint
       
       
