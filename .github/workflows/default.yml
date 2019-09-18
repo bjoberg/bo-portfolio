@@ -1,4 +1,4 @@
-name: CI for all branches
+name: Default
 
 on: [push]
 
@@ -17,19 +17,19 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: install
+    - name: Install
       run: npm install
       env:
         CI: true
-    - name: lint
+    - name: Lint
       run: npm run lint
       env:
         CI: true
-    - name: test
+    - name: Test
       run: npm run test
       env:
         CI: true
-    - name: build
+    - name: Build
       run: npm run build
       env:
         CI: true                
@@ -42,7 +42,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
+    - name: Build Docker image
       env:
         ORG: bjoberg
         REPO: portfolio-dashboard
