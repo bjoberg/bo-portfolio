@@ -30,7 +30,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      env:
-        ORG: Hi there! My name is
-        APP_NAME: Mona
-      run: docker build . --file Dockerfile --tag $ORG/$APP_NAME:$(date +%s)
+      run: docker build . --file Dockerfile --tag {owner}/{repo}:$(date +%s)
