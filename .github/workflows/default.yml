@@ -35,7 +35,9 @@ jobs:
         CI: true                
 
   build:
-  
+
+    needs: validate
+
     runs-on: ubuntu-latest
     
     steps:
