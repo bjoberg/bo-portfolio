@@ -1,15 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
+import ImageStyles from './image.styles';
+
+const useStyles = makeStyles(ImageStyles);
 
 const Image = (props) => {
+  const classes = useStyles();
   const { id, imageUrl, title } = props;
 
   return (
-    <img
-      id={id}
-      src={imageUrl}
-      alt={title}
-    />
+    <Link to={`/image/${id}`} className={classes.link}>
+      <div className={classes.imgContainer}>
+        <img
+          id={id}
+          src={imageUrl}
+          alt={title}
+          className={classes.img}
+        />
+      </div>
+    </Link>
   );
 };
 
