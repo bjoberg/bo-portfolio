@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { hot } from 'react-hot-loader';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import { ThemeProvider } from '@material-ui/styles';
@@ -84,4 +85,11 @@ function App() {
   );
 }
 
-export default App;
+// eslint-disable-next-line
+let hotApp = App;
+
+if (process.env.NODE_ENV === 'development') {
+  hotApp = hot(module)(App);
+}
+
+export default hotApp;
