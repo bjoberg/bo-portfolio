@@ -1,6 +1,6 @@
 import { headerHeight } from '../../utils/theme';
 
-const GroupListPageStyles = theme => ({
+const GroupListPageStyles = {
   root: {
     flexGrow: 1,
   },
@@ -11,6 +11,6 @@ const GroupListPageStyles = theme => ({
     marginTop: headerHeight,
     flexGrow: 1,
   },
-});
+};
 
 export default GroupListPageStyles;
