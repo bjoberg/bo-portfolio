@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -8,10 +8,20 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install --production
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
 
-EXPOSE 8080
+# Set environment variables
+ENV NODE_ENV production
+ENV API_ENDPOINT https://bo-portfolio-api.herokuapp.com
+
+# Build the application
+RUN npm run build
+
+# Start the application
+EXPOSE 5000
 CMD [ "npm", "start" ]

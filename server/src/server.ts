@@ -31,7 +31,7 @@ app.use(compression());
 app.use(helmet());
 
 // Proxy all requests to the api
-app.use("/api/v1/", proxy({ target: process.env.API_V1_ENDPOINT, changeOrigin: true }));
+app.use("/api/v1/", proxy({ target: process.env.API_ENDPOINT, changeOrigin: true }));
 
 // In 'production' send the gzipped file to the browser
 app.get("*.css", async (req: Request, res: Response, next: NextFunction) => {
