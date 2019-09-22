@@ -16,7 +16,7 @@ export default class ImageService {
     try {
       const response = await this.service({
         method: 'get',
-        url: `/image/${id}`,
+        url: `/api/v1/image/${id}`,
       });
 
       return response.data;
@@ -53,7 +53,7 @@ export default class ImageService {
     try {
       return await this.service({
         method: 'delete',
-        url: `/image/${id}`,
+        url: `/api/v1/image/${id}`,
       });
     } catch (error) {
       throw new ApiError(500, `Error deleting image: ${id}`);
