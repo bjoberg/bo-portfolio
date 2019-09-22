@@ -16,7 +16,7 @@ jobs:
     - name: Deploy application to stage environment
       env:
         ENV: staging
-        HEROKU_APP_NAME: brett-oberg-portfolio
+        HEROKU_APP_NAME: bo-portfolio
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
         curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
