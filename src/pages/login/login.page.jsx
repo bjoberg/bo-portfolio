@@ -1,5 +1,7 @@
 import React from 'react';
 
-const LoginPage = () => <div />;
+import GoogleLoginButton from '../../components/google-login-button/google-login-button.component';
+
+const LoginPage = () => <GoogleLoginButton />;
 
 export default LoginPage;
