@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { Link } from 'react-router-dom';
+import { LinearProgress, makeStyles } from '@material-ui/core';
 
 import ImageListPageStyles from './image-list.styles';
 import ImageService from '../../services/image.service';
@@ -41,12 +41,14 @@ const ImageListPage = (props) => {
   return (
     <div className={classes.root}>
       {images.map(item => (
-        <Image
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          imageUrl={item.imageUrl}
-        />
+        <Link to={`/image/${item.id}`} className={classes.link}>
+          <Image
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            imageUrl={item.imageUrl}
+          />
+        </Link>
       ))}
     </div>
   );
