@@ -20,10 +20,6 @@ const ImageStyles = theme => ({
     height: '100%',
     margin: theme.spacing(0.5),
   },
-  link: {
-    textDecoration: 'none',
-    color: 'inherit',
-  },
 });
 
 export default ImageStyles;
