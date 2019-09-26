@@ -1,5 +1,3 @@
-import { headerHeight } from '../../utils/theme';
-
 const EntityDetailsStyles = theme => ({
   container: {
     display: 'flex',
@@ -31,7 +29,6 @@ const EntityDetailsStyles = theme => ({
     justifyContent: 'flex-end',
   },
   progressBarContainer: {
-    marginTop: headerHeight,
     flexGrow: 1,
   },
   button: {

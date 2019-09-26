@@ -65,6 +65,7 @@ function App() {
           <MiniDrawer />
         </div>
       </ClickAwayListener>
+      <div className={classes.toolbar} />
       <main className={classes.container}>
         <Routes
           openSnackbar={openSnackbar}
