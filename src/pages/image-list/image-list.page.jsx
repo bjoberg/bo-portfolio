@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import ImageListPageStyles from './image-list.styles';
 import ImageService from '../../services/image.service';
 import Image from '../../components/image/image.component';
-import ImageListPageStyles from './image-list.styles';
 
 const imageService = new ImageService();
 const useStyles = makeStyles(ImageListPageStyles);
@@ -42,6 +42,7 @@ const ImageListPage = (props) => {
     <div className={classes.root}>
       {images.map(item => (
         <Image
+          key={item.id}
           id={item.id}
           title={item.title}
           imageUrl={item.imageUrl}
@@ -53,14 +54,6 @@ const ImageListPage = (props) => {
 
 ImageListPage.propTypes = {
   history: PropTypes.shape({
-    action: PropTypes.string,
-    block: PropTypes.func,
-    createHref: PropTypes.func,
-    go: PropTypes.func,
-    goBack: PropTypes.func,
-    goForward: PropTypes.func,
-    length: PropTypes.number,
-    listen: PropTypes.func,
     location: PropTypes.shape({
       pathname: PropTypes.string,
       search: PropTypes.string,
