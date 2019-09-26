@@ -41,9 +41,8 @@ const ImageListPage = (props) => {
   return (
     <div className={classes.root}>
       {images.map(item => (
-        <Link to={`/image/${item.id}`} className={classes.link}>
+        <Link key={item.id} to={`/image/${item.id}`} className={classes.link}>
           <Image
-            key={item.id}
             id={item.id}
             title={item.title}
             imageUrl={item.imageUrl}

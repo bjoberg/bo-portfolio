@@ -11,7 +11,7 @@ const Image = (props) => {
   const { id, imageUrl, title } = props;
 
   return (
-    <div className={classes.imgContainer}>
+    <div className={classes.thumbnail}>
       <img
         id={id}
         src={imageUrl}
