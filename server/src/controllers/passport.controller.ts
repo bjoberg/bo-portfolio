@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
+import IGoogleAuthorization from "../models/google-authorization.interface";
 import IGooglePassportConfig from "../models/google-passport-config.interface";
 import IGoogleProfile from "../models/google-profile.interface";
 
@@ -70,6 +71,11 @@ export default class PassportController {
     done: (err?: string | Error, user?: any, info?: any) => void
   ) => {
     const error: Error | undefined = undefined;
-    done(error, { accessToken, refreshToken, profile });
+    const info = {
+      accessToken,
+      profile,
+      refreshToken
+    } as IGoogleAuthorization;
+    done(error, info);
   };
 }
