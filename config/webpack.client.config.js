@@ -35,7 +35,7 @@ module.exports = {
         test: /\.(png|jpg|gif|ico)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
             options: {
               cacheDirectory: true,
               name: '/static/media/[name].[contenthash:8].[ext]',
