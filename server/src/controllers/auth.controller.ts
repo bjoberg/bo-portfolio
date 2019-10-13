@@ -19,7 +19,7 @@ export default class AuthController {
   };
 
   /**
-   * Logout the use by revoking the google access token and destroying the request's user session
+   * Logout the user by revoking the google access token and destroying the request's user session
    * @param req Request object sent from the browser
    * @param res Response object that will be sent back to the browser
    */
