@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { hot } from 'react-hot-loader';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -13,12 +13,15 @@ import FullDrawer from './components/full-drawer/full-drawer.component';
 import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
 import { theme } from './utils/theme';
+import UserService from './services/user.service';
 
 const useStyles = makeStyles(AppStyles);
+const userService = new UserService();
 
 function App() {
   const classes = useStyles();
   const title = 'Brett Oberg';
+  const [user, setUser] = useState();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
@@ -49,6 +52,15 @@ function App() {
     setSnackBarIsOpen(true);
   };
 
+  useEffect(async () => {
+    try {
+      const userInfo = await userService.getUserInfo();
+      setUser(userInfo);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    }
+  }, [setUser]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -67,9 +79,7 @@ function App() {
       </ClickAwayListener>
       <div className={classes.toolbar} />
       <main className={classes.container}>
-        <Routes
-          openSnackbar={openSnackbar}
-        />
+        <Routes openSnackbar={openSnackbar} />
       </main>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
