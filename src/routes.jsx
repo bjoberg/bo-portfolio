@@ -17,13 +17,11 @@ const Routes = (props) => {
       <Route
         exact
         path="/login"
-        component={LoginPage}
+        render={routeProps => (
+          <LoginPage {...routeProps} openSnackbar={openSnackbar} />
+        )}
       />
-      <Route
-        exact
-        path="/images"
-        component={ImageListPage}
-      />
+      <Route exact path="/images" component={ImageListPage} />
       <Route
         exact
         path="/image"
@@ -45,11 +43,7 @@ const Routes = (props) => {
           />
         )}
       />
-      <Route
-        exact
-        path="/groups"
-        component={GroupListPage}
-      />
+      <Route exact path="/groups" component={GroupListPage} />
       <Route
         exact
         path="/group"

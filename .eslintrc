@@ -1,13 +1,10 @@
 {
   "parser": "babel-eslint",
-  "extends": [
-    "airbnb"
-  ],
-  "plugins": [
-    "react",
-    "import",
-    "node"
-  ],
+  "extends": ["airbnb"],
+  "plugins": ["react", "import", "node"],
+  "globals": {
+    "window": true
+  },
   "rules": {
     "no-console": "error",
     "strict": 0
