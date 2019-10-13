@@ -22,6 +22,7 @@ import passport from "passport";
 import webpackDevConfig from "../../config/webpack.client.config";
 import PassportController from "./controllers/passport.controller";
 import { authRouter } from "./routes/auth.routes";
+import { userRouter } from "./routes/user.routes";
 import { getBaseFile, sendGz } from "./utils/express.utils";
 
 const port = process.env.PORT !== undefined ? process.env.PORT : 5000;
@@ -60,6 +61,7 @@ passportController.initializeGoogleStrategy(
 
 // Setup routes
 app.use("/auth", authRouter);
+app.use("/api/v1", userRouter);
 app.use(
   "/api/v1/",
   proxy({ target: process.env.API_ENDPOINT, changeOrigin: true })
