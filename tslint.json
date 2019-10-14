@@ -1,7 +1,9 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
-  "jsRules": {},
+  "extends": [
+    "tslint:recommended"
+  ],
+  "tslint.jsEnable": false,
   "rules": {
     "trailing-comma": [
       true,
@@ -15,7 +17,11 @@
         "esSpecCompliant": true
       }
     ],
-    "semicolon": [true, "always", "ignore-bound-class-methods"]
+    "semicolon": [
+      true,
+      "always",
+      "ignore-bound-class-methods"
+    ]
   },
   "rulesDirectory": []
 }

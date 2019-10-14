@@ -52,17 +52,20 @@ function App() {
     setSnackBarIsOpen(true);
   };
 
+  /**
+   * Get the user's information when the application loads
+   */
   useEffect(() => {
     const getUserInfo = async () => {
       try {
         const userInfo = await userService.getUserInfo();
         setUser(userInfo);
       } catch (error) {
-        openSnackbar('error', error.message);
+        setUser(undefined);
       }
     };
     getUserInfo();
-  }, [setUser]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

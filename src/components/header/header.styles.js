@@ -21,6 +21,7 @@ const HeaderStlyes = theme => ({
   },
   iconButton: {
     padding: 0,
+    backgroundColor: theme.palette.primary,
   },
   avatar: {
     margin: 0,
