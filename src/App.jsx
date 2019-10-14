@@ -52,13 +52,16 @@ function App() {
     setSnackBarIsOpen(true);
   };
 
-  useEffect(async () => {
-    try {
-      const userInfo = await userService.getUserInfo();
-      setUser(userInfo);
-    } catch (error) {
-      openSnackbar('error', error.message);
-    }
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const userInfo = await userService.getUserInfo();
+        setUser(userInfo);
+      } catch (error) {
+        openSnackbar('error', error.message);
+      }
+    };
+    getUserInfo();
   }, [setUser]);
 
   return (
@@ -71,7 +74,7 @@ function App() {
             title={title}
             drawerIsOpen={drawerIsOpen}
             handleToggle={toggleDrawer}
-            handleClose={closeDrawer}
+            user={user}
           />
           <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
           <MiniDrawer />

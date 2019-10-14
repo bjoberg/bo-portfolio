@@ -1,7 +1,13 @@
 {
   "parser": "babel-eslint",
-  "extends": ["airbnb"],
-  "plugins": ["react", "import", "node"],
+  "extends": [
+    "airbnb"
+  ],
+  "plugins": [
+    "react",
+    "import",
+    "node"
+  ],
   "globals": {
     "window": true
   },

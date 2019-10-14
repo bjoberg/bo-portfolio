@@ -19,6 +19,12 @@ const HeaderStlyes = theme => ({
   title: {
     flexGrow: 1,
   },
+  iconButton: {
+    padding: 0,
+  },
+  avatar: {
+    margin: 0,
+  },
 });
 
 export default HeaderStlyes;
