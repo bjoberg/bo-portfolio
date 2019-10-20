@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { hot } from 'react-hot-loader';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -21,25 +21,16 @@ const userService = new UserService();
 function App() {
   const classes = useStyles();
   const title = 'Brett Oberg';
+
   const [user, setUser] = useState();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
-  /**
-   * Toggle the application's drawer
-   */
-  const toggleDrawer = () => {
-    setDrawerIsOpen(!drawerIsOpen);
-  };
-
-  /**
-   * Close the application's drawer
-   */
-  const closeDrawer = () => {
-    setDrawerIsOpen(false);
-  };
+  const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
+  const closeDrawer = () => setDrawerIsOpen(false);
+  const closeSnackbar = () => setSnackBarIsOpen(false);
 
   /**
    * Open the snackbar as a notification
@@ -53,19 +44,21 @@ function App() {
   };
 
   /**
+   * Make a request to get the current user's profile information
+   */
+  const getUserInfo = useCallback(async () => {
+    try {
+      const userInfo = await userService.getUserInfo();
+      setUser(userInfo);
+    } catch (error) {
+      setUser(undefined);
+    }
+  }, []);
+
+  /**
    * Get the user's information when the application loads
    */
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const userInfo = await userService.getUserInfo();
-        setUser(userInfo);
-      } catch (error) {
-        setUser(undefined);
-      }
-    };
-    getUserInfo();
-  }, []);
+  useEffect(() => { getUserInfo(); }, [getUserInfo]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -93,7 +86,7 @@ function App() {
       >
         <SnackbarContentWrapper
           className={classes.snackbarMargin}
-          onClose={() => setSnackBarIsOpen(false)}
+          onClose={closeSnackbar}
           variant={snackbarStatus}
           message={snackbarContent}
         />
