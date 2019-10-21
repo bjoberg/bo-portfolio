@@ -12,7 +12,7 @@ const useStyles = makeStyles(ProfilePopoverStyles);
 const ProfilePopover = (props) => {
   const classes = useStyles();
   const {
-    isOpen, anchorEl, handleClose, name, email, role,
+    isOpen, anchorEl, handleClose, handleLogout, name, email, role,
   } = props;
 
   return (
@@ -43,7 +43,7 @@ const ProfilePopover = (props) => {
       </div>
       <Divider />
       <List component="nav" dense aria-label="sign out">
-        <ListItem button>
+        <ListItem button onClick={handleLogout}>
           <ListItemText primary="Sign out" />
         </ListItem>
       </List>
@@ -56,6 +56,7 @@ ProfilePopover.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   anchorEl: PropTypes.object,
   handleClose: PropTypes.func,
+  handleLogout: PropTypes.func,
   name: PropTypes.string,
   email: PropTypes.string,
   role: PropTypes.string,
@@ -65,6 +66,7 @@ ProfilePopover.defaultProps = {
   isOpen: false,
   anchorEl: {},
   handleClose: () => { },
+  handleLogout: () => { },
   name: undefined,
   email: undefined,
   role: undefined,

@@ -12,7 +12,7 @@ const useStyles = makeStyles(ProfileMenuStyles);
 
 const ProfileMenu = (props) => {
   const classes = useStyles();
-  const { user } = props;
+  const { user, handleLogout } = props;
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const popoverIsOpen = Boolean(popoverAnchorEl);
 
@@ -49,6 +49,7 @@ const ProfileMenu = (props) => {
           isOpen={popoverIsOpen}
           anchorEl={popoverAnchorEl}
           handleClose={handleMenuClose}
+          handleLogout={handleLogout}
           name={user.name}
           email={user.email}
         />
@@ -59,6 +60,7 @@ const ProfileMenu = (props) => {
 };
 
 ProfileMenu.propTypes = {
+  handleLogout: PropTypes.func,
   user: PropTypes.shape({
     name: PropTypes.string,
     picture: PropTypes.string,
@@ -67,6 +69,7 @@ ProfileMenu.propTypes = {
 };
 
 ProfileMenu.defaultProps = {
+  handleLogout: () => { },
   user: undefined,
 };
 

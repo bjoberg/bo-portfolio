@@ -17,9 +17,7 @@ const Routes = (props) => {
       <Route
         exact
         path="/login"
-        render={routeProps => (
-          <LoginPage {...routeProps} openSnackbar={openSnackbar} />
-        )}
+        component={LoginPage}
       />
       <Route exact path="/images" component={ImageListPage} />
       <Route
