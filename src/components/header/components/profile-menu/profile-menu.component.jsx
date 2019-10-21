@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
@@ -6,12 +6,19 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
 
 import ProfileMenuStyles from './profile-menu.styles';
+import ProfilePopover from '../profile-popover/profile-popover.component';
 
 const useStyles = makeStyles(ProfileMenuStyles);
 
 const ProfileMenu = (props) => {
   const classes = useStyles();
   const { user } = props;
+  const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
+  const popoverIsOpen = Boolean(popoverAnchorEl);
+
+  const handleIconButtonOnClick = event => setPopoverAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setPopoverAnchorEl(null);
+
   let avatar;
 
   if (user) {
@@ -30,12 +37,22 @@ const ProfileMenu = (props) => {
 
   if (user) {
     return (
-      <IconButton
-        color="inherit"
-        className={classes.iconButton}
-      >
-        {avatar}
-      </IconButton>
+      <Fragment>
+        <IconButton
+          color="inherit"
+          className={classes.iconButton}
+          onClick={handleIconButtonOnClick}
+        >
+          {avatar}
+        </IconButton>
+        <ProfilePopover
+          isOpen={popoverIsOpen}
+          anchorEl={popoverAnchorEl}
+          handleClose={handleMenuClose}
+          name={user.name}
+          email={user.email}
+        />
+      </Fragment>
     );
   }
   return null;
