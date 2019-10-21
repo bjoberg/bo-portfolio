@@ -14,8 +14,9 @@ const useStyles = makeStyles(HeaderStlyes);
 
 const Header = (props) => {
   const classes = useStyles();
-  const { title, handleToggle, user } = props;
-
+  const {
+    title, handleToggle, handleLogout, user,
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -34,7 +35,7 @@ const Header = (props) => {
             <Typography variant="h6" className={classes.title}>
               {title}
             </Typography>
-            <ProfileMenu user={user} />
+            <ProfileMenu user={user} handleLogout={handleLogout} />
           </Toolbar>
         </AppBar>
       </ElevationScroll>
@@ -45,6 +46,7 @@ const Header = (props) => {
 Header.propTypes = {
   title: PropTypes.string,
   handleToggle: PropTypes.func,
+  handleLogout: PropTypes.func,
   user: PropTypes.shape({
     name: PropTypes.string,
     picture: PropTypes.string,
@@ -55,6 +57,7 @@ Header.propTypes = {
 Header.defaultProps = {
   title: '',
   handleToggle: () => { },
+  handleLogout: () => { },
   user: undefined,
 };
 

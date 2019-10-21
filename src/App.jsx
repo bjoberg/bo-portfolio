@@ -14,6 +14,7 @@ import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
 import { theme } from './utils/theme';
 import UserService from './services/user.service';
+import AuthService from './services/auth.service';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
@@ -31,6 +32,7 @@ function App() {
   const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
   const closeDrawer = () => setDrawerIsOpen(false);
   const closeSnackbar = () => setSnackBarIsOpen(false);
+  const logoutGoogle = () => AuthService.logoutGoogle();
 
   /**
    * Open the snackbar as a notification
@@ -71,6 +73,7 @@ function App() {
             drawerIsOpen={drawerIsOpen}
             handleToggle={toggleDrawer}
             user={user}
+            handleLogout={logoutGoogle}
           />
           <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
           <MiniDrawer />

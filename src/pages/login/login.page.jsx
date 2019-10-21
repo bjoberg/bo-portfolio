@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 
 import LoginPageStyles from './login.styles';
@@ -8,31 +7,15 @@ import AuthService from '../../services/auth.service';
 
 const useStyles = makeStyles(LoginPageStyles);
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const classes = useStyles();
-  const { openSnackbar } = props;
-
-  const loginButtonOnClick = async () => {
-    try {
-      AuthService.loginGoogle();
-    } catch (error) {
-      openSnackbar('error', error.message);
-    }
-  };
+  const loginButtonOnClick = () => AuthService.loginGoogle();
 
   return (
     <div className={classes.container}>
       <GoogleLoginButton handleOnClick={loginButtonOnClick} />
     </div>
   );
-};
-
-LoginPage.propTypes = {
-  openSnackbar: PropTypes.func,
-};
-
-LoginPage.defaultProps = {
-  openSnackbar: () => {},
 };
 
 export default LoginPage;
