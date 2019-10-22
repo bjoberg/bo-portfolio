@@ -47,7 +47,7 @@ function App() {
   };
 
   /**
-   * Make a request to get the current user's profile information
+   * Attemp to retrieve and set the user's data
    */
   const setUserData = useCallback(async () => {
     try {
