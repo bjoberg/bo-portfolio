@@ -38,7 +38,7 @@ const ProfilePopover = (props) => {
           {email}
         </Typography>
         <Typography variant="subtitle2">
-          {role}
+          {`Role: ${role}`}
         </Typography>
       </div>
       <Divider />

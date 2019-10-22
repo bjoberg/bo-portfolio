@@ -52,6 +52,7 @@ const ProfileMenu = (props) => {
           handleLogout={handleLogout}
           name={user.name}
           email={user.email}
+          role={user.role}
         />
       </Fragment>
     );
@@ -65,6 +66,7 @@ ProfileMenu.propTypes = {
     name: PropTypes.string,
     picture: PropTypes.string,
     email: PropTypes.string,
+    role: PropTypes.string,
   }),
 };
 
