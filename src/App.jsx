@@ -15,6 +15,7 @@ import AppStyles from './app.styles';
 import { theme } from './utils/theme';
 import UserService from './services/user.service';
 import AuthService from './services/auth.service';
+import GoogleUser from './models/user.model';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
@@ -46,12 +47,14 @@ function App() {
   };
 
   /**
-   * Make a request to get the current user's profile information
+   * Attemp to retrieve and set the user's data
    */
-  const getUserInfo = useCallback(async () => {
+  const setUserData = useCallback(async () => {
     try {
       const userInfo = await userService.getUserInfo();
-      setUser(userInfo);
+      const roleInfo = await userService.getUserRole(userInfo.sub);
+      const googleUser = new GoogleUser({ ...userInfo, ...roleInfo });
+      setUser(googleUser.toJson());
     } catch (error) {
       setUser(undefined);
     }
@@ -60,7 +63,7 @@ function App() {
   /**
    * Get the user's information when the application loads
    */
-  useEffect(() => { getUserInfo(); }, [getUserInfo]);
+  useEffect(() => { setUserData(); }, [setUserData]);
 
   return (
     <ThemeProvider theme={theme}>
