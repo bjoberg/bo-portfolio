@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { hot } from 'react-hot-loader';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -13,30 +13,27 @@ import FullDrawer from './components/full-drawer/full-drawer.component';
 import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
 import { theme } from './utils/theme';
+import UserService from './services/user.service';
+import AuthService from './services/auth.service';
+import GoogleUser from './models/google-user.model';
 
 const useStyles = makeStyles(AppStyles);
+const userService = new UserService();
 
 function App() {
   const classes = useStyles();
   const title = 'Brett Oberg';
+
+  const [user, setUser] = useState();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
 
-  /**
-   * Toggle the application's drawer
-   */
-  const toggleDrawer = () => {
-    setDrawerIsOpen(!drawerIsOpen);
-  };
-
-  /**
-   * Close the application's drawer
-   */
-  const closeDrawer = () => {
-    setDrawerIsOpen(false);
-  };
+  const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
+  const closeDrawer = () => setDrawerIsOpen(false);
+  const closeSnackbar = () => setSnackBarIsOpen(false);
+  const logoutGoogle = () => AuthService.logoutGoogle();
 
   /**
    * Open the snackbar as a notification
@@ -49,6 +46,25 @@ function App() {
     setSnackBarIsOpen(true);
   };
 
+  /**
+   * Attemp to retrieve and set the user's data
+   */
+  const setUserData = useCallback(async () => {
+    try {
+      const userInfo = await userService.getUserInfo();
+      const roleInfo = await userService.getUserRole(userInfo.sub);
+      const googleUser = new GoogleUser({ ...userInfo, ...roleInfo });
+      setUser(googleUser.toJson());
+    } catch (error) {
+      setUser(undefined);
+    }
+  }, []);
+
+  /**
+   * Get the user's information when the application loads
+   */
+  useEffect(() => { setUserData(); }, [setUserData]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -59,16 +75,16 @@ function App() {
             title={title}
             drawerIsOpen={drawerIsOpen}
             handleToggle={toggleDrawer}
-            handleClose={closeDrawer}
+            user={user}
+            handleLogout={logoutGoogle}
           />
           <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
           <MiniDrawer />
         </div>
       </ClickAwayListener>
+      <div className={classes.toolbar} />
       <main className={classes.container}>
-        <Routes
-          openSnackbar={openSnackbar}
-        />
+        <Routes openSnackbar={openSnackbar} />
       </main>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -76,7 +92,7 @@ function App() {
       >
         <SnackbarContentWrapper
           className={classes.snackbarMargin}
-          onClose={() => setSnackBarIsOpen(false)}
+          onClose={closeSnackbar}
           variant={snackbarStatus}
           message={snackbarContent}
         />

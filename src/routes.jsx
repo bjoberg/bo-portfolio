@@ -7,6 +7,7 @@ import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/constants';
 import ImageListPage from './pages/image-list/image-list.page';
+import LoginPage from './pages/login/login.page';
 
 const Routes = (props) => {
   const { openSnackbar } = props;
@@ -15,9 +16,10 @@ const Routes = (props) => {
     <Switch>
       <Route
         exact
-        path="/images"
-        component={ImageListPage}
+        path="/login"
+        component={LoginPage}
       />
+      <Route exact path="/images" component={ImageListPage} />
       <Route
         exact
         path="/image"
@@ -39,11 +41,7 @@ const Routes = (props) => {
           />
         )}
       />
-      <Route
-        exact
-        path="/groups"
-        component={GroupListPage}
-      />
+      <Route exact path="/groups" component={GroupListPage} />
       <Route
         exact
         path="/group"

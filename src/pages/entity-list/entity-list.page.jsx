@@ -75,12 +75,10 @@ const EntityListPage = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.container}>
-        <EntityGrid
-          entityType={entityType}
-          data={entityData}
-        />
-      </div>
+      <EntityGrid
+        entityType={entityType}
+        data={entityData}
+      />
     </Fragment>
   );
 };
