@@ -15,7 +15,7 @@ import AppStyles from './app.styles';
 import { theme } from './utils/theme';
 import UserService from './services/user.service';
 import AuthService from './services/auth.service';
-import GoogleUser from './models/user.model';
+import GoogleUser from './models/google-user.model';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();

@@ -7,6 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 import ProfileMenuStyles from './profile-menu.styles';
 import ProfilePopover from '../profile-popover/profile-popover.component';
+import GoogleUser from '../../../../models/google-user.model';
 
 const useStyles = makeStyles(ProfileMenuStyles);
 
@@ -62,12 +63,7 @@ const ProfileMenu = (props) => {
 
 ProfileMenu.propTypes = {
   handleLogout: PropTypes.func,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    picture: PropTypes.string,
-    email: PropTypes.string,
-    role: PropTypes.string,
-  }),
+  user: PropTypes.instanceOf(GoogleUser),
 };
 
 ProfileMenu.defaultProps = {
