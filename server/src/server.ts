@@ -60,8 +60,8 @@ passportController.initializeGoogleStrategy(
 );
 
 // Setup routes
-app.use("/auth", authRouter);
-app.use("/api/v1", userRouter);
+app.use("auth", authRouter);
+app.use("api/v1", userRouter);
 app.use(
   "/api/v1/",
   proxy({ target: process.env.API_ENDPOINT, changeOrigin: true })
