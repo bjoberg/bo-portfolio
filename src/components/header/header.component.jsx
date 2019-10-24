@@ -7,6 +7,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 
 import HeaderStlyes from './header.styles';
+import GoogleUser from '../../models/google-user.model';
 import ElevationScroll from '../elevation-scroll/elevation-scroll.component';
 import ProfileMenu from './components/profile-menu/profile-menu.component';
 
@@ -47,11 +48,7 @@ Header.propTypes = {
   title: PropTypes.string,
   handleToggle: PropTypes.func,
   handleLogout: PropTypes.func,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    picture: PropTypes.string,
-    email: PropTypes.string,
-  }),
+  user: PropTypes.instanceOf(GoogleUser),
 };
 
 Header.defaultProps = {

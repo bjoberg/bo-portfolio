@@ -17,13 +17,19 @@ class GoogleUser {
 
   /**
    * Set the role of the current user object
-   * @param {string} role of the uesr object
+   * @param {string} role of the user object
    */
   setRole(role) {
-    if (role === Roles.ADMIN) {
-      this.role = role;
-    } else {
-      this.role = Roles.READONLY;
+    switch (role) {
+      case Roles.ADMIN:
+        this.role = Roles.ADMIN;
+        break;
+      case Roles.READONLY:
+        this.role = Roles.READONLY;
+        break;
+      default:
+        this.role = Roles.READONLY;
+        break;
     }
   }
 
