@@ -8,12 +8,17 @@ import ErrorPage from './pages/error/error.page';
 import EntityType from './utils/constants';
 import ImageListPage from './pages/image-list/image-list.page';
 import LoginPage from './pages/login/login.page';
+import HomePage from './pages/home/home.page';
 
 const Routes = (props) => {
   const { openSnackbar } = props;
 
   return (
     <Switch>
+      <Route
+        path="/"
+        component={HomePage}
+      />
       <Route
         exact
         path="/login"
