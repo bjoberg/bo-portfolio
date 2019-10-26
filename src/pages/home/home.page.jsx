@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
-
 import HomePageStyles from './home.styles.js';
+
+import src from '../../media/IMG_2623.png';
 
 const useStyles = makeStyles(HomePageStyles);
 
@@ -10,7 +11,9 @@ const HomePage = (props) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div className={classes.media} />
+      <div className={classes.media}>
+        <img src={src} alt="test" className={classes.img} />
+      </div>
       <div className={classes.content}>
         <Typography variant="h3">Software Engineer. Photographer. Outdoor Enthusiast.</Typography>
         <Typography variant="body1">Heyyooo 👋🏼, thanks for taking the time to visit my photography portfolio. My name is Brett Oberg, and in my spare time I take photos. I am inspired by nature and I use photography as an excuse to experience its beauty. Photography has helped give direction and purpose to my life, and I hope my images inspire you to go out and find what is special for you.</Typography>

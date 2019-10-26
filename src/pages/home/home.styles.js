@@ -3,12 +3,18 @@ const HomePageStyles = theme => ({
     display: 'flex',
   },
   media: {
-    backgroundColor: 'purple',
-    minWidth: '50%',
+    display: 'flex',
+    overflow: 'hidden',
+    maxWidth: '50%',
+    maxHeight: 600,
+    justifyContent: 'center',
   },
   content: {
     padding: theme.spacing(2),
-    backgroundColor: 'yellow',
+  },
+  img: {
+    objectFit: 'cover',
+    height: '100%',
   },
 });
 

@@ -38,7 +38,7 @@ module.exports = {
             loader: 'url-loader',
             options: {
               cacheDirectory: true,
-              name: '/static/media/[name].[contenthash:8].[ext]',
+              name: 'static/media/[name].[contenthash:8].[ext]',
             },
           },
         ],
