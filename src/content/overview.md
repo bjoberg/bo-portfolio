@@ -4,4 +4,4 @@ Heyyooo 👋🏼, thanks for taking the time to visit my photography portfolio. 
 
 Aside from photography, I spend my time developing software (like this website 😜), cycling, golfing, playing tennis, and spening time with family.
 
-I hope you enjoy my work and, please, if you would like to collaborate on a project or chat over coffee ☕️, please email me at [brett.oberg8@gmail.com](mailto:brett.oberg8@gmail.com).
+I hope you enjoy my work and would like to collaborate on a project or chat over coffee ☕️, please email me at [brett.oberg8@gmail.com](mailto:brett.oberg8@gmail.com).
