@@ -1,4 +1,4 @@
-# Software Engineer. Photographer. Outdoor Enthusiast.
+# Brett Oberg
 
 Heyyooo 👋🏼, thanks for taking the time to visit my photography portfolio. My name is Brett Oberg, and in my spare time I take photos. I am inspired by nature and I use photography as an excuse to experience its beauty. Photography has helped give direction and purpose to my life, and I hope my images inspire you to go out and find what is special for you.
 

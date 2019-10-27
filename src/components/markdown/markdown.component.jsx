@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core';
+import MarkdownStyles from './markdown.styles';
 
 const wrapMarkup = html => ({
   __html: html,
@@ -11,4 +14,12 @@ const Markdown = (props) => {
   );
 };
 
-export default Markdown;
+Markdown.propTypes = {
+  content: PropTypes.string,
+};
+
+Markdown.defaultProps = {
+  content: '',
+};
+
+export default withStyles(MarkdownStyles)(Markdown);

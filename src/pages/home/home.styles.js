@@ -2,6 +2,7 @@ const HomePageStyles = theme => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    maxWidth: theme.breakpoints.values.xl,
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
@@ -12,11 +13,11 @@ const HomePageStyles = theme => ({
     justifyContent: 'center',
     [theme.breakpoints.down('xl')]: {
       height: 700,
-      flex: 0.5,
+      flex: 0.65,
     },
     [theme.breakpoints.down('lg')]: {
       height: 600,
-      flex: 0.5,
+      flex: 0.65,
     },
     [theme.breakpoints.down('md')]: {
       height: 500,
@@ -32,7 +33,7 @@ const HomePageStyles = theme => ({
     },
   },
   content: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     flex: 1,
   },
   img: {
