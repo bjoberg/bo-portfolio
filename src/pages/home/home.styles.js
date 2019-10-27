@@ -10,22 +10,25 @@ const HomePageStyles = theme => ({
     overflow: 'hidden',
     display: 'flex',
     justifyContent: 'center',
-    flex: 0.75,
     [theme.breakpoints.down('xl')]: {
       height: 700,
+      flex: 0.5,
     },
     [theme.breakpoints.down('lg')]: {
       height: 600,
+      flex: 0.5,
     },
     [theme.breakpoints.down('md')]: {
       height: 500,
+      flex: 0.75,
     },
     [theme.breakpoints.down('sm')]: {
       height: 400,
+      flex: 1,
     },
     [theme.breakpoints.down('xs')]: {
-      flex: 1,
       height: 400,
+      flex: 1,
     },
   },
   content: {
