@@ -1,21 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 
-
-import HomePageStyles from './home.styles';
-import src from '../../media/IMG_2623.png';
-import content from '../../content/overview.md';
 import Markdown from '../../components/markdown/markdown.component';
+import HomePageStyles from './home.styles';
+import src from '../../media/profile.png';
+import content from '../../content/overview.md';
 
 const useStyles = makeStyles(HomePageStyles);
 
-const HomePage = (props) => {
+const HomePage = () => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <div className={classes.media}>
-        <img src={src} alt="test" className={classes.img} />
+        <img src={src} alt="brett oberg photography" className={classes.img} />
       </div>
       <div className={classes.content}>
         <Markdown content={content} />
