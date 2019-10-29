@@ -1,4 +1,4 @@
-import { miniDrawerWidth, headerHeight } from './utils/theme';
+import { miniDrawerWidth } from './utils/theme';
 
 const AppStyles = theme => ({
   container: {
@@ -8,13 +8,13 @@ const AppStyles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: miniDrawerWidth + theme.spacing(2),
-    marginTop: headerHeight + theme.spacing(2),
     marginRight: theme.spacing(2),
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
       marginLeft: theme.spacing(2),
     },
   },
+  toolbar: theme.mixins.toolbar,
   snackbarMargin: {
     margin: theme.spacing(1),
   },

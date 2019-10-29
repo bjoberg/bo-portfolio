@@ -2,7 +2,6 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 const miniDrawerWidth = 80;
 const drawerWidth = 250;
-const headerHeight = 64;
 
 const theme = createMuiTheme({
   palette: {
@@ -19,11 +18,18 @@ const theme = createMuiTheme({
       hover: '#e5ffff',
     },
   },
+  typography: {
+    subtitle1: {
+      fontWeight: 900,
+    },
+    subtitle2: {
+      color: '#616161', // default grey[700]
+    },
+  },
 });
 
 export {
   theme,
   miniDrawerWidth,
   drawerWidth,
-  headerHeight,
 };

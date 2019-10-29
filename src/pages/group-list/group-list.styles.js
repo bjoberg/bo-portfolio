@@ -1,5 +1,3 @@
-import { headerHeight } from '../../utils/theme';
-
 const GroupListPageStyles = {
   root: {
     flexGrow: 1,
@@ -8,7 +6,6 @@ const GroupListPageStyles = {
     width: '100%',
   },
   progressBarContainer: {
-    marginTop: headerHeight,
     flexGrow: 1,
   },
 };
