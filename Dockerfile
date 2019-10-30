@@ -17,7 +17,6 @@ COPY . .
 
 # Set environment variables
 ENV NODE_ENV production
-ENV API_ENDPOINT https://bo-portfolio-api.herokuapp.com
 
 # Build the application
 RUN npm run build
