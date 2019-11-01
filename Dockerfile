@@ -1,26 +1,39 @@
-FROM node:12
+# #############################################################################
+# Builder
+# #############################################################################
+FROM node:12 AS builder
 
-# Create app directory
+# Setup the working directory
 WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY . .
 
-# Set environment variables
-ENV NODE_ENV production
-
 # Build the application
+ENV NODE_ENV production
 RUN npm run build
 
-# Start the application
+# #############################################################################
+# Runner
+# #############################################################################
+FROM node:alpine
+
+# Create a new user... don't run as root
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Setup the working directory
+WORKDIR /usr/src/app
+COPY package.json ./
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/build ./build
+
+# Set app configuration
+ENV PORT 5000
+ENV NODE_ENV production
 EXPOSE 5000
+
+# Start the application
 CMD [ "npm", "start" ]
