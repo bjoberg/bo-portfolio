@@ -46,7 +46,7 @@ export default class ImageService {
         data: response.data.rows,
       };
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve images');
+      throw new ApiError(404, 'Unable to retrieve images.');
     }
   }
 
