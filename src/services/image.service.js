@@ -27,14 +27,18 @@ export default class ImageService {
 
   /**
    * Retrieve a list of images
+   *
+   * @param {number} limit Number of elements to retrieve
+   * @param {number} page Elements to retrieve based on limit and number of elements in db
    * @returns {JSON} object of images
    * @throws ApiError
    */
-  async getImages() {
+  async getImages(limit = 30, page = 0) {
     try {
+      const paginationQuery = `?limit=${limit}&page=${page}`;
       const response = await this.service({
         method: 'get',
-        url: '/api/v1/images',
+        url: `/api/v1/images${paginationQuery}`,
       });
 
       return response.data.rows;
