@@ -25,7 +25,16 @@ const Routes = (props) => {
         path="/login"
         component={LoginPage}
       />
-      <Route exact path="/images" component={ImageListPage} />
+      <Route
+        exact
+        path="/images"
+        render={routeProps => (
+          <ImageListPage
+            {...routeProps}
+            openSnackbar={openSnackbar}
+          />
+        )}
+      />
       <Route
         exact
         path="/image"

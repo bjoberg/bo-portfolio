@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { LinearProgress, makeStyles } from '@material-ui/core';
+import { LinearProgress, makeStyles, Button } from '@material-ui/core';
 
 import ImageListPageStyles from './image-list.styles';
 import ImageService from '../../services/image.service';
@@ -11,24 +11,44 @@ const imageService = new ImageService();
 const useStyles = makeStyles(ImageListPageStyles);
 
 const ImageListPage = (props) => {
+  const { openSnackbar } = props;
   const classes = useStyles();
-  const { history } = props;
-  const [images, setImages] = useState([{}]);
+  const limit = 30;
+
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [isEnd, setIsEnd] = useState(false);
+
+  const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 
   useEffect(() => {
-    async function getImagesAsync() {
+    const getInitialImages = async () => {
       try {
         setPageIsLoaded(false);
-        setImages(await imageService.getImages());
+        const result = await imageService.getImages(limit);
+        setIsEnd(evaluateIsEnd(result.totalItems, limit, 1));
+        setImages(result.data);
       } catch (error) {
-        history.push('/error');
+        // TODO: Show error message with retry option
       } finally {
         setPageIsLoaded(true);
       }
+    };
+    getInitialImages();
+  }, []);
+
+  const handlePaginateImages = async () => {
+    try {
+      const next = page + 1;
+      const result = await imageService.getImages(limit);
+      setIsEnd(evaluateIsEnd(result.totalItems, limit, next + 1));
+      setPage(next);
+      setImages([...images, ...result.data]);
+    } catch (error) {
+      openSnackbar('error', error.message);
     }
-    getImagesAsync();
-  }, [history]);
+  };
 
   if (!pageIsLoaded) {
     return (
@@ -50,6 +70,11 @@ const ImageListPage = (props) => {
           />
         </Link>
       ))}
+      {!isEnd && (
+        <Button variant="contained" onClick={() => handlePaginateImages()}>
+          Default
+        </Button>
+      )}
     </div>
   );
 };
@@ -65,7 +90,13 @@ ImageListPage.propTypes = {
     }),
     push: PropTypes.func,
     replace: PropTypes.func,
-  }).isRequired,
+  }),
+  openSnackbar: PropTypes.func,
+};
+
+ImageListPage.defaultProps = {
+  history: undefined,
+  openSnackbar: () => { },
 };
 
 export default ImageListPage;

@@ -41,7 +41,10 @@ export default class ImageService {
         url: `/api/v1/images${paginationQuery}`,
       });
 
-      return response.data.rows;
+      return {
+        totalItems: response.data.totalItems,
+        data: response.data.rows,
+      };
     } catch (error) {
       throw new ApiError(404, 'Unable to retrieve images');
     }
