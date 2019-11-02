@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  LinearProgress, makeStyles, CircularProgress,
+  LinearProgress, makeStyles, CircularProgress, Typography, Button,
 } from '@material-ui/core';
 
 import ImageListPageStyles from './image-list.styles';
@@ -22,6 +22,7 @@ const ImageListPage = (props) => {
   const limit = 30;
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
+  const [pageHasError, setPageHasError] = useState(false);
   const [images, setImages] = useState([]);
   const [imagesPage, setImagesPage] = useState(0);
   const [isEndOfImages, setIsEndOfImages] = useState(false);
@@ -48,6 +49,8 @@ const ImageListPage = (props) => {
   const [isFetchingImages] = useInfiniteScroll(handlePaginateImages, isEndOfImages,
     hasErrorFetchingImages);
 
+  const handlePageReload = () => window.location.reload();
+
   useEffect(() => {
     const getInitialImages = async () => {
       try {
@@ -56,7 +59,7 @@ const ImageListPage = (props) => {
         setIsEndOfImages(evaluateIsEnd(result.totalItems, limit, 1));
         setImages(result.data);
       } catch (error) {
-        // TODO: Show error message with retry option
+        setPageHasError(true);
       } finally {
         setPageIsLoaded(true);
       }
@@ -66,6 +69,13 @@ const ImageListPage = (props) => {
 
   return (
     <Fragment>
+      {pageHasError && (
+        <Fragment>
+          <Typography variant="h1">Error</Typography>
+          <Typography gutterBottom>Unable to retrieve the images</Typography>
+          <Button variant="outlined" onClick={() => handlePageReload()}>Reload</Button>
+        </Fragment>
+      )}
       {!pageIsLoaded && (
         <div className={classes.linearProgressContainer}>
           <LinearProgress />
