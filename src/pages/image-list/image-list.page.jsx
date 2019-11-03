@@ -1,54 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { LinearProgress, makeStyles } from '@material-ui/core';
 
 import ImageListPageStyles from './image-list.styles';
-import ImageService from '../../services/image.service';
-import Image from '../../components/image/image.component';
+import ImageListPageGrid from './components/image-list-page-grid/image-list-page-grid.component';
+import ImageListPageError from './components/image-list-page-error/image-list-page-error.component';
 
-const imageService = new ImageService();
 const useStyles = makeStyles(ImageListPageStyles);
 
 const ImageListPage = (props) => {
   const classes = useStyles();
-  const { history } = props;
-  const [images, setImages] = useState([{}]);
+  const { openSnackbar } = props;
+
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
+  const [pageHasError, setPageHasError] = useState(false);
 
-  useEffect(() => {
-    async function getImagesAsync() {
-      try {
-        setPageIsLoaded(false);
-        setImages(await imageService.getImages());
-      } catch (error) {
-        history.push('/error');
-      } finally {
-        setPageIsLoaded(true);
-      }
-    }
-    getImagesAsync();
-  }, [history]);
-
-  if (!pageIsLoaded) {
-    return (
-      <div className={classes.progressBarContainer}>
-        <LinearProgress />
-      </div>
-    );
-  }
+  if (pageHasError) return <ImageListPageError />;
 
   return (
-    <div className={classes.root}>
-      {images.map(item => (
-        <Image
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          imageUrl={item.imageUrl}
-        />
-      ))}
-    </div>
+    <Fragment>
+      {!pageIsLoaded && (
+        <div className={classes.linearProgressContainer}>
+          <LinearProgress />
+        </div>
+      )}
+      <ImageListPageGrid
+        openSnackbar={openSnackbar}
+        handlePageIsLoaded={setPageIsLoaded}
+        handlePageHasError={setPageHasError}
+      />
+    </Fragment>
   );
 };
 
@@ -63,7 +44,13 @@ ImageListPage.propTypes = {
     }),
     push: PropTypes.func,
     replace: PropTypes.func,
-  }).isRequired,
+  }),
+  openSnackbar: PropTypes.func,
+};
+
+ImageListPage.defaultProps = {
+  history: undefined,
+  openSnackbar: () => { },
 };
 
 export default ImageListPage;

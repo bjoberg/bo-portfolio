@@ -1,6 +1,6 @@
 const ImageListPageStyles = {
-  progressBarContainer: {
-    flexGrow: 1,
+  linearProgressContainer: {
+    flex: 1,
   },
 };
 

@@ -10,7 +10,8 @@
     "node"
   ],
   "globals": {
-    "window": true
+    "window": true,
+    "document": true
   },
   "rules": {
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
