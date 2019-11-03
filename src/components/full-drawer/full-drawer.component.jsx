@@ -17,7 +17,7 @@ const FullDrawer = (props) => {
   return (
     <Drawer
       className={classes.drawer}
-      variant="persistent"
+      variant="temporary"
       anchor="left"
       open={isOpen}
       classes={{
@@ -48,7 +48,7 @@ FullDrawer.propTypes = {
 FullDrawer.defaultProps = {
   items: NavigationItems,
   isOpen: false,
-  handleClose: () => {},
+  handleClose: () => { },
 };
 
 export default FullDrawer;
