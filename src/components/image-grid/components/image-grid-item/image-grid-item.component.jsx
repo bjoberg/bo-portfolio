@@ -2,34 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 
-import ImageStyles from './image.styles';
+import ImageGridItemStyles from './image-grid-item.styles';
 
-const useStyles = makeStyles(ImageStyles);
+const useStyles = makeStyles(ImageGridItemStyles);
 
-const Image = (props) => {
+const ImageGridItem = (props) => {
   const classes = useStyles();
   const { id, imageUrl, title } = props;
 
   return (
-    <div className={classes.imgContainer}>
+    <div className={classes.root}>
       <img
+        className={classes.img}
         id={id}
         src={imageUrl}
         alt={title}
-        className={classes.img}
       />
     </div>
   );
 };
 
-Image.propTypes = {
+ImageGridItem.propTypes = {
   id: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
   title: PropTypes.string,
 };
 
-Image.defaultProps = {
+ImageGridItem.defaultProps = {
   title: '',
 };
 
-export default Image;
+export default ImageGridItem;
