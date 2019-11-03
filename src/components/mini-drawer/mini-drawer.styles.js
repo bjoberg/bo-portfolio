@@ -4,7 +4,7 @@ const MiniDrawerStyles = theme => ({
   drawer: {
     minWidth: miniDrawerWidth,
     flexShrink: 0,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
   },
