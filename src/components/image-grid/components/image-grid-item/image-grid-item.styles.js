@@ -1,5 +1,5 @@
-const ImageStyles = theme => ({
-  imgContainer: {
+const ImageGridItemStyles = theme => ({
+  root: {
     height: 250,
     maxWidth: 600,
     margin: theme.spacing(0.5),
@@ -19,4 +19,4 @@ const ImageStyles = theme => ({
   },
 });
 
-export default ImageStyles;
+export default ImageGridItemStyles;
