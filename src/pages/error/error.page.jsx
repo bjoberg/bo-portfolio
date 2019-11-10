@@ -1,37 +1,29 @@
-import React, { div } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import ErrorStyles from './error.styles';
-
-const useStyles = makeStyles(ErrorStyles);
+import { Typography, Button } from '@material-ui/core';
 
 const ErrorPage = (props) => {
-  const { title, body } = props;
-  const classes = useStyles();
+  const { title, details } = props;
+
+  const reloadPage = () => window.location.reload();
 
   return (
-    <div className={classes.container}>
-      <Typography variant="h1">
-        {title}
-      </Typography>
-      <Typography variant="h3">
-        {body}
-      </Typography>
-    </div>
+    <Fragment>
+      <Typography variant="h1">{title}</Typography>
+      <Typography gutterBottom>{details}</Typography>
+      <Button variant="outlined" onClick={() => reloadPage()}>Reload</Button>
+    </Fragment>
   );
 };
 
 ErrorPage.propTypes = {
   title: PropTypes.string,
-  body: PropTypes.string,
+  details: PropTypes.string,
 };
 
 ErrorPage.defaultProps = {
   title: 'Error',
-  body: 'This page does not exist',
+  details: 'This page does not exist',
 };
 
 export default ErrorPage;

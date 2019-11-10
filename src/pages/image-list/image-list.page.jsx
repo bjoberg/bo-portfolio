@@ -4,7 +4,7 @@ import { LinearProgress, makeStyles } from '@material-ui/core';
 
 import ImageListPageStyles from './image-list.styles';
 import ImageListPageGrid from './components/image-list-page-grid/image-list-page-grid.component';
-import ImageListPageError from './components/image-list-page-error/image-list-page-error.component';
+import ErrorPage from '../error/error.page';
 
 const useStyles = makeStyles(ImageListPageStyles);
 
@@ -15,7 +15,7 @@ const ImageListPage = (props) => {
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
 
-  if (pageHasError) return <ImageListPageError />;
+  if (pageHasError) return <ErrorPage title="Error" details="Unable to retrieve images" />;
 
   return (
     <Fragment>
