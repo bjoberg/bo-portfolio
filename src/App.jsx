@@ -16,6 +16,7 @@ import { theme } from './utils/theme';
 import UserService from './services/user.service';
 import AuthService from './services/auth.service';
 import GoogleUser from './models/google-user.model';
+import Roles from './utils/roles';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
@@ -25,6 +26,7 @@ function App() {
   const title = 'Brett Oberg';
 
   const [user, setUser] = useState();
+  const [isEditable, setIsEditable] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
@@ -65,6 +67,12 @@ function App() {
    */
   useEffect(() => { setUserData(); }, [setUserData]);
 
+  useEffect(() => {
+    if (user === undefined || user === null) return;
+    if (user.role === Roles.ADMIN) setIsEditable(true);
+    else setIsEditable(false);
+  }, [user]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -84,7 +92,7 @@ function App() {
       </ClickAwayListener>
       <div className={classes.toolbar} />
       <main className={classes.container}>
-        <Routes openSnackbar={openSnackbar} />
+        <Routes openSnackbar={openSnackbar} isEditable={isEditable} />
       </main>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

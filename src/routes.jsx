@@ -9,9 +9,10 @@ import EntityType from './utils/constants';
 import ImageListPage from './pages/image-list/image-list.page';
 import LoginPage from './pages/login/login.page';
 import HomePage from './pages/home/home.page';
+import GroupPage from './pages/group/group.page';
 
 const Routes = (props) => {
-  const { openSnackbar } = props;
+  const { openSnackbar, isEditable } = props;
 
   return (
     <Switch>
@@ -71,10 +72,9 @@ const Routes = (props) => {
       <Route
         path="/group/:id"
         render={routeProps => (
-          <EntityDetailsPage
+          <GroupPage
             {...routeProps}
-            entityType={EntityType.GROUP}
-            openSnackbar={openSnackbar}
+            isEditable={isEditable}
           />
         )}
       />
@@ -82,8 +82,14 @@ const Routes = (props) => {
     </Switch>
   );
 };
+
 Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
+  isEditable: PropTypes.bool,
+};
+
+Routes.defaultProps = {
+  isEditable: false,
 };
 
 export default Routes;
