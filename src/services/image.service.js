@@ -35,12 +35,14 @@ export default class ImageService {
    * @returns {JSON} object of images
    * @throws ApiError
    */
-  async getImages(limit = 30, page = 0) {
+  async getImages(limit = 30, page = 0, groupId = undefined) {
     try {
       const paginationQuery = `?limit=${limit}&page=${page}`;
+      let filterQuery = '';
+      if (groupId) filterQuery = `groupId=${groupId}`;
       const response = await this.service({
         method: HttpMethods.get,
-        url: `/api/v1/images${paginationQuery}`,
+        url: `/api/v1/images${paginationQuery}&${filterQuery}`,
       });
 
       return {
