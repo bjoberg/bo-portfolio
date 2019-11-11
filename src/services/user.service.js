@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import HttpMethods from '../models/http-methods';
 import ApiError from '../models/api-error.model';
 
 export default class UserService {
@@ -14,7 +16,7 @@ export default class UserService {
   async getUserInfo() {
     try {
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: '/api/v1/userinfo',
       });
 
@@ -33,7 +35,7 @@ export default class UserService {
   async getUserRole(googleId) {
     try {
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: `/api/v1/user/${googleId}/role`,
       });
 
