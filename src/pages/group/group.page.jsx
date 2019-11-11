@@ -4,9 +4,10 @@ import React, {
 import PropTypes from 'prop-types';
 import { LinearProgress } from '@material-ui/core';
 
-import GroupPageHeader from './components/group-page-header/group-page-header.component';
 import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
+import GroupPageHeader from './components/group-page-header/group-page-header.component';
+import GroupPageImageList from './components/group-page-grid/group-page-grid.component';
 
 const groupService = new GroupService();
 
@@ -15,7 +16,7 @@ const GroupPage = (props) => {
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
-  const [groupDetails, setGroupDetails] = useState();
+  const [groupDetails, setGroupDetails] = useState({});
 
   /**
    * Make request to retrieve group details
@@ -24,7 +25,6 @@ const GroupPage = (props) => {
     try {
       const response = await groupService.getGroup(match.params.id);
       setGroupDetails(response);
-      setPageIsLoaded(true);
     } catch (error) {
       setPageHasError(true);
     }
@@ -44,7 +44,10 @@ const GroupPage = (props) => {
     }
   };
 
-  useEffect(() => { getGroupDetails(); }, [getGroupDetails]);
+  useEffect(() => {
+    getGroupDetails();
+    setPageIsLoaded(true);
+  }, [getGroupDetails]);
 
   if (pageHasError) return <ErrorPage title="Error" details={`Unable to retrieve group: ${match.params.id}`} />;
   if (!pageIsLoaded) return <LinearProgress />;
@@ -56,6 +59,7 @@ const GroupPage = (props) => {
         isEditable={isEditable}
         handleUpdate={updateGroupTitle}
       />
+      <GroupPageImageList />
     </Fragment>
   );
 };
