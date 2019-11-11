@@ -5,7 +5,6 @@ import cookieSession from "cookie-session";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
-import proxy from "http-proxy-middleware";
 import path from "path";
 import webpack, { Configuration } from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -21,20 +20,21 @@ try {
 import passport from "passport";
 import webpackDevConfig from "../../config/webpack.client.config";
 import PassportController from "./controllers/passport.controller";
+import ProxyController from "./controllers/proxy.controller";
 import { authRouter } from "./routes/auth.routes";
 import { userRouter } from "./routes/user.routes";
 import { getBaseFile, sendGz } from "./utils/express.utils";
 
 const port = process.env.PORT !== undefined ? process.env.PORT : 5000;
+const apiEndpoint = process.env.API_ENDPOINT !== undefined ? process.env.API_ENDPOINT : "";
+const cookieKey = process.env.COOKIE_KEY !== undefined ? process.env.COOKIE_KEY : "";
+const callbackUrl = process.env.GOOGLE_CALLBACK_URL !== undefined ? process.env.GOOGLE_CALLBACK_URL : "";
+const clientId = process.env.GOOGLE_CLIENT_ID !== undefined ? process.env.GOOGLE_CLIENT_ID : "";
+const clientSecret = process.env.GOOGLE_CLIENT_SECRET !== undefined ? process.env.GOOGLE_CLIENT_SECRET : "";
 const isProduction = process.env.NODE_ENV === "production";
 const buildPath = isProduction ? "build" : "dev";
-const cookieKey = process.env.COOKIE_KEY;
-const app = express();
-const passportController = new PassportController();
-const callbackUrl = process.env.GOOGLE_CALLBACK_URL;
-const clientId = process.env.GOOGLE_CLIENT_ID;
-const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const scope = ["profile", "email"];
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,6 +42,7 @@ app.use(compression());
 app.use(helmet());
 
 // Setup passport
+const passportController = new PassportController();
 if (cookieKey !== undefined) {
   app.use(
     cookieSession({
@@ -62,10 +63,10 @@ passportController.initializeGoogleStrategy(
 // Setup routes
 app.use("/auth", authRouter);
 app.use("/api/v1", userRouter);
-app.use(
-  "/api/v1/",
-  proxy({ target: process.env.API_ENDPOINT, changeOrigin: true })
-);
+
+// Setup proxies
+const proxyController = new ProxyController(app, "/api/v1/", apiEndpoint);
+proxyController.initialize();
 
 // In 'production' send the gzipped file to the browser
 app.get("*.css", async (req: Request, res: Response, next: NextFunction) => {
