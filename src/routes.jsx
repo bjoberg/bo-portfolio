@@ -74,6 +74,7 @@ const Routes = (props) => {
         render={routeProps => (
           <GroupPage
             {...routeProps}
+            openSnackbar={openSnackbar}
             isEditable={isEditable}
           />
         )}

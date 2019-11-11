@@ -23,10 +23,11 @@ export default class ProxyController {
     this.app.use(proxyEndpoint, proxy(apiEndpoint, {
       proxyReqPathResolver(req: Request) { return proxyReqPathResolver(req); },
       proxyReqOptDecorator(proxyReqOpts: RequestOptions, srcReq: Request) {
-        if (shouldAddAuthorization) {
+        if (shouldAddAuthorization(srcReq.method)) {
           const user = srcReq.user as IGoogleAuthorization;
+          const accessToken = user ? user.accessToken : "";
           proxyReqOpts.headers = {
-            "Authorization": `Bearer ${user.accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
             "Content-Type": "application/json"
           };
         }

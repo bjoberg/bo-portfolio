@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import HttpMethods from '../models/http-methods';
 import ApiError from '../models/api-error.model';
 
 export default class ImageService {
@@ -15,7 +17,7 @@ export default class ImageService {
   async getImage(id) {
     try {
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: `/api/v1/image/${id}`,
       });
 
@@ -37,7 +39,7 @@ export default class ImageService {
     try {
       const paginationQuery = `?limit=${limit}&page=${page}`;
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: `/api/v1/images${paginationQuery}`,
       });
 
@@ -59,7 +61,7 @@ export default class ImageService {
   async deleteImage(id) {
     try {
       return await this.service({
-        method: 'delete',
+        method: HttpMethods.delete,
         url: `/api/v1/image/${id}`,
       });
     } catch (error) {
@@ -76,7 +78,7 @@ export default class ImageService {
   async updateImage(image) {
     try {
       const response = await this.service({
-        method: 'put',
+        method: HttpMethods.put,
         url: `/api/v1/image/${image.id}`,
         data: {
           ...image,
@@ -101,7 +103,7 @@ export default class ImageService {
   async createImage(image) {
     try {
       const response = await this.service({
-        method: 'post',
+        method: HttpMethods.post,
         url: '/api/v1/image',
         data: {
           thumbnailUrl: image.thumbnailUrl,

@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import HttpMethods from '../models/http-methods';
 import ApiError from '../models/api-error.model';
 
 export default class GroupService {
@@ -15,7 +17,7 @@ export default class GroupService {
   async getGroup(id) {
     try {
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: `/api/v1/group/${id}`,
       });
 
@@ -33,7 +35,7 @@ export default class GroupService {
   async getGroups() {
     try {
       const response = await this.service({
-        method: 'get',
+        method: HttpMethods.get,
         url: '/api/v1/groups',
       });
 
@@ -52,7 +54,7 @@ export default class GroupService {
   async deleteGroup(id) {
     try {
       return await this.service({
-        method: 'delete',
+        method: HttpMethods.delete,
         url: `/api/v1/group/${id}`,
       });
     } catch (error) {
@@ -69,7 +71,7 @@ export default class GroupService {
   async updateGroup(group) {
     try {
       const response = await this.service({
-        method: 'put',
+        method: HttpMethods.put,
         url: `/api/v1/group/${group.id}`,
         data: {
           ...group,
@@ -81,7 +83,8 @@ export default class GroupService {
         data: response.data[1][0],
       };
     } catch (error) {
-      throw new ApiError(500, `Error updating group: ${group.id}`);
+      const { message, code } = error.response.data;
+      throw new ApiError(code, message);
     }
   }
 
@@ -94,7 +97,7 @@ export default class GroupService {
   async createGroup(group) {
     try {
       const response = await this.service({
-        method: 'post',
+        method: HttpMethods.post,
         url: '/api/v1/group',
         data: {
           thumbnailUrl: group.thumbnailUrl,
