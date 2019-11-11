@@ -25,6 +25,7 @@ const GroupPage = (props) => {
     try {
       const response = await groupService.getGroup(match.params.id);
       setGroupDetails(response);
+      setPageIsLoaded(true);
     } catch (error) {
       setPageHasError(true);
     }
@@ -46,7 +47,6 @@ const GroupPage = (props) => {
 
   useEffect(() => {
     getGroupDetails();
-    setPageIsLoaded(true);
   }, [getGroupDetails]);
 
   if (pageHasError) return <ErrorPage title="Error" details={`Unable to retrieve group: ${match.params.id}`} />;
