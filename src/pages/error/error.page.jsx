@@ -19,7 +19,7 @@ const ErrorPage = (props) => {
     <Fragment>
       <Grid
         container
-        spacing="8"
+        spacing={8}
         direction="column"
         justify="center"
         alignItems="center"

@@ -16,6 +16,7 @@ const GroupPage = (props) => {
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
+  const [pageError, setPageError] = useState({});
   const [groupDetails, setGroupDetails] = useState({});
 
   /**
@@ -27,6 +28,11 @@ const GroupPage = (props) => {
       setGroupDetails(response);
       setPageIsLoaded(true);
     } catch (error) {
+      const { status, message } = error;
+      setPageError({
+        title: `${status}`,
+        details: `${message}`,
+      });
       setPageHasError(true);
     }
   }, [match.params.id]);
@@ -52,8 +58,8 @@ const GroupPage = (props) => {
   if (pageHasError) {
     return (
       <ErrorPage
-        title="Unable to retrieve group"
-        details="The group that was requested has been removed or does not exist."
+        title={pageError.title}
+        details={pageError.details}
         actionButtonLink="/groups"
         actionButtonTitle="View all groups"
       />
