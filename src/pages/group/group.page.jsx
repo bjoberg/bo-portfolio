@@ -49,7 +49,16 @@ const GroupPage = (props) => {
     getGroupDetails();
   }, [getGroupDetails]);
 
-  if (pageHasError) return <ErrorPage title="Error" details={`Unable to retrieve group: ${match.params.id}`} />;
+  if (pageHasError) {
+    return (
+      <ErrorPage
+        title="Unable to retrieve group"
+        details="The group that was requested has been removed or does not exist."
+        actionButtonLink="/groups"
+        actionButtonTitle="View all groups"
+      />
+    );
+  }
   if (!pageIsLoaded) return <LinearProgress />;
 
   return (

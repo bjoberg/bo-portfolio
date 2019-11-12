@@ -1,17 +1,40 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Button } from '@material-ui/core';
+import {
+  Typography, Button, Grid, makeStyles,
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
+import ErrorPageStyles from './error.styles';
+
+const useStyles = makeStyles(ErrorPageStyles);
 
 const ErrorPage = (props) => {
-  const { title, details } = props;
-
-  const reloadPage = () => window.location.reload();
+  const classes = useStyles();
+  const {
+    title, details, actionButtonTitle, actionButtonLink,
+  } = props;
 
   return (
     <Fragment>
-      <Typography variant="h1">{title}</Typography>
-      <Typography gutterBottom>{details}</Typography>
-      <Button variant="outlined" onClick={() => reloadPage()}>Reload</Button>
+      <Grid
+        container
+        spacing="8"
+        direction="column"
+        justify="center"
+        alignItems="center"
+        className={classes.container}
+      >
+        <Grid item>
+          <Typography variant="h1" align="center" gutterBottom>{title}</Typography>
+          <Typography align="center">{details}</Typography>
+        </Grid>
+        <Grid item>
+          <Link to={actionButtonLink} className={classes.link}>
+            <Button variant="outlined">{actionButtonTitle}</Button>
+          </Link>
+        </Grid>
+      </Grid>
     </Fragment>
   );
 };
@@ -19,11 +42,15 @@ const ErrorPage = (props) => {
 ErrorPage.propTypes = {
   title: PropTypes.string,
   details: PropTypes.string,
+  actionButtonTitle: PropTypes.string,
+  actionButtonLink: PropTypes.string,
 };
 
 ErrorPage.defaultProps = {
-  title: 'Error',
-  details: 'This page does not exist',
+  title: 'Unknown Error',
+  details: 'There was an unknown error with your request.',
+  actionButtonTitle: 'Back to home',
+  actionButtonLink: '/',
 };
 
 export default ErrorPage;
