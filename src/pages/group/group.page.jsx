@@ -16,8 +16,8 @@ const GroupPage = (props) => {
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
-  const [pageError, setPageError] = useState({});
-  const [groupDetails, setGroupDetails] = useState({});
+  const [pageError, setPageError] = useState();
+  const [groupDetails, setGroupDetails] = useState();
 
   /**
    * Make request to retrieve group details
@@ -26,7 +26,6 @@ const GroupPage = (props) => {
     try {
       const response = await groupService.getGroup(match.params.id);
       setGroupDetails(response);
-      setPageIsLoaded(true);
     } catch (error) {
       const { status, message } = error;
       setPageError({
@@ -34,6 +33,8 @@ const GroupPage = (props) => {
         details: `${message}`,
       });
       setPageHasError(true);
+    } finally {
+      setPageIsLoaded(true);
     }
   }, [match.params.id]);
 
