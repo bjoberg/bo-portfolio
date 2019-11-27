@@ -11,9 +11,9 @@ export default class GroupService {
   /**
    * Create a new ApiError based on input
    *
-   * @param {any} error error that was triggered
-   * @param {*} defaultStatus default status code if error is unknown
-   * @param {*} defaultMessage default status message if error is unknown
+   * @param {Error} error error that was triggered
+   * @param {number} defaultStatusCode default status code if error is unknown
+   * @param {string} defaultMessage default status message if error is unknown
    */
   static createNewApiError(error, defaultStatusCode, defaultMessage) {
     let status = defaultStatusCode;
