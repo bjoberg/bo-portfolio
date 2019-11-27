@@ -16,7 +16,8 @@ const GroupPage = (props) => {
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
-  const [groupDetails, setGroupDetails] = useState({});
+  const [pageError, setPageError] = useState();
+  const [groupDetails, setGroupDetails] = useState();
 
   /**
    * Make request to retrieve group details
@@ -25,9 +26,15 @@ const GroupPage = (props) => {
     try {
       const response = await groupService.getGroup(match.params.id);
       setGroupDetails(response);
-      setPageIsLoaded(true);
     } catch (error) {
+      const { status, message } = error;
+      setPageError({
+        title: `${status}`,
+        details: `${message}`,
+      });
       setPageHasError(true);
+    } finally {
+      setPageIsLoaded(true);
     }
   }, [match.params.id]);
 
@@ -49,7 +56,16 @@ const GroupPage = (props) => {
     getGroupDetails();
   }, [getGroupDetails]);
 
-  if (pageHasError) return <ErrorPage title="Error" details={`Unable to retrieve group: ${match.params.id}`} />;
+  if (pageHasError) {
+    return (
+      <ErrorPage
+        title={pageError.title}
+        details={pageError.details}
+        actionButtonLink="/groups"
+        actionButtonTitle="View all groups"
+      />
+    );
+  }
   if (!pageIsLoaded) return <LinearProgress />;
 
   return (
