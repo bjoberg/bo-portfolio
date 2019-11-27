@@ -28,7 +28,7 @@ const GroupPage = (props) => {
     try {
       const groupInfo = await groupService.getGroup(match.params.id);
       // TODO: Make this better
-      const images = await imageService.getImages(30, 0, match.params.id);
+      const images = await imageService.getImagesForGroup(30, 0, match.params.id);
       setGroupDetails(groupInfo);
       setGroupImages(images.data);
       setPageIsLoaded(true);
