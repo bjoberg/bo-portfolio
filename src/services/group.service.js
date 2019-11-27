@@ -9,7 +9,25 @@ export default class GroupService {
   }
 
   /**
+   * Create a new ApiError based on input
+   *
+   * @param {Error} error error that was triggered
+   * @param {number} defaultStatusCode default status code if error is unknown
+   * @param {string} defaultMessage default status message if error is unknown
+   */
+  static createNewApiError(error, defaultStatusCode, defaultMessage) {
+    let status = defaultStatusCode;
+    let message = defaultMessage;
+    if (error.response) {
+      ({ status } = error.response);
+      ({ message } = error.response.data);
+    }
+    return new ApiError(status, message);
+  }
+
+  /**
    * Retrieve a single group based on id
+   *
    * @param {string} id of the group to retrieve
    * @returns {JSON} group object
    * @throws ApiError
@@ -23,12 +41,14 @@ export default class GroupService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(404, `Error retrieving group: ${id}`);
+      const apiError = GroupService.createNewApiError(error, 500, `Unable to get group: ${id}`);
+      throw apiError;
     }
   }
 
   /**
    * Retrieve a list of groups
+   *
    * @returns {JSON} object of groups
    * @throws ApiError
    */
@@ -41,12 +61,14 @@ export default class GroupService {
 
       return response.data.rows;
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve groups');
+      const apiError = GroupService.createNewApiError(error, 500, 'Unable to get groups');
+      throw apiError;
     }
   }
 
   /**
    * Delete a single group based on id
+   *
    * @param {string} id of the group to delete
    * @returns number of rows destroyed
    * @throws ApiError
@@ -58,12 +80,14 @@ export default class GroupService {
         url: `/api/v1/group/${id}`,
       });
     } catch (error) {
-      throw new ApiError(500, `Error deleting group: ${id}`);
+      const apiError = GroupService.createNewApiError(error, 500, `Unable to delete group: ${id}`);
+      throw apiError;
     }
   }
 
   /**
    * Update a single group based on id
+   *
    * @param {JSON} group object to be updated
    * @returns {JSON} group object
    * @throws ApiError
@@ -83,13 +107,14 @@ export default class GroupService {
         data: response.data[1][0],
       };
     } catch (error) {
-      const { message, code } = error.response.data;
-      throw new ApiError(code, message);
+      const apiError = GroupService.createNewApiError(error, 500, `Unable to update group: ${group.id}`);
+      throw apiError;
     }
   }
 
   /**
    * Create a single group
+   *
    * @param {JSON} group object to be created
    * @returns {JSON} group object
    * @throws ApiError
@@ -109,7 +134,8 @@ export default class GroupService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(500, 'Error creating group');
+      const apiError = GroupService.createNewApiError(error, 500, 'Unable to update create group');
+      throw apiError;
     }
   }
 }
