@@ -20,6 +20,7 @@ const GroupPage = (props) => {
   const [pageHasError, setPageHasError] = useState(false);
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
+  const [pageError, setPageError] = useState();
 
   /**
    * Make request to retrieve group data
@@ -33,7 +34,14 @@ const GroupPage = (props) => {
       setGroupImages(images.data);
       setPageIsLoaded(true);
     } catch (error) {
+      const { status, message } = error;
+      setPageError({
+        title: `${status}`,
+        details: `${message}`,
+      });
       setPageHasError(true);
+    } finally {
+      setPageIsLoaded(true);
     }
   }, [match.params.id]);
 
@@ -53,7 +61,16 @@ const GroupPage = (props) => {
 
   useEffect(() => { getGroupData(); }, [getGroupData]);
 
-  if (pageHasError) return <ErrorPage title="Error" details={`Unable to retrieve group: ${match.params.id}`} />;
+  if (pageHasError) {
+    return (
+      <ErrorPage
+        title={pageError.title}
+        details={pageError.details}
+        actionButtonLink="/groups"
+        actionButtonTitle="View all groups"
+      />
+    );
+  }
   if (!pageIsLoaded) return <LinearProgress />;
 
   return (
