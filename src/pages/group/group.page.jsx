@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { LinearProgress } from '@material-ui/core';
 
+import httpStatus from 'http-status';
 import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
@@ -23,25 +24,44 @@ const GroupPage = (props) => {
   const [pageError, setPageError] = useState();
 
   /**
+   * Evaluate error a display status to user
+   *
+   * @param {number|string} defaultStatusCode error status code to display if error object does not
+   * have status prop
+   * @param {string} defaultStatusMessage error message details to display if error object does not
+   * have message prop
+   * @param {any} error error that was thrown
+   */
+  const displayPageError = (defaultStatusCode, defaultStatusMessage, error) => {
+    const { status, message } = error;
+    const title = `${status}` || `${defaultStatusCode}`;
+    const details = message || defaultStatusMessage;
+    setPageError({ title, details });
+    setPageHasError(true);
+  };
+
+  /**
    * Make request to retrieve group data
    */
   const getGroupData = useCallback(async () => {
     try {
       const groupInfo = await groupService.getGroup(match.params.id);
-      // TODO: Make this better
-      const images = await imageService.getImagesForGroup(30, 0, match.params.id);
       setGroupDetails(groupInfo);
-      setGroupImages(images.data);
-      setPageIsLoaded(true);
     } catch (error) {
-      const { status, message } = error;
-      setPageError({
-        title: `${status}`,
-        details: `${message}`,
-      });
-      setPageHasError(true);
-    } finally {
-      setPageIsLoaded(true);
+      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
+      const defaultStatusMessage = 'Unknown error has occured while getting group details';
+      displayPageError(defaultStatusCode, defaultStatusMessage, error);
+    }
+  }, [match.params.id]);
+
+  const getGroupImages = useCallback(async () => {
+    try {
+      const images = await imageService.getImagesForGroup(30, 0, match.params.id);
+      setGroupImages(images.data);
+    } catch (error) {
+      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
+      const defaultStatusMessage = 'Unknown error has occured while getting group images';
+      displayPageError(defaultStatusCode, defaultStatusMessage, error);
     }
   }, [match.params.id]);
 
@@ -59,7 +79,14 @@ const GroupPage = (props) => {
     }
   };
 
-  useEffect(() => { getGroupData(); }, [getGroupData]);
+  useEffect(() => {
+    const loadPageData = async () => {
+      await getGroupData();
+      await getGroupImages();
+      setPageIsLoaded(true);
+    };
+    loadPageData();
+  }, [getGroupData, getGroupImages]);
 
   if (pageHasError) {
     return (
