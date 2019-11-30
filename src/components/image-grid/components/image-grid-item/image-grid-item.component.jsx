@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTheme, makeStyles, useMediaQuery } from '@material-ui/core';
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
+import {
+  useTheme, makeStyles, useMediaQuery, Checkbox,
+} from '@material-ui/core';
+import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
+import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 
 import ImageGridItemStyles from './image-grid-item.styles';
 
@@ -11,7 +17,7 @@ const ImageGridItem = (props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
-    id, imageUrl, title, imageHeight, imageWidth,
+    id, imageUrl, title, imageHeight, imageWidth, isSelected, isEditable, onImageSelect,
   } = props;
 
   let height = theme.image.height.large;
@@ -19,13 +25,29 @@ const ImageGridItem = (props) => {
   const width = (height / imageHeight) * imageWidth;
 
   return (
-    <div className={classes.root} style={{ width }}>
-      <img
-        className={classes.img}
-        id={id}
-        src={imageUrl}
-        alt={title}
-      />
+    <div
+      className={clsx(classes.root, isSelected && classes.selected)}
+      style={{ width }}
+    >
+      {isEditable && (
+        <div className={classes.actionBar}>
+          <Checkbox
+            color="secondary"
+            checked={isSelected}
+            onClick={() => onImageSelect(id)}
+            icon={<CircleUnchecked />}
+            checkedIcon={<CircleCheckedFilled />}
+          />
+        </div>
+      )}
+      <Link key={id} to={`/image/${id}`} className={classes.link}>
+        <img
+          className={classes.img}
+          id={id}
+          src={imageUrl}
+          alt={title}
+        />
+      </Link>
     </div>
   );
 };
@@ -36,12 +58,18 @@ ImageGridItem.propTypes = {
   title: PropTypes.string,
   imageHeight: PropTypes.number,
   imageWidth: PropTypes.number,
+  isSelected: PropTypes.bool,
+  isEditable: PropTypes.bool,
+  onImageSelect: PropTypes.func,
 };
 
 ImageGridItem.defaultProps = {
   title: '',
   imageHeight: 100,
   imageWidth: 100,
+  isSelected: false,
+  isEditable: false,
+  onImageSelect: () => { },
 };
 
 export default ImageGridItem;

@@ -107,7 +107,7 @@ const GroupPage = (props) => {
         isEditable={isEditable}
         handleUpdate={updateGroupTitle}
       />
-      <GroupPageGrid images={groupImages} />
+      <GroupPageGrid images={groupImages} isEditable={isEditable} />
     </Fragment>
   );
 };
