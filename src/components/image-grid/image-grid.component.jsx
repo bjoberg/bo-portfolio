@@ -21,6 +21,8 @@ const ImageGrid = (props) => {
               id={item.id}
               title={item.title}
               imageUrl={item.imageUrl}
+              imageHeight={item.height}
+              imageWidth={item.width}
             />
           </Link>
         ))}
@@ -39,6 +41,8 @@ ImageGrid.propTypes = {
     id: PropTypes.string,
     title: PropTypes.string,
     imageUrl: PropTypes.string,
+    height: PropTypes.number,
+    width: PropTypes.number,
   })),
   isLoading: PropTypes.bool,
 };
