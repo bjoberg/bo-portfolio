@@ -19,17 +19,16 @@ const ErrorPage = (props) => {
     <Fragment>
       <Grid
         container
-        spacing={8}
         direction="column"
         justify="center"
         alignItems="center"
         className={classes.container}
       >
-        <Grid item>
+        <Grid item className={classes.item}>
           <Typography variant="h1" align="center" gutterBottom>{title}</Typography>
           <Typography align="center">{details}</Typography>
         </Grid>
-        <Grid item>
+        <Grid item className={classes.item}>
           <Link to={actionButtonLink} className={classes.link}>
             <Button variant="outlined">{actionButtonTitle}</Button>
           </Link>

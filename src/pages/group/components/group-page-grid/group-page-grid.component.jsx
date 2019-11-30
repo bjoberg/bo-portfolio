@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const GroupPageGrid = props => (<div>Hellow</div>);
+import { ImageGrid } from '../../../../components/image-grid';
+
+const GroupPageGrid = (props) => {
+  const { images } = props;
+  return (<ImageGrid images={images} isLoading={false} />);
+};
 
 export default GroupPageGrid;
