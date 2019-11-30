@@ -1,7 +1,8 @@
 const ImageGridItemStyles = theme => ({
   root: {
-    height: 250,
+    height: theme.image.height.large,
     maxWidth: 600,
+    backgroundColor: theme.palette.grey[100],
     margin: theme.spacing(0.5),
     overflow: 'hidden',
     transition: theme.transitions.create('height', {
@@ -9,7 +10,7 @@ const ImageGridItemStyles = theme => ({
       duration: theme.transitions.duration.shortest,
     }),
     [theme.breakpoints.down('sm')]: {
-      height: 175,
+      height: theme.image.height.small,
       maxWidth: 400,
     },
   },
