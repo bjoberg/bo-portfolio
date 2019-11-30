@@ -29,6 +29,12 @@ const theme = createMuiTheme({
       color: '#616161', // default grey[700]
     },
   },
+  image: {
+    height: {
+      small: 175,
+      large: 250,
+    },
+  },
 });
 
 export {
