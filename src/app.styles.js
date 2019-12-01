@@ -8,6 +8,7 @@ const AppStyles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: miniDrawerWidth + theme.spacing(2),
+    marginTop: theme.spacing(2),
     marginRight: theme.spacing(2),
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
