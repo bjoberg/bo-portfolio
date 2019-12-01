@@ -17,7 +17,7 @@ const ImageGridItem = (props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
-    id, imageUrl, title, imageHeight, imageWidth, isSelected, isEditable, onImageSelect,
+    id, imageUrl, title, imageHeight, imageWidth, isSelected, isEditable, handleImageSelect,
   } = props;
 
   let height = theme.image.height.large;
@@ -34,7 +34,7 @@ const ImageGridItem = (props) => {
           <Checkbox
             color="secondary"
             checked={isSelected}
-            onClick={() => onImageSelect(id)}
+            onClick={() => handleImageSelect(id)}
             icon={<CircleUnchecked />}
             checkedIcon={<CircleCheckedFilled />}
           />
@@ -60,7 +60,7 @@ ImageGridItem.propTypes = {
   imageWidth: PropTypes.number,
   isSelected: PropTypes.bool,
   isEditable: PropTypes.bool,
-  onImageSelect: PropTypes.func,
+  handleImageSelect: PropTypes.func,
 };
 
 ImageGridItem.defaultProps = {
@@ -69,7 +69,7 @@ ImageGridItem.defaultProps = {
   imageWidth: 100,
   isSelected: false,
   isEditable: false,
-  onImageSelect: () => { },
+  handleImageSelect: () => { },
 };
 
 export default ImageGridItem;

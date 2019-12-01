@@ -10,7 +10,7 @@ const useStyles = makeStyles(ImageGridStyles);
 const ImageGrid = (props) => {
   const classes = useStyles();
   const {
-    images, selectedImages, isLoading, isEditable, onImageSelect,
+    images, selectedImages, isLoading, isEditable, handleImageSelect,
   } = props;
 
   /**
@@ -37,7 +37,7 @@ const ImageGrid = (props) => {
             imageWidth={item.width}
             isEditable={isEditable}
             isSelected={getIsSelected(item.id)}
-            onImageSelect={onImageSelect}
+            handleImageSelect={handleImageSelect}
           />
         ))}
       </div>
@@ -61,7 +61,7 @@ ImageGrid.propTypes = {
   selectedImages: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
   isEditable: PropTypes.bool,
-  onImageSelect: PropTypes.func,
+  handleImageSelect: PropTypes.func,
 };
 
 ImageGrid.defaultProps = {
@@ -69,7 +69,7 @@ ImageGrid.defaultProps = {
   selectedImages: [],
   isLoading: false,
   isEditable: false,
-  onImageSelect: () => { },
+  handleImageSelect: () => { },
 };
 
 export default ImageGrid;

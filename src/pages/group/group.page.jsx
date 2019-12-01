@@ -2,13 +2,14 @@ import React, {
   Fragment, useState, useEffect, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
-import { LinearProgress } from '@material-ui/core';
-
 import httpStatus from 'http-status';
+import { LinearProgress, Grid } from '@material-ui/core';
+
 import ErrorPage from '../error/error.page';
-import GroupService from '../../services/group.service';
+import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
 import GroupPageGrid from './components/group-page-grid/group-page-grid.component';
+import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 
 const groupService = new GroupService();
@@ -19,9 +20,10 @@ const GroupPage = (props) => {
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
+  const [pageError, setPageError] = useState();
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
-  const [pageError, setPageError] = useState();
+  const [groupSelectedImages, setGroupSelectedImages] = useState([]);
 
   /**
    * Evaluate error a display status to user
@@ -54,6 +56,9 @@ const GroupPage = (props) => {
     }
   }, [match.params.id]);
 
+  /**
+   * Make request to retrieve group images
+   */
   const getGroupImages = useCallback(async () => {
     try {
       const images = await imageService.getImagesForGroup(30, 0, match.params.id);
@@ -79,6 +84,29 @@ const GroupPage = (props) => {
     }
   };
 
+  /**
+   * Add / Remove item from select image array
+   *
+   * @param {string} selectedImageId id of image that was selected
+   */
+  const handleImageSelect = (selectedImageId) => {
+    const imageIsSelected = groupSelectedImages.find(el => el === selectedImageId);
+    if (imageIsSelected) {
+      const temp = groupSelectedImages;
+      temp.splice(temp.indexOf(selectedImageId), 1);
+      setGroupSelectedImages([...temp]);
+    } else {
+      setGroupSelectedImages([...groupSelectedImages, selectedImageId]);
+    }
+  };
+
+  /**
+   * Clear all of the selected images
+   */
+  const resetSelectedImages = () => {
+    setGroupSelectedImages([]);
+  };
+
   useEffect(() => {
     const loadPageData = async () => {
       await getGroupData();
@@ -98,16 +126,36 @@ const GroupPage = (props) => {
       />
     );
   }
-  if (!pageIsLoaded) return <LinearProgress />;
+
+  if (!pageIsLoaded) {
+    return <LinearProgress />;
+  }
 
   return (
     <Fragment>
-      <GroupPageHeader
-        title={groupDetails.title}
-        isEditable={isEditable}
-        handleUpdate={updateGroupTitle}
-      />
-      <GroupPageGrid images={groupImages} isEditable={isEditable} />
+      {groupSelectedImages && groupSelectedImages.length > 0 && (
+        <GroupPageActionBar
+          selectedItems={groupSelectedImages}
+          handleClose={resetSelectedImages}
+        />
+      )}
+      <Grid container spacing={2} direction="column">
+        <Grid item>
+          <GroupPageHeader
+            title={groupDetails.title}
+            isEditable={isEditable}
+            handleUpdate={updateGroupTitle}
+          />
+        </Grid>
+        <Grid item>
+          <GroupPageGrid
+            images={groupImages}
+            selectedImages={groupSelectedImages}
+            isEditable={isEditable}
+            handleImageSelect={handleImageSelect}
+          />
+        </Grid>
+      </Grid>
     </Fragment>
   );
 };
