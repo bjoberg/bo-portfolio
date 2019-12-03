@@ -12,7 +12,9 @@ const useStyles = makeStyles(GroupPageActionBarStyles);
 
 const GroupPageActionBar = (props) => {
   const classes = useStyles();
-  const { selectedItems, handleClose, handleDelete } = props;
+  const {
+    selectedItems, handleClose, handleDelete, isDisabled,
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -24,6 +26,7 @@ const GroupPageActionBar = (props) => {
             color="inherit"
             aria-label="Close"
             onClick={() => handleClose()}
+            disabled={isDisabled}
           >
             <CloseIcon />
           </IconButton>
@@ -35,6 +38,7 @@ const GroupPageActionBar = (props) => {
             color="secondary"
             aria-label="Delete"
             onClick={() => handleDelete()}
+            disabled={isDisabled}
           >
             <DeleteIcon />
           </IconButton>
@@ -48,12 +52,14 @@ GroupPageActionBar.propTypes = {
   selectedItems: PropTypes.arrayOf(PropTypes.string),
   handleClose: PropTypes.func,
   handleDelete: PropTypes.func,
+  isDisabled: PropTypes.bool,
 };
 
 GroupPageActionBar.defaultProps = {
   selectedItems: [],
   handleClose: () => { },
   handleDelete: () => { },
+  isDisabled: false,
 };
 
 export default GroupPageActionBar;

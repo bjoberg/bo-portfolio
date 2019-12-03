@@ -25,6 +25,7 @@ const GroupPage = (props) => {
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
   const [groupSelectedImages, setGroupSelectedImages] = useState([]);
+  const [groupActionIsPending, setGroupActionIsPending] = useState(false);
 
   /**
    * Evaluate error a display status to user
@@ -104,16 +105,42 @@ const GroupPage = (props) => {
   /**
    * Clear all of the selected images
    */
-  const resetSelectedImages = () => {
-    setGroupSelectedImages([]);
+  const resetSelectedImages = () => { setGroupSelectedImages([]); };
+
+  /**
+   * Remove images from groupImages list
+   *
+   * @param {string[]} imageIds list of ids to remove from groupImages list
+   */
+  const removeImagesFromGroup = (imageIds) => {
+    const imageIdsToRemove = imageIds;
+    const tempGroupImages = groupImages;
+
+    imageIdsToRemove.forEach((id) => {
+      tempGroupImages.forEach((image, i) => {
+        if (image.id === id) {
+          tempGroupImages.splice(i, 1);
+        }
+      });
+    });
+
+    setGroupImages(tempGroupImages);
   };
 
   /**
    * Remove the selected items from the group
    */
   const handleRemoveImages = async () => {
-    await imageService.deleteImagesFromGroup(groupId, groupSelectedImages);
-    // TODO: Update the ui to reflect the items that were removed
+    try {
+      setGroupActionIsPending(true);
+      const result = await imageService.deleteImagesFromGroup(groupId, groupSelectedImages);
+      removeImagesFromGroup(result.data.success);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      resetSelectedImages();
+      setGroupActionIsPending(false);
+    }
   };
 
   useEffect(() => {
@@ -147,6 +174,7 @@ const GroupPage = (props) => {
           selectedItems={groupSelectedImages}
           handleClose={resetSelectedImages}
           handleDelete={handleRemoveImages}
+          isDisabled={groupActionIsPending}
         />
       )}
       <Grid container spacing={2} direction="column">
