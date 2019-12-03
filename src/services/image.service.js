@@ -96,6 +96,30 @@ export default class ImageService {
   }
 
   /**
+   * Disassociate images from the specified group
+   *
+   * @param {string} groupId unique id of group to disassociate images from
+   * @param {string[]} imageIds unique ids of images to disassociate from group
+   * @returns {object} describing state of deletion
+   * @throws ApiError
+   */
+  async deleteImagesFromGroup(groupId, imageIds) {
+    try {
+      let query = '';
+      imageIds.forEach((id, i) => {
+        if (i === 0) query = `?imageId=${id}`;
+        else query = `${query}&imageId=${id}`;
+      });
+      return await this.service({
+        method: HttpMethods.delete,
+        url: `/api/v1/group/${groupId}/images${query}`,
+      });
+    } catch (error) {
+      throw new ApiError(500, `Error deleting images from ${groupId}`);
+    }
+  }
+
+  /**
    * Update a single image based on id
    *
    * @param {JSON} image object to be updated
