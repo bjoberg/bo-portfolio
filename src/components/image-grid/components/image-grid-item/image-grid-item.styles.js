@@ -14,9 +14,19 @@ const ImageGridItemStyles = theme => ({
       maxWidth: 400,
     },
   },
+  actionBar: {
+    position: 'absolute',
+  },
+  selected: {
+    outline: `2px solid ${theme.palette.secondary.main}`,
+  },
   img: {
     objectFit: 'cover',
     height: '100%',
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
   },
 });
 

@@ -2,13 +2,14 @@ import React, {
   Fragment, useState, useEffect, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
-import { LinearProgress } from '@material-ui/core';
-
 import httpStatus from 'http-status';
+import { LinearProgress, Grid } from '@material-ui/core';
+
 import ErrorPage from '../error/error.page';
-import GroupService from '../../services/group.service';
+import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
 import GroupPageGrid from './components/group-page-grid/group-page-grid.component';
+import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 
 const groupService = new GroupService();
@@ -16,12 +17,15 @@ const imageService = new ImageService();
 
 const GroupPage = (props) => {
   const { match, openSnackbar, isEditable } = props;
+  const groupId = match.params.id;
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
+  const [pageError, setPageError] = useState();
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
-  const [pageError, setPageError] = useState();
+  const [groupSelectedImages, setGroupSelectedImages] = useState([]);
+  const [groupActionIsPending, setGroupActionIsPending] = useState(false);
 
   /**
    * Evaluate error a display status to user
@@ -45,25 +49,28 @@ const GroupPage = (props) => {
    */
   const getGroupData = useCallback(async () => {
     try {
-      const groupInfo = await groupService.getGroup(match.params.id);
+      const groupInfo = await groupService.getGroup(groupId);
       setGroupDetails(groupInfo);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group details';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
     }
-  }, [match.params.id]);
+  }, [groupId]);
 
+  /**
+   * Make request to retrieve group images
+   */
   const getGroupImages = useCallback(async () => {
     try {
-      const images = await imageService.getImagesForGroup(30, 0, match.params.id);
+      const images = await imageService.getImagesForGroup(30, 0, groupId);
       setGroupImages(images.data);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
     }
-  }, [match.params.id]);
+  }, [groupId]);
 
   /**
    * Update the title of the group
@@ -76,6 +83,63 @@ const GroupPage = (props) => {
       await groupService.updateGroup(data);
     } catch (error) {
       openSnackbar('error', error.message);
+    }
+  };
+
+  /**
+   * Add / Remove item from select image array
+   *
+   * @param {string} selectedImageId id of image that was selected
+   */
+  const handleImageSelect = (selectedImageId) => {
+    const imageIsSelected = groupSelectedImages.find(el => el === selectedImageId);
+    if (imageIsSelected) {
+      const temp = groupSelectedImages;
+      temp.splice(temp.indexOf(selectedImageId), 1);
+      setGroupSelectedImages([...temp]);
+    } else {
+      setGroupSelectedImages([...groupSelectedImages, selectedImageId]);
+    }
+  };
+
+  /**
+   * Clear all of the selected images
+   */
+  const resetSelectedImages = () => { setGroupSelectedImages([]); };
+
+  /**
+   * Remove images from groupImages list
+   *
+   * @param {string[]} imageIds list of ids to remove from groupImages list
+   */
+  const removeImagesFromGroup = (imageIds) => {
+    const imageIdsToRemove = imageIds;
+    const tempGroupImages = groupImages;
+
+    imageIdsToRemove.forEach((id) => {
+      tempGroupImages.forEach((image, i) => {
+        if (image.id === id) {
+          tempGroupImages.splice(i, 1);
+        }
+      });
+    });
+
+    setGroupImages(tempGroupImages);
+  };
+
+  /**
+   * Remove the selected items from the group
+   */
+  const handleRemoveImages = async () => {
+    try {
+      setGroupActionIsPending(true);
+      const result = await imageService.deleteImagesFromGroup(groupId, groupSelectedImages);
+      removeImagesFromGroup(result.data.success);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      resetSelectedImages();
+      setGroupActionIsPending(false);
     }
   };
 
@@ -98,16 +162,39 @@ const GroupPage = (props) => {
       />
     );
   }
-  if (!pageIsLoaded) return <LinearProgress />;
+
+  if (!pageIsLoaded) {
+    return <LinearProgress />;
+  }
 
   return (
     <Fragment>
-      <GroupPageHeader
-        title={groupDetails.title}
-        isEditable={isEditable}
-        handleUpdate={updateGroupTitle}
-      />
-      <GroupPageGrid images={groupImages} />
+      {groupSelectedImages && groupSelectedImages.length > 0 && (
+        <GroupPageActionBar
+          selectedItems={groupSelectedImages}
+          groupTitle={groupDetails.title}
+          handleClose={resetSelectedImages}
+          handleDelete={handleRemoveImages}
+          isDisabled={groupActionIsPending}
+        />
+      )}
+      <Grid container spacing={2} direction="column">
+        <Grid item>
+          <GroupPageHeader
+            title={groupDetails.title}
+            isEditable={isEditable}
+            handleUpdate={updateGroupTitle}
+          />
+        </Grid>
+        <Grid item>
+          <GroupPageGrid
+            images={groupImages}
+            selectedImages={groupSelectedImages}
+            isEditable={isEditable}
+            handleImageSelect={handleImageSelect}
+          />
+        </Grid>
+      </Grid>
     </Fragment>
   );
 };
