@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress, makeStyles, Typography } from '@material-ui/core';
 
 import ImageGridStyles from './image-grid.styles';
 import ImageGridItem from './components/image-grid-item/image-grid-item.component';
@@ -23,6 +23,10 @@ const ImageGrid = (props) => {
     if (isFound) return true;
     return false;
   };
+
+  if (images.length === 0) {
+    return (<Typography>No images to display.</Typography>);
+  }
 
   return (
     <Fragment>
