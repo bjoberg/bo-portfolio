@@ -12,10 +12,6 @@ const ImageGridStyles = theme => ({
     alignItems: 'center',
     padding: theme.spacing(2),
   },
-  link: {
-    textDecoration: 'none',
-    color: 'inherit',
-  },
 });
 
 export default ImageGridStyles;

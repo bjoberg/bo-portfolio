@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, TextField } from '@material-ui/core';
 
@@ -33,23 +33,21 @@ const GroupPageHeader = (props) => {
   };
 
   return (
-    <Fragment>
-      <TextField
-        fullWidth
-        multiline
-        value={groupTitle.current}
-        disabled={!isEditable}
-        onBlur={() => handleOnBlur()}
-        onChange={e => handleOnChange(e)}
-        InputProps={{
-          disableUnderline: !isEditable,
-          classes: {
-            disabled: classes.textField,
-            input: classes.textField,
-          },
-        }}
-      />
-    </Fragment>
+    <TextField
+      fullWidth
+      multiline
+      value={groupTitle.current}
+      disabled={!isEditable}
+      onBlur={() => handleOnBlur()}
+      onChange={e => handleOnChange(e)}
+      InputProps={{
+        disableUnderline: !isEditable,
+        classes: {
+          disabled: classes.textField,
+          input: classes.textField,
+        },
+      }}
+    />
   );
 };
 
