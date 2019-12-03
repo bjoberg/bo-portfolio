@@ -172,6 +172,7 @@ const GroupPage = (props) => {
       {groupSelectedImages && groupSelectedImages.length > 0 && (
         <GroupPageActionBar
           selectedItems={groupSelectedImages}
+          groupTitle={groupDetails.title}
           handleClose={resetSelectedImages}
           handleDelete={handleRemoveImages}
           isDisabled={groupActionIsPending}

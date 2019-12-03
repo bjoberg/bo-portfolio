@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   makeStyles, AppBar, Toolbar, Typography, IconButton,
@@ -7,14 +7,19 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import GroupPageActionBarStyles from './group-page-action-bar.styles';
+import AlertDialog from '../../../../components/alert-dialog/alert-dialog.component';
 
 const useStyles = makeStyles(GroupPageActionBarStyles);
 
 const GroupPageActionBar = (props) => {
   const classes = useStyles();
   const {
-    selectedItems, handleClose, handleDelete, isDisabled,
+    selectedItems, groupTitle, handleClose, handleDelete, isDisabled,
   } = props;
+
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+
+  const closeDeleteDialog = () => { setDeleteDialogIsOpen(false); };
 
   return (
     <div className={classes.root}>
@@ -37,19 +42,30 @@ const GroupPageActionBar = (props) => {
             edge="start"
             color="secondary"
             aria-label="Delete"
-            onClick={() => handleDelete()}
+            onClick={() => setDeleteDialogIsOpen(true)}
             disabled={isDisabled}
           >
             <DeleteIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <AlertDialog
+        id="alert-dialog--delete"
+        isOpen={deleteDialogIsOpen}
+        title="Remove images?"
+        body={`You are about to remove ${selectedItems.length} images from ${groupTitle}. This will not delete the images, it will only disassociate the images from the group.`}
+        closeButtonText="Cancel"
+        confirmButtonText="Delete"
+        handleClose={closeDeleteDialog}
+        handleConfirm={handleDelete}
+      />
     </div>
   );
 };
 
 GroupPageActionBar.propTypes = {
   selectedItems: PropTypes.arrayOf(PropTypes.string),
+  groupTitle: PropTypes.string,
   handleClose: PropTypes.func,
   handleDelete: PropTypes.func,
   isDisabled: PropTypes.bool,
@@ -57,6 +73,7 @@ GroupPageActionBar.propTypes = {
 
 GroupPageActionBar.defaultProps = {
   selectedItems: [],
+  groupTitle: '',
   handleClose: () => { },
   handleDelete: () => { },
   isDisabled: false,
