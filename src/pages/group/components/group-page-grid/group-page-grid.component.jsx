@@ -12,7 +12,6 @@ const GroupPageGrid = (props) => {
     <ImageGrid
       images={images}
       selectedImages={selectedImages}
-      isLoading={false}
       isEditable={isEditable}
       handleImageSelect={handleImageSelect}
     />
