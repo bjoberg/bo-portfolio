@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Dialog } from '@material-ui/core';
 
 import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import GroupListPage from './pages/group-list/group-list.page';
@@ -72,11 +73,13 @@ const Routes = (props) => {
       <Route
         path="/group/:id"
         render={routeProps => (
-          <GroupPage
-            {...routeProps}
-            openSnackbar={openSnackbar}
-            isEditable={isEditable}
-          />
+          <Dialog fullScreen open transitionDuration={{ enter: 0, exit: 0 }}>
+            <GroupPage
+              {...routeProps}
+              openSnackbar={openSnackbar}
+              isEditable={isEditable}
+            />
+          </Dialog>
         )}
       />
       <Route component={ErrorPage} />
