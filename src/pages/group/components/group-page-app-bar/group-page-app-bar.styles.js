@@ -6,7 +6,7 @@ const GroupPageAppBarStyles = theme => ({
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
   },
-  icon: {
+  closeIcon: {
     marginRight: theme.spacing(2),
   },
 });

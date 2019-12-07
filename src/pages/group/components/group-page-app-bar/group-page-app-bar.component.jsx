@@ -22,27 +22,19 @@ const GroupPageAppBar = (props) => {
         <Toolbar>
           <IconButton
             edge="start"
-            className={classes.icon}
-            color="inherit"
-            aria-label="Close"
+            className={classes.closeIcon}
+            aria-label="close"
             onClick={() => handleClose()}
           >
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.grow} />
           {isEditable && (
-            <IconButton
-              edge="start"
-              className={classes.icon}
-              aria-label="add-photo"
-            >
+            <IconButton edge="start" aria-label="add-photo">
               <AddPhotoIcon />
             </IconButton>
           )}
-          <IconButton
-            edge="start"
-            aria-label="info"
-          >
+          <IconButton edge="end" aria-label="info">
             <InfoIcon />
           </IconButton>
         </Toolbar>
