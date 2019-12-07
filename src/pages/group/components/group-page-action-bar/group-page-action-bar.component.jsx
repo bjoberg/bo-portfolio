@@ -23,7 +23,7 @@ const GroupPageActionBar = (props) => {
 
   return (
     <Fragment>
-      <AppBar position="fixed" className={classes.appBar} classes={{ root: { zIndex: 1500 } }}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"

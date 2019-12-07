@@ -171,7 +171,7 @@ const GroupPage = (props) => {
   }, [getGroupData, getGroupImages]);
 
   return (
-    <Fragment>
+    <div className={classes.root}>
       {groupSelectedImages && groupSelectedImages.length > 0 && (
         <GroupPageActionBar
           selectedItems={groupSelectedImages}
@@ -182,50 +182,51 @@ const GroupPage = (props) => {
         />
       )}
       {(!groupSelectedImages || groupSelectedImages.length === 0) && (
+        <GroupPageAppBar
+          handleClose={handleGoBack}
+          isEditable={isEditable}
+        />
+      )}
+      {pageHasError && (
         <Fragment>
-          <GroupPageAppBar
-            handleClose={handleGoBack}
-            isEditable={isEditable}
+          <div className={classes.toolbar} />
+          <ErrorPage
+            title={pageError.title}
+            details={pageError.details}
+            actionButtonLink="/groups"
+            actionButtonTitle="View all groups"
           />
         </Fragment>
       )}
-      {pageHasError && (
-        <ErrorPage
-          title={pageError.title}
-          details={pageError.details}
-          actionButtonLink="/groups"
-          actionButtonTitle="View all groups"
-        />
+      {!pageIsLoaded && (
+        <div className={classes.progressContainer}>
+          <CircularProgress />
+        </div>
       )}
-      {!pageHasError && (
+      {(!pageHasError && pageIsLoaded) && (
         <Fragment>
-          {!pageIsLoaded && (<CircularProgress className={classes.progressContainer} />)}
-          {pageIsLoaded && (
-            <Fragment>
-              <div className={classes.toolbar} />
-              <Grid container className={classes.root} pacing={2} direction="column">
-                <Grid item>
-                  <GroupPageHeader
-                    title={groupDetails.title}
-                    totalImages={totalGroupImages}
-                    isEditable={isEditable}
-                    handleUpdate={updateGroupTitle}
-                  />
-                </Grid>
-                <Grid item>
-                  <GroupPageGrid
-                    images={groupImages}
-                    selectedImages={groupSelectedImages}
-                    isEditable={isEditable}
-                    handleImageSelect={handleImageSelect}
-                  />
-                </Grid>
-              </Grid>
-            </Fragment>
-          )}
+          <div className={classes.toolbar} />
+          <Grid container className={classes.gridContainer} pacing={2} direction="column">
+            <Grid item>
+              <GroupPageHeader
+                title={groupDetails.title}
+                totalImages={totalGroupImages}
+                isEditable={isEditable}
+                handleUpdate={updateGroupTitle}
+              />
+            </Grid>
+            <Grid item>
+              <GroupPageGrid
+                images={groupImages}
+                selectedImages={groupSelectedImages}
+                isEditable={isEditable}
+                handleImageSelect={handleImageSelect}
+              />
+            </Grid>
+          </Grid>
         </Fragment>
       )}
-    </Fragment>
+    </div>
   );
 };
 
