@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, TextField } from '@material-ui/core';
+import { makeStyles, TextField, Typography } from '@material-ui/core';
 
 import GroupPageHeaderStyles from './group-page-header.styles';
 
@@ -8,7 +8,9 @@ const useStyles = makeStyles(GroupPageHeaderStyles);
 
 const GroupPageHeader = (props) => {
   const classes = useStyles();
-  const { title, isEditable, handleUpdate } = props;
+  const {
+    title, totalImages, isEditable, handleUpdate,
+  } = props;
 
   const [groupTitle, setGroupTitle] = useState({ previous: title, current: title });
 
@@ -33,32 +35,37 @@ const GroupPageHeader = (props) => {
   };
 
   return (
-    <TextField
-      fullWidth
-      multiline
-      value={groupTitle.current}
-      disabled={!isEditable}
-      onBlur={() => handleOnBlur()}
-      onChange={e => handleOnChange(e)}
-      InputProps={{
-        disableUnderline: !isEditable,
-        classes: {
-          disabled: classes.textField,
-          input: classes.textField,
-        },
-      }}
-    />
+    <div className={classes.root}>
+      <TextField
+        fullWidth
+        multiline
+        value={groupTitle.current}
+        disabled={!isEditable}
+        onBlur={() => handleOnBlur()}
+        onChange={e => handleOnChange(e)}
+        InputProps={{
+          disableUnderline: !isEditable,
+          classes: {
+            disabled: classes.textField,
+            input: classes.textField,
+          },
+        }}
+      />
+      <Typography variant="caption" color="textSecondary">{`${totalImages} images`}</Typography>
+    </div>
   );
 };
 
 GroupPageHeader.propTypes = {
   title: PropTypes.string,
+  totalImages: PropTypes.number,
   isEditable: PropTypes.bool,
   handleUpdate: PropTypes.func,
 };
 
 GroupPageHeader.defaultProps = {
   title: '',
+  totalImages: 0,
   isEditable: false,
   handleUpdate: () => { },
 };

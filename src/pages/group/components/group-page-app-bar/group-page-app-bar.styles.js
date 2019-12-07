@@ -1,14 +1,14 @@
-const GroupPageActionBarStyles = theme => ({
+const GroupPageAppBarStyles = theme => ({
+  grow: {
+    flexGrow: 1,
+  },
   appBar: {
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
   },
-  closeButton: {
+  closeIcon: {
     marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
   },
 });
 
-export default GroupPageActionBarStyles;
+export default GroupPageAppBarStyles;
