@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   makeStyles, AppBar, Toolbar, Typography, IconButton,
@@ -22,7 +22,7 @@ const GroupPageActionBar = (props) => {
   const closeDeleteDialog = () => { setDeleteDialogIsOpen(false); };
 
   return (
-    <div className={classes.root}>
+    <Fragment>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -59,7 +59,7 @@ const GroupPageActionBar = (props) => {
         handleClose={closeDeleteDialog}
         handleConfirm={handleDelete}
       />
-    </div>
+    </Fragment>
   );
 };
 
