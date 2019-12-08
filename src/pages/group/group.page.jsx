@@ -32,6 +32,7 @@ const GroupPage = (props) => {
   const [pageError, setPageError] = useState();
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
+  const [isLoadingGroupImages, setIsLoadingGroupImages] = useState();
   const [totalGroupImages, setTotalGroupImages] = useState();
   const [groupSelectedImages, setGroupSelectedImages] = useState([]);
   const [groupActionIsPending, setGroupActionIsPending] = useState(false);
@@ -73,6 +74,7 @@ const GroupPage = (props) => {
    */
   const getGroupImages = useCallback(async () => {
     try {
+      setIsLoadingGroupImages(true);
       const images = await imageService.getImagesForGroup(30, 0, groupId);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);
@@ -80,6 +82,8 @@ const GroupPage = (props) => {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
+    } finally {
+      setIsLoadingGroupImages(false);
     }
   }, [groupId]);
 
@@ -134,35 +138,13 @@ const GroupPage = (props) => {
   const handleGoBack = () => history.push('/groups');
 
   /**
-   * Remove images from groupImages list
-   *
-   * @param {string[]} imageIds list of ids to remove from groupImages list
-   */
-  const removeImagesFromGroup = (imageIds) => {
-    const imageIdsToRemove = imageIds;
-    const tempGroupImages = groupImages;
-
-    imageIdsToRemove.forEach((id) => {
-      tempGroupImages.forEach((image, i) => {
-        if (image.id === id) {
-          tempGroupImages.splice(i, 1);
-        }
-      });
-    });
-
-    setGroupImages(tempGroupImages);
-  };
-
-  /**
    * Remove the selected items from the group
    */
   const handleRemoveImages = async () => {
     try {
       setGroupActionIsPending(true);
-      const result = await imageService.deleteImagesFromGroup(groupId, groupSelectedImages);
-      const { success } = result.data;
-      removeImagesFromGroup(success);
-      setTotalGroupImages(totalGroupImages - success.length);
+      await imageService.deleteImagesFromGroup(groupId, groupSelectedImages);
+      await getGroupImages();
     } catch (error) {
       openSnackbar('error', error.message);
     } finally {
@@ -237,12 +219,15 @@ const GroupPage = (props) => {
                 images={groupImages}
                 selectedImages={groupSelectedImages}
                 isEditable={isEditable}
+                isLoading={isLoadingGroupImages}
                 handleImageSelect={handleImageSelect}
               />
             </Grid>
           </Grid>
           <GroupPageAddImagesDialog
             groupId={groupId}
+            groupImages={groupImages}
+            getGroupImages={getGroupImages}
             isOpen={addImagesDialogIsOpen}
             handleClose={closeAddImagesDialog}
             isEditable={isEditable}

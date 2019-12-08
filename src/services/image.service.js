@@ -102,6 +102,30 @@ export default class ImageService {
   }
 
   /**
+   * Associate images to the specified group
+   *
+   * @param {string} groupId unique id of group to associated images to
+   * @param {string[]} imageIds unique ids of images to associate to group
+   * @returns {object} describing state of association
+   * @throws ApiError
+   */
+  async addImagesToGroup(groupId, imageIds) {
+    try {
+      let query = '';
+      imageIds.forEach((id, i) => {
+        if (i === 0) query = `?imageId=${id}`;
+        else query = `${query}&imageId=${id}`;
+      });
+      return await this.service({
+        method: HttpMethods.post,
+        url: `/api/v1/group/${groupId}/images${query}`,
+      });
+    } catch (error) {
+      throw new ApiError(500, `Error adding images to ${groupId}`);
+    }
+  }
+
+  /**
    * Delete a single image based on id
    *
    * @param {string} id of the image to delete
