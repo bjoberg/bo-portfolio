@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
 import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import ErrorPage from '../error/error.page';
 import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
@@ -12,7 +13,7 @@ import GroupPageGrid from './components/group-page-grid/group-page-grid.componen
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import GroupPageStyles from './group.styles';
-import GroupPageAppBar from './components/group-page-app-bar/group-page-app-bar.component';
+import ActionBar from '../../components/action-bar';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
@@ -182,9 +183,12 @@ const GroupPage = (props) => {
         />
       )}
       {(!groupSelectedImages || groupSelectedImages.length === 0) && (
-        <GroupPageAppBar
-          handleClose={handleGoBack}
-          isEditable={isEditable}
+        <ActionBar
+          handleClose={() => handleGoBack()}
+          elevateOnScroll
+          closeButton={<ArrowBackIcon />}
+          showInfo
+          showAddPhoto={isEditable}
         />
       )}
       {pageHasError && (
