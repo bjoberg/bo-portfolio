@@ -11,7 +11,7 @@ const GroupPageAddImagesDialog = (props) => {
 
   return (
     <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
-      <ActionBar handleClose={() => handleClose()} />
+      <ActionBar handleClose={() => handleClose()} actionButtonColor="secondary" showSave />
     </Dialog>
   );
 };

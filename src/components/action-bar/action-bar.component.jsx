@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  makeStyles, AppBar, Toolbar, Typography, IconButton,
+  makeStyles, AppBar, Toolbar, Typography, IconButton, Button,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -29,6 +29,9 @@ const ActionBar = (props) => {
     handleInfo,
     showAddPhoto,
     handleAddPhoto,
+    showSave,
+    saveButtonText,
+    handleSave,
   } = props;
 
   return (
@@ -40,7 +43,6 @@ const ActionBar = (props) => {
             className={classes.closeButton}
             aria-label="close"
             onClick={() => handleClose()}
-            disabled={isDisabled}
           >
             {closeButton}
           </IconButton>
@@ -66,6 +68,15 @@ const ActionBar = (props) => {
             >
               <AddPhotoIcon />
             </IconButton>
+          )}
+          {showSave && (
+            <Button
+              variant="contained"
+              color={actionButtonColor}
+              onClick={() => handleSave()}
+            >
+              {saveButtonText}
+            </Button>
           )}
           {showInfo && (
             <IconButton
@@ -97,6 +108,9 @@ ActionBar.propTypes = {
   handleInfo: PropTypes.func,
   showAddPhoto: PropTypes.bool,
   handleAddPhoto: PropTypes.func,
+  showSave: PropTypes.bool,
+  saveButtonText: PropTypes.string,
+  handleSave: PropTypes.func,
 };
 
 ActionBar.defaultProps = {
@@ -113,6 +127,9 @@ ActionBar.defaultProps = {
   handleInfo: () => { },
   showAddPhoto: false,
   handleAddPhoto: () => { },
+  showSave: false,
+  saveButtonText: 'Save',
+  handleSave: () => { },
 };
 
 export default ActionBar;
