@@ -1,54 +1,30 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  makeStyles, AppBar, Toolbar, Typography, IconButton,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
 
-import GroupPageActionBarStyles from './group-page-action-bar.styles';
 import AlertDialog from '../../../../components/alert-dialog/alert-dialog.component';
+import ActionBar from '../../../../components/action-bar';
 
-const useStyles = makeStyles(GroupPageActionBarStyles);
 
 const GroupPageActionBar = (props) => {
-  const classes = useStyles();
   const {
     selectedItems, groupTitle, handleClose, handleDelete, isDisabled,
   } = props;
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
-  const closeDeleteDialog = () => { setDeleteDialogIsOpen(false); };
+  const openDeleteDiaglog = () => setDeleteDialogIsOpen(true);
+  const closeDeleteDialog = () => setDeleteDialogIsOpen(false);
 
   return (
     <Fragment>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.closeButton}
-            color="inherit"
-            aria-label="Close"
-            onClick={() => handleClose()}
-            disabled={isDisabled}
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {`${selectedItems.length} selected`}
-          </Typography>
-          <IconButton
-            edge="start"
-            color="secondary"
-            aria-label="Delete"
-            onClick={() => setDeleteDialogIsOpen(true)}
-            disabled={isDisabled}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <ActionBar
+        handleClose={handleClose}
+        isDisabled={isDisabled}
+        title={`${selectedItems.length} selected`}
+        actionButtonColor="secondary"
+        showDelete
+        handleDelete={openDeleteDiaglog}
+      />
       <AlertDialog
         id="alert-dialog--delete"
         isOpen={deleteDialogIsOpen}
