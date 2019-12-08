@@ -25,7 +25,6 @@ const Header = (props) => {
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <IconButton
-              edge="start"
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"

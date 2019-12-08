@@ -5,7 +5,7 @@ const GroupPageStyles = theme => ({
     left: 0,
     minHeight: '100vh',
     width: '100vw',
-    zIndex: theme.zIndex.snackbar - 1,
+    zIndex: theme.zIndex.modal - 1,
     backgroundColor: theme.palette.background.default,
   },
   gridContainer: {
