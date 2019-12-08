@@ -54,13 +54,13 @@ export default class ImageService {
   }
 
   /**
-   * Retrieve a list of image for a specific group
+   * Retrieve a list of images associated with a specific group
    *
    * @param {number} limit Number of elements to retrieve
    * @param {number} page Elements to retrieve based on limit and number of elements in db
    * @param {string} groupId unique id of group to get images for
    */
-  async getImagesForGroup(limit = 30, page = 0, groupId = undefined) {
+  async getImagesForGroup(limit = 30, page = 0, groupId) {
     try {
       const paginationQuery = `?limit=${limit}&page=${page}`;
       const response = await this.service({
@@ -74,6 +74,30 @@ export default class ImageService {
       };
     } catch (error) {
       throw new ApiError(404, 'Unable to retrieve images for group.');
+    }
+  }
+
+  /**
+   * Retrieve a list of images not associated with a specific group
+   *
+   * @param {number} limit Number of elements to retrieve
+   * @param {number} page Elements to retrieve based on limit and number of elements in db
+   * @param {string} groupId unique id of group to get images for
+   */
+  async getImagesNotForGroup(limit = 30, page = 0, groupId) {
+    try {
+      const paginationQuery = `?limit=${limit}&page=${page}`;
+      const response = await this.service({
+        method: HttpMethods.get,
+        url: `/api/v1/group/${groupId}/!/images${paginationQuery}`,
+      });
+
+      return {
+        totalItems: response.data.totalItems,
+        data: response.data.rows,
+      };
+    } catch (error) {
+      throw new ApiError(404, 'Unable to retrieve images not associated with group.');
     }
   }
 

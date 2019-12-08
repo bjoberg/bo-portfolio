@@ -215,7 +215,7 @@ const GroupPage = (props) => {
           />
         </Fragment>
       )}
-      {!pageIsLoaded && (
+      {(!pageHasError && !pageIsLoaded) && (
         <div className={classes.progressContainer}>
           <CircularProgress />
         </div>
@@ -242,8 +242,10 @@ const GroupPage = (props) => {
             </Grid>
           </Grid>
           <GroupPageAddImagesDialog
+            groupId={groupId}
             isOpen={addImagesDialogIsOpen}
             handleClose={closeAddImagesDialog}
+            isEditable={isEditable}
           />
         </Fragment>
       )}
