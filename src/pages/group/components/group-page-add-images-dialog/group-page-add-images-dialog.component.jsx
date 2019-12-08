@@ -13,9 +13,10 @@ import ImageService from '../../../../services/image.service';
 import { ImageGrid } from '../../../../components/image-grid';
 import ErrorPage from '../../../error/error.page';
 
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
-const imageService = new ImageService();
 const useStyles = makeStyles(GroupPageAddImagesDialogStyles);
+const imageService = new ImageService();
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 const GroupPageAddImagesDialog = (props) => {
   const classes = useStyles();
@@ -26,7 +27,8 @@ const GroupPageAddImagesDialog = (props) => {
   const [dialogIsLoaded, setDialogIsLoaded] = useState(false);
   const [dialogHasError, setDialogHasError] = useState(false);
   const [dialogError, setDialogError] = useState();
-  const [images, setImages] = useState();
+  const [images, setImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   /**
    * Evaluate error a display status to user
@@ -59,6 +61,25 @@ const GroupPageAddImagesDialog = (props) => {
     }
   }, [groupId]);
 
+  /**
+   * Add / Remove item from select image array
+   *
+   * @param {string} selectedImageId id of image that was selected
+   */
+  const handleImageSelect = (selectedImageId) => {
+    const imageIsSelected = selectedImages.find(el => el === selectedImageId);
+    if (imageIsSelected) {
+      const temp = selectedImages;
+      temp.splice(temp.indexOf(selectedImageId), 1);
+      setSelectedImages([...temp]);
+    } else {
+      setSelectedImages([...selectedImages, selectedImageId]);
+    }
+  };
+
+  /**
+   * Retrieve initial image data
+   */
   useEffect(() => {
     const loadDialogData = async () => {
       await getImages();
@@ -66,6 +87,13 @@ const GroupPageAddImagesDialog = (props) => {
     };
     if (isEditable) loadDialogData();
   }, [getImages, isEditable]);
+
+  /**
+   * When the dialog is toggled, clear the selected items
+   */
+  useEffect(() => {
+    setSelectedImages([]);
+  }, [isOpen]);
 
   return (
     <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
@@ -95,6 +123,8 @@ const GroupPageAddImagesDialog = (props) => {
             <ImageGrid
               images={images}
               isEditable
+              selectedImages={selectedImages}
+              handleImageSelect={handleImageSelect}
             />
           </div>
         </div>
