@@ -1,4 +1,4 @@
-const GroupPageActionBarStyles = theme => ({
+const ActionBarStyles = theme => ({
   appBar: {
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
@@ -11,4 +11,4 @@ const GroupPageActionBarStyles = theme => ({
   },
 });
 
-export default GroupPageActionBarStyles;
+export default ActionBarStyles;
