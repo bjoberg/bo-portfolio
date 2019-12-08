@@ -6,13 +6,14 @@ import httpStatus from 'http-status';
 import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import ErrorPage from '../error/error.page';
+import GroupPageStyles from './group.styles';
 import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
 import GroupPageGrid from './components/group-page-grid/group-page-grid.component';
+import GroupPageAddImagesDialog from './components/group-page-add-images-dialog/group-page-add-images-dialog.component';
+import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
-import GroupPageStyles from './group.styles';
 import ActionBar from '../../components/action-bar';
 
 const groupService = new GroupService();
@@ -34,6 +35,7 @@ const GroupPage = (props) => {
   const [totalGroupImages, setTotalGroupImages] = useState();
   const [groupSelectedImages, setGroupSelectedImages] = useState([]);
   const [groupActionIsPending, setGroupActionIsPending] = useState(false);
+  const [addImagesDialogIsOpen, setAddImagesDialogIsOpen] = useState(false);
 
   /**
    * Evaluate error a display status to user
@@ -117,6 +119,16 @@ const GroupPage = (props) => {
   const resetSelectedImages = () => setGroupSelectedImages([]);
 
   /**
+   * Open the add images dialog
+   */
+  const openAddImagesDialog = () => setAddImagesDialogIsOpen(true);
+
+  /**
+   * Close the add images dialog
+   */
+  const closeAddImagesDialog = () => setAddImagesDialogIsOpen(false);
+
+  /**
    * Navigate back to the groups page
    */
   const handleGoBack = () => history.push('/groups');
@@ -189,6 +201,7 @@ const GroupPage = (props) => {
           closeButton={<ArrowBackIcon />}
           showInfo
           showAddPhoto={isEditable}
+          handleAddPhoto={openAddImagesDialog}
         />
       )}
       {pageHasError && (
@@ -228,6 +241,10 @@ const GroupPage = (props) => {
               />
             </Grid>
           </Grid>
+          <GroupPageAddImagesDialog
+            isOpen={addImagesDialogIsOpen}
+            handleClose={closeAddImagesDialog}
+          />
         </Fragment>
       )}
     </div>
