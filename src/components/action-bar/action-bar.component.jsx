@@ -74,6 +74,7 @@ const ActionBar = (props) => {
               variant="contained"
               color={actionButtonColor}
               onClick={() => handleSave()}
+              disabled={isDisabled}
             >
               {saveButtonText}
             </Button>

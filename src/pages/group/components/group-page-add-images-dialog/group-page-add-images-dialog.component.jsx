@@ -53,15 +53,12 @@ const GroupPageAddImagesDialog = (props) => {
    */
   const getImages = useCallback(async () => {
     try {
-      setIsLoadingImages(true);
       const result = await imageService.getImagesNotForGroup(30, 0, groupId);
       setImages(result.data);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayDialogError(defaultStatusCode, defaultStatusMessage, error);
-    } finally {
-      setIsLoadingImages(false);
     }
   }, [groupId]);
 
@@ -86,14 +83,16 @@ const GroupPageAddImagesDialog = (props) => {
    */
   const handleAddImagesToGroup = async () => {
     try {
+      setIsLoadingImages(true);
       await imageService.addImagesToGroup(groupId, selectedImages);
       await getGroupImages();
       handleClose();
-      await getImages();
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while adding images to group';
       displayDialogError(defaultStatusCode, defaultStatusMessage, error);
+    } finally {
+      setIsLoadingImages(false);
     }
   };
 
@@ -101,11 +100,13 @@ const GroupPageAddImagesDialog = (props) => {
    * Retrieve image data
    */
   useEffect(() => {
-    const loadDialogData = async () => {
-      await getImages();
+    const loadDialogData = async () => { await getImages(); };
+    if (isEditable) {
+      setIsLoadingImages(true);
+      loadDialogData();
       setDialogIsLoaded(true);
-    };
-    if (isEditable) loadDialogData();
+      setIsLoadingImages(false);
+    }
   }, [getImages, isEditable, groupImages]);
 
   /**
@@ -120,6 +121,7 @@ const GroupPageAddImagesDialog = (props) => {
         actionButtonColor="secondary"
         showSave
         handleSave={handleAddImagesToGroup}
+        isDisabled={isLoadingImages}
       />
       {dialogHasError && (
         <Fragment>
