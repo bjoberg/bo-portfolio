@@ -15,9 +15,11 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import ActionBar from '../../components/action-bar';
+import useInfiniteScroll from '../../hooks/infinite-scroll.hook';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
+const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 const useStyles = makeStyles(GroupPageStyles);
 
 const GroupPage = (props) => {
@@ -25,6 +27,7 @@ const GroupPage = (props) => {
   const {
     match, history, openSnackbar, isEditable,
   } = props;
+  const limit = 30;
   const groupId = match.params.id;
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
@@ -32,7 +35,30 @@ const GroupPage = (props) => {
   const [pageError, setPageError] = useState();
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
-  const [isLoadingGroupImages, setIsLoadingGroupImages] = useState();
+  const [groupImagesPage, setGroupImagesPage] = useState(0);
+  const [isEndOfGroupImages, setIsEndOfGroupImages] = useState(false);
+  const [hasErrorFetchingGroupImages, setHasErrorFetchingGroupImages] = useState(false);
+
+  const handlePaginateGroupImages = useCallback((isFetching) => {
+    const paginateImages = async () => {
+      try {
+        const next = groupImagesPage + 1;
+        const result = await imageService.getImagesForGroup(limit, next, groupId);
+        setGroupImages(prevState => [...prevState, ...result.data]);
+        setIsEndOfGroupImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setGroupImagesPage(next);
+      } catch (error) {
+        setHasErrorFetchingGroupImages(true);
+        isFetching(false);
+        // openSnackbar('error', `${error.message} Refresh to try again.`);
+      }
+    };
+    paginateImages();
+  }, [groupId, groupImagesPage]);
+
+  const [isLoadingGroupImages] = useInfiniteScroll(handlePaginateGroupImages, isEndOfGroupImages,
+    hasErrorFetchingGroupImages);
   const [totalGroupImages, setTotalGroupImages] = useState();
   const [groupSelectedImages, setGroupSelectedImages] = useState([]);
   const [groupActionIsPending, setGroupActionIsPending] = useState(false);
@@ -74,8 +100,10 @@ const GroupPage = (props) => {
    */
   const getGroupImages = useCallback(async () => {
     try {
-      setIsLoadingGroupImages(true);
+      // setIsLoadingGroupImages(true);
       const images = await imageService.getImagesForGroup(30, 0, groupId);
+      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 0));
+      setGroupImagesPage(0);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);
     } catch (error) {
@@ -83,7 +111,7 @@ const GroupPage = (props) => {
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
     } finally {
-      setIsLoadingGroupImages(false);
+      // setIsLoadingGroupImages(false);
     }
   }, [groupId]);
 
