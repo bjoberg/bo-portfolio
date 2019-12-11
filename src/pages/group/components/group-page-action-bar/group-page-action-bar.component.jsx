@@ -4,16 +4,24 @@ import PropTypes from 'prop-types';
 import AlertDialog from '../../../../components/alert-dialog/alert-dialog.component';
 import ActionBar from '../../../../components/action-bar';
 
-
 const GroupPageActionBar = (props) => {
   const {
     selectedItems, groupTitle, handleClose, handleDelete, isDisabled,
   } = props;
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogIsDisabled, setDeleteDialogIsDisabled] = useState(false);
 
   const openDeleteDiaglog = () => setDeleteDialogIsOpen(true);
   const closeDeleteDialog = () => setDeleteDialogIsOpen(false);
+
+  /**
+   * Action for the dialog's confirm action
+   */
+  const handleConfirm = async () => {
+    setDeleteDialogIsDisabled(true);
+    await handleDelete();
+  };
 
   return (
     <Fragment>
@@ -28,12 +36,13 @@ const GroupPageActionBar = (props) => {
       <AlertDialog
         id="alert-dialog--delete"
         isOpen={deleteDialogIsOpen}
+        isDisabled={deleteDialogIsDisabled}
         title="Remove images?"
         body={`You are about to remove ${selectedItems.length} images from ${groupTitle}. This will not delete the images, it will only disassociate the images from the group.`}
         closeButtonText="Cancel"
         confirmButtonText="Delete"
         handleClose={closeDeleteDialog}
-        handleConfirm={handleDelete}
+        handleConfirm={handleConfirm}
       />
     </Fragment>
   );
