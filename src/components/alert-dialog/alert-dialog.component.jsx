@@ -12,6 +12,7 @@ const AlertDialog = (props) => {
     handleClose,
     handleConfirm,
     isOpen,
+    isDisabled,
     title,
     body,
     closeButtonText,
@@ -35,6 +36,7 @@ const AlertDialog = (props) => {
         <Button
           onClick={handleClose}
           color="primary"
+          disabled={isDisabled}
         >
           {closeButtonText}
         </Button>
@@ -42,6 +44,7 @@ const AlertDialog = (props) => {
           onClick={handleConfirm}
           color="primary"
           autoFocus
+          disabled={isDisabled}
         >
           {confirmButtonText}
         </Button>
@@ -54,6 +57,7 @@ AlertDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleConfirm: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   title: PropTypes.string,
   body: PropTypes.string,
   closeButtonText: PropTypes.string,
@@ -62,6 +66,7 @@ AlertDialog.propTypes = {
 
 AlertDialog.defaultProps = {
   isOpen: false,
+  isDisabled: false,
   title: 'Default title',
   body: 'Default body -- provide the "body" prop to set this value.',
   closeButtonText: 'Cancel',
