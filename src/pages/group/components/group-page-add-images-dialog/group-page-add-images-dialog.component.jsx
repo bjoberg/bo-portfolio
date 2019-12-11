@@ -21,13 +21,14 @@ const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={r
 const GroupPageAddImagesDialog = (props) => {
   const classes = useStyles();
   const {
-    groupId, isOpen, handleClose, isEditable,
+    groupId, groupImages, isOpen, handleClose, isEditable, getGroupImages,
   } = props;
 
   const [dialogIsLoaded, setDialogIsLoaded] = useState(false);
   const [dialogHasError, setDialogHasError] = useState(false);
   const [dialogError, setDialogError] = useState();
   const [images, setImages] = useState([]);
+  const [isLoadingImages, setIsLoadingImages] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
 
   /**
@@ -78,22 +79,40 @@ const GroupPageAddImagesDialog = (props) => {
   };
 
   /**
-   * Retrieve initial image data
+   * Add images to the specified group
+   */
+  const handleAddImagesToGroup = async () => {
+    try {
+      setIsLoadingImages(true);
+      await imageService.addImagesToGroup(groupId, selectedImages);
+      await getGroupImages();
+      handleClose();
+    } catch (error) {
+      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
+      const defaultStatusMessage = 'Unknown error has occured while adding images to group';
+      displayDialogError(defaultStatusCode, defaultStatusMessage, error);
+    } finally {
+      setIsLoadingImages(false);
+    }
+  };
+
+  /**
+   * Retrieve image data
    */
   useEffect(() => {
-    const loadDialogData = async () => {
-      await getImages();
+    const loadDialogData = async () => { await getImages(); };
+    if (isEditable) {
+      setIsLoadingImages(true);
+      loadDialogData();
       setDialogIsLoaded(true);
-    };
-    if (isEditable) loadDialogData();
-  }, [getImages, isEditable]);
+      setIsLoadingImages(false);
+    }
+  }, [getImages, isEditable, groupImages]);
 
   /**
    * When the dialog is toggled, clear the selected items
    */
-  useEffect(() => {
-    setSelectedImages([]);
-  }, [isOpen]);
+  useEffect(() => { setSelectedImages([]); }, [isOpen]);
 
   return (
     <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
@@ -101,6 +120,8 @@ const GroupPageAddImagesDialog = (props) => {
         handleClose={() => handleClose()}
         actionButtonColor="secondary"
         showSave
+        handleSave={handleAddImagesToGroup}
+        isDisabled={isLoadingImages}
       />
       {dialogHasError && (
         <Fragment>
@@ -123,6 +144,7 @@ const GroupPageAddImagesDialog = (props) => {
             <ImageGrid
               images={images}
               isEditable
+              isLoading={isLoadingImages}
               selectedImages={selectedImages}
               handleImageSelect={handleImageSelect}
             />
@@ -135,15 +157,19 @@ const GroupPageAddImagesDialog = (props) => {
 
 GroupPageAddImagesDialog.propTypes = {
   groupId: PropTypes.string.isRequired,
+  groupImages: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
   isEditable: PropTypes.bool,
+  getGroupImages: PropTypes.func,
 };
 
 GroupPageAddImagesDialog.defaultProps = {
   isOpen: false,
+  groupImages: [],
   handleClose: () => { },
   isEditable: false,
+  getGroupImages: () => { },
 };
 
 export default GroupPageAddImagesDialog;
