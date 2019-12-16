@@ -7,9 +7,11 @@ const useInfiniteScroll = (callback, isEnd, hasError) => {
    * Start fetching data when the user has scrolled to the bottom of the page
    */
   const handleScroll = useCallback(() => {
-    const { offsetHeight, scrollTop } = document.documentElement;
-    const currPosition = window.innerHeight + scrollTop;
-    if (currPosition !== offsetHeight || isFetching || isEnd || hasError) return;
+    const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+    const currPosition = scrollHeight - scrollTop;
+
+    // If scrollHeight - scrollTop = clientHeight; you have reached the bottom of the page
+    if (currPosition !== clientHeight || isFetching || isEnd || hasError) return;
     setIsFetching(true);
   }, [hasError, isEnd, isFetching]);
 
