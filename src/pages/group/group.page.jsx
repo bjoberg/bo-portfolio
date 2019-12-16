@@ -60,11 +60,11 @@ const GroupPage = (props) => {
       } catch (error) {
         setHasErrorFetchingGroupImages(true);
         isFetching(false);
-        // openSnackbar('error', `${error.message} Refresh to try again.`);
+        openSnackbar('error', `${error.message} Refresh to try again.`);
       }
     };
     paginateImages();
-  }, [groupId, groupImagesPage]);
+  }, [groupId, groupImagesPage, openSnackbar]);
 
   const [isLoadingGroupImages] = useInfiniteScroll(handlePaginateGroupImages, isEndOfGroupImages,
     hasErrorFetchingGroupImages);
@@ -110,9 +110,8 @@ const GroupPage = (props) => {
    */
   const getGroupImages = useCallback(async () => {
     try {
-      // setIsLoadingGroupImages(true);
       const images = await imageService.getImagesForGroup(30, 0, groupId);
-      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 0));
+      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 1));
       setGroupImagesPage(0);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);
@@ -120,8 +119,6 @@ const GroupPage = (props) => {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
-    } finally {
-      // setIsLoadingGroupImages(false);
     }
   }, [groupId]);
 
