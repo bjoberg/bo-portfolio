@@ -15,9 +15,11 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import ActionBar from '../../components/action-bar';
+import useInfiniteScroll from '../../hooks/infinite-scroll.hook';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
+const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 const useStyles = makeStyles(GroupPageStyles);
 
 const GroupPage = (props) => {
@@ -25,6 +27,7 @@ const GroupPage = (props) => {
   const {
     match, history, openSnackbar, isEditable,
   } = props;
+  const limit = 30;
   const groupId = match.params.id;
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
@@ -32,11 +35,44 @@ const GroupPage = (props) => {
   const [pageError, setPageError] = useState();
   const [groupDetails, setGroupDetails] = useState();
   const [groupImages, setGroupImages] = useState();
-  const [isLoadingGroupImages, setIsLoadingGroupImages] = useState();
+  const [groupImagesPage, setGroupImagesPage] = useState(0);
+  const [isEndOfGroupImages, setIsEndOfGroupImages] = useState(false);
+  const [hasErrorFetchingGroupImages, setHasErrorFetchingGroupImages] = useState(false);
   const [totalGroupImages, setTotalGroupImages] = useState();
   const [groupSelectedImages, setGroupSelectedImages] = useState([]);
   const [groupActionIsPending, setGroupActionIsPending] = useState(false);
   const [addImagesDialogIsOpen, setAddImagesDialogIsOpen] = useState(false);
+
+  /**
+   * Request next page of images
+   *
+   * @param {boolean} isFetching status of the image request
+   */
+  const handlePaginateGroupImages = useCallback((isFetching) => {
+    const paginateImages = async () => {
+      try {
+        const next = groupImagesPage + 1;
+        const result = await imageService.getImagesForGroup(limit, next, groupId);
+        setGroupImages(prevState => [...prevState, ...result.data]);
+        setIsEndOfGroupImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setGroupImagesPage(next);
+      } catch (error) {
+        setHasErrorFetchingGroupImages(true);
+        isFetching(false);
+        openSnackbar('error', `${error.message} Refresh to try again.`);
+      }
+    };
+    paginateImages();
+  }, [groupId, groupImagesPage, openSnackbar]);
+
+  const [isLoadingGroupImages] = useInfiniteScroll(handlePaginateGroupImages, isEndOfGroupImages,
+    hasErrorFetchingGroupImages);
+
+  const resetSelectedImages = () => setGroupSelectedImages([]);
+  const openAddImagesDialog = () => setAddImagesDialogIsOpen(true);
+  const closeAddImagesDialog = () => setAddImagesDialogIsOpen(false);
+  const handleGoBack = () => history.push('/groups');
 
   /**
    * Evaluate error a display status to user
@@ -74,16 +110,15 @@ const GroupPage = (props) => {
    */
   const getGroupImages = useCallback(async () => {
     try {
-      setIsLoadingGroupImages(true);
       const images = await imageService.getImagesForGroup(30, 0, groupId);
+      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 1));
+      setGroupImagesPage(0);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
       displayPageError(defaultStatusCode, defaultStatusMessage, error);
-    } finally {
-      setIsLoadingGroupImages(false);
     }
   }, [groupId]);
 
@@ -116,26 +151,6 @@ const GroupPage = (props) => {
       setGroupSelectedImages([...groupSelectedImages, selectedImageId]);
     }
   };
-
-  /**
-   * Clear all of the selected images
-   */
-  const resetSelectedImages = () => setGroupSelectedImages([]);
-
-  /**
-   * Open the add images dialog
-   */
-  const openAddImagesDialog = () => setAddImagesDialogIsOpen(true);
-
-  /**
-   * Close the add images dialog
-   */
-  const closeAddImagesDialog = () => setAddImagesDialogIsOpen(false);
-
-  /**
-   * Navigate back to the groups page
-   */
-  const handleGoBack = () => history.push('/groups');
 
   /**
    * Remove the selected items from the group
