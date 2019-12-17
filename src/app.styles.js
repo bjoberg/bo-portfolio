@@ -2,6 +2,12 @@ import { miniDrawerWidth } from './utils/theme';
 
 const AppStyles = theme => ({
   container: {
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  navContainer: {
     flexGrow: 1,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -15,7 +21,6 @@ const AppStyles = theme => ({
       marginLeft: theme.spacing(2),
     },
   },
-  toolbar: theme.mixins.toolbar,
   snackbarMargin: {
     margin: theme.spacing(1),
   },

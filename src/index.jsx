@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
-import App from './App';
+import { ThemeProvider } from '@material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 import * as serviceWorker from './serviceWorker';
+import App from './App';
+import { theme } from './utils/theme';
 
 ReactDOM.render(
   <HashRouter>
-    <App />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </HashRouter>,
   // eslint-disable-next-line no-undef
   document.getElementById('root'),

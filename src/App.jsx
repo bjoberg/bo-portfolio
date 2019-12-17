@@ -1,32 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, Fragment,
+} from 'react';
 import { hot } from 'react-hot-loader';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
-import { ThemeProvider } from '@material-ui/styles';
-import { ClickAwayListener } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Header from './components/header/header.component';
 import Routes from './routes';
 import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
-import FullDrawer from './components/full-drawer/full-drawer.component';
-import MiniDrawer from './components/mini-drawer/mini-drawer.component';
 import AppStyles from './app.styles';
-import { theme } from './utils/theme';
 import UserService from './services/user.service';
 import AuthService from './services/auth.service';
 import GoogleUser from './models/google-user.model';
 import Roles from './utils/roles';
+import NavContainer from './components/nav-container';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
 
-function App() {
+const App = () => {
   const classes = useStyles();
   const title = 'Brett Oberg';
 
   const [user, setUser] = useState();
   const [isEditable, setIsEditable] = useState(false);
+  const [displayNavContainer, setDisplayNavContainer] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
@@ -39,6 +37,7 @@ function App() {
 
   /**
    * Open the snackbar as a notification
+   *
    * @param {string} variant of the snackbar to display
    * @param {string} message to display in the snackbar
    */
@@ -49,7 +48,17 @@ function App() {
   };
 
   /**
-   * Attemp to retrieve and set the user's data
+   * Toggle the display state of the nav container
+   *
+   * @param {boolean} toggle hide / show the nav container
+   */
+  const toggleNavContainer = (toggle) => {
+    if (toggle === displayNavContainer) return;
+    setDisplayNavContainer(toggle);
+  };
+
+  /**
+   * Attempt to retrieve and set the user's data
    */
   const setUserData = useCallback(async () => {
     try {
@@ -67,6 +76,9 @@ function App() {
    */
   useEffect(() => { setUserData(); }, [setUserData]);
 
+  /**
+   * Determine if ther user can edit application content
+   */
   useEffect(() => {
     if (user === undefined || user === null) return;
     if (user.role === Roles.ADMIN) setIsEditable(true);
@@ -74,25 +86,23 @@ function App() {
   }, [user]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ClickAwayListener onClickAway={closeDrawer}>
-        {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
-        <div>
-          <Header
-            title={title}
-            drawerIsOpen={drawerIsOpen}
-            handleToggle={toggleDrawer}
-            user={user}
-            handleLogout={logoutGoogle}
-          />
-          <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
-          <MiniDrawer />
-        </div>
-      </ClickAwayListener>
-      <div className={classes.toolbar} />
-      <main className={classes.container}>
-        <Routes openSnackbar={openSnackbar} isEditable={isEditable} />
+    <Fragment>
+      {displayNavContainer && (
+        <NavContainer
+          closeDrawer={closeDrawer}
+          title={title}
+          drawerIsOpen={drawerIsOpen}
+          toggleDrawer={toggleDrawer}
+          user={user}
+          handleLogout={logoutGoogle}
+        />
+      )}
+      <main className={clsx(displayNavContainer ? classes.navContainer : classes.container)}>
+        <Routes
+          openSnackbar={openSnackbar}
+          toggleNavContainer={toggleNavContainer}
+          isEditable={isEditable}
+        />
       </main>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -105,9 +115,9 @@ function App() {
           message={snackbarContent}
         />
       </Snackbar>
-    </ThemeProvider>
+    </Fragment>
   );
-}
+};
 
 // eslint-disable-next-line
 let hotApp = App;
