@@ -1,11 +1,7 @@
 const GroupPageStyles = theme => ({
   root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     minHeight: '100vh',
     width: '100vw',
-    zIndex: theme.zIndex.modal - 1,
     backgroundColor: theme.palette.background.default,
     overflow: 'hidden',
     paddingLeft: theme.spacing(2),

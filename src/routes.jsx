@@ -12,72 +12,100 @@ import HomePage from './pages/home/home.page';
 import GroupPage from './pages/group/group.page';
 
 const Routes = (props) => {
-  const { openSnackbar, isEditable } = props;
+  const { openSnackbar, displayNavContainer, isEditable } = props;
 
   return (
     <Switch>
       <Route
         exact
         path="/"
-        component={HomePage}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (<HomePage {...routeProps} />);
+        }}
       />
       <Route
         exact
         path="/login"
-        component={LoginPage}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (<LoginPage {...routeProps} />);
+        }}
       />
       <Route
         exact
         path="/images"
-        render={routeProps => (
-          <ImageListPage
-            {...routeProps}
-            openSnackbar={openSnackbar}
-          />
-        )}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (
+            <ImageListPage
+              {...routeProps}
+              openSnackbar={openSnackbar}
+            />
+          );
+        }}
       />
       <Route
         exact
         path="/image"
-        render={routeProps => (
-          <EntityDetailsPage
-            {...routeProps}
-            entityType={EntityType.IMAGE}
-            openSnackbar={openSnackbar}
-          />
-        )}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (
+            <EntityDetailsPage
+              {...routeProps}
+              entityType={EntityType.IMAGE}
+              openSnackbar={openSnackbar}
+            />
+          );
+        }}
       />
       <Route
         path="/image/:id"
-        render={routeProps => (
-          <EntityDetailsPage
-            {...routeProps}
-            entityType={EntityType.IMAGE}
-            openSnackbar={openSnackbar}
-          />
-        )}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (
+            <EntityDetailsPage
+              {...routeProps}
+              entityType={EntityType.IMAGE}
+              openSnackbar={openSnackbar}
+            />
+          );
+        }}
       />
-      <Route exact path="/groups" component={GroupListPage} />
+      <Route
+        exact
+        path="/groups"
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (<GroupListPage {...routeProps} />);
+        }}
+      />
       <Route
         exact
         path="/group"
-        render={routeProps => (
-          <EntityDetailsPage
-            {...routeProps}
-            entityType={EntityType.GROUP}
-            openSnackbar={openSnackbar}
-          />
-        )}
+        render={(routeProps) => {
+          displayNavContainer(true);
+          return (
+            <EntityDetailsPage
+              {...routeProps}
+              entityType={EntityType.GROUP}
+              openSnackbar={openSnackbar}
+            />
+          );
+        }}
       />
       <Route
         path="/group/:id"
-        render={routeProps => (
-          <GroupPage
-            {...routeProps}
-            openSnackbar={openSnackbar}
-            isEditable={isEditable}
-          />
-        )}
+        render={(routeProps) => {
+          displayNavContainer(false);
+          return (
+            <GroupPage
+              {...routeProps}
+              openSnackbar={openSnackbar}
+              isEditable={isEditable}
+            />
+          );
+        }}
       />
       <Route component={ErrorPage} />
     </Switch>
@@ -86,6 +114,7 @@ const Routes = (props) => {
 
 Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
+  displayNavContainer: PropTypes.func.isRequired,
   isEditable: PropTypes.bool,
 };
 
