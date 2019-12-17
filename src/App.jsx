@@ -37,6 +37,7 @@ const App = () => {
 
   /**
    * Open the snackbar as a notification
+   *
    * @param {string} variant of the snackbar to display
    * @param {string} message to display in the snackbar
    */
@@ -47,7 +48,17 @@ const App = () => {
   };
 
   /**
-   * Attemp to retrieve and set the user's data
+   * Toggle the display state of the nav container
+   *
+   * @param {boolean} toggle hide / show the nav container
+   */
+  const toggleNavContainer = (toggle) => {
+    if (toggle === displayNavContainer) return;
+    setDisplayNavContainer(toggle);
+  };
+
+  /**
+   * Attempt to retrieve and set the user's data
    */
   const setUserData = useCallback(async () => {
     try {
@@ -65,6 +76,9 @@ const App = () => {
    */
   useEffect(() => { setUserData(); }, [setUserData]);
 
+  /**
+   * Determine if ther user can edit application content
+   */
   useEffect(() => {
     if (user === undefined || user === null) return;
     if (user.role === Roles.ADMIN) setIsEditable(true);
@@ -86,7 +100,7 @@ const App = () => {
       <main className={clsx(displayNavContainer ? classes.navContainer : classes.container)}>
         <Routes
           openSnackbar={openSnackbar}
-          displayNavContainer={setDisplayNavContainer}
+          toggleNavContainer={toggleNavContainer}
           isEditable={isEditable}
         />
       </main>

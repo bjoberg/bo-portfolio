@@ -12,7 +12,7 @@ import HomePage from './pages/home/home.page';
 import GroupPage from './pages/group/group.page';
 
 const Routes = (props) => {
-  const { openSnackbar, displayNavContainer, isEditable } = props;
+  const { openSnackbar, toggleNavContainer, isEditable } = props;
 
   return (
     <Switch>
@@ -20,7 +20,7 @@ const Routes = (props) => {
         exact
         path="/"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (<HomePage {...routeProps} />);
         }}
       />
@@ -28,7 +28,7 @@ const Routes = (props) => {
         exact
         path="/login"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (<LoginPage {...routeProps} />);
         }}
       />
@@ -36,7 +36,7 @@ const Routes = (props) => {
         exact
         path="/images"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (
             <ImageListPage
               {...routeProps}
@@ -49,7 +49,7 @@ const Routes = (props) => {
         exact
         path="/image"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (
             <EntityDetailsPage
               {...routeProps}
@@ -62,7 +62,7 @@ const Routes = (props) => {
       <Route
         path="/image/:id"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (
             <EntityDetailsPage
               {...routeProps}
@@ -76,7 +76,7 @@ const Routes = (props) => {
         exact
         path="/groups"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (<GroupListPage {...routeProps} />);
         }}
       />
@@ -84,7 +84,7 @@ const Routes = (props) => {
         exact
         path="/group"
         render={(routeProps) => {
-          displayNavContainer(true);
+          toggleNavContainer(true);
           return (
             <EntityDetailsPage
               {...routeProps}
@@ -97,7 +97,7 @@ const Routes = (props) => {
       <Route
         path="/group/:id"
         render={(routeProps) => {
-          displayNavContainer(false);
+          toggleNavContainer(false);
           return (
             <GroupPage
               {...routeProps}
@@ -114,7 +114,7 @@ const Routes = (props) => {
 
 Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
-  displayNavContainer: PropTypes.func.isRequired,
+  toggleNavContainer: PropTypes.func.isRequired,
   isEditable: PropTypes.bool,
 };
 
