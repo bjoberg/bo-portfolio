@@ -1,12 +1,9 @@
 const GroupPageStyles = theme => ({
   root: {
     minHeight: '100vh',
-    width: '100vw',
+    width: '100%',
     backgroundColor: theme.palette.background.default,
     overflow: 'hidden',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
   },
   gridContainer: {
     width: '100%',

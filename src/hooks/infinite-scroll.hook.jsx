@@ -9,9 +9,10 @@ const useInfiniteScroll = (callback, isEnd, hasError) => {
   const handleScroll = useCallback(() => {
     const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
     const currPosition = scrollHeight - scrollTop;
+    const reloadPoint = clientHeight + 100;
 
     // If scrollHeight - scrollTop = clientHeight; you have reached the bottom of the page
-    if (currPosition !== clientHeight || isFetching || isEnd || hasError) return;
+    if (currPosition > reloadPoint || isFetching || isEnd || hasError) return;
     setIsFetching(true);
   }, [hasError, isEnd, isFetching]);
 
