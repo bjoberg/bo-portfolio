@@ -36,6 +36,12 @@ const HomePageStyles = theme => ({
     padding: theme.spacing(4),
     flex: 1,
   },
+  link: {
+    textDecoration: 'none',
+  },
+  callToAction: {
+    marginTop: theme.spacing(6),
+  },
   img: {
     objectFit: 'cover',
     maxHeight: '100%',

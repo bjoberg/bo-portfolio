@@ -1,6 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Button } from '@material-ui/core';
 
+import PhotoIcon from '@material-ui/icons/Photo';
+import { Link } from 'react-router-dom';
 import Markdown from '../../components/markdown/markdown.component';
 import HomePageStyles from './home.styles';
 import src from '../../media/profile.png';
@@ -17,6 +19,13 @@ const HomePage = () => {
       </div>
       <div className={classes.content}>
         <Markdown content={content} />
+        <div className={classes.callToAction}>
+          <Link to="/images" className={classes.link}>
+            <Button variant="outlined" color="primary" size="large" startIcon={<PhotoIcon />}>
+              View Images
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
