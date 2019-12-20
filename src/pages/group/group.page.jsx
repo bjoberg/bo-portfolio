@@ -1,10 +1,11 @@
 import React, {
-  Fragment, useState, useEffect, useCallback,
+  Fragment, useState, useEffect, useCallback, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
-import { Grid, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Grid, makeStyles, CircularProgress,
+} from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import GroupPageStyles from './group.styles';
@@ -30,6 +31,8 @@ const GroupPage = (props) => {
   } = props;
   const limit = 30;
   const groupId = match.params.id;
+
+  const groupImageGridRef = useRef(null);
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
@@ -68,7 +71,7 @@ const GroupPage = (props) => {
   }, [groupId, groupImagesPage, openSnackbar]);
 
   const [isLoadingGroupImages] = useInfiniteScroll(handlePaginateGroupImages, isEndOfGroupImages,
-    hasErrorFetchingGroupImages);
+    hasErrorFetchingGroupImages, groupImageGridRef);
 
   const resetSelectedImages = () => setGroupSelectedImages([]);
   const openAddImagesDialog = () => setAddImagesDialogIsOpen(true);
@@ -232,6 +235,7 @@ const GroupPage = (props) => {
             </Grid>
             <Grid item>
               <GroupPageGrid
+                domRef={groupImageGridRef}
                 images={groupImages}
                 selectedImages={groupSelectedImages}
                 isEditable={isEditable}
@@ -242,7 +246,6 @@ const GroupPage = (props) => {
           </Grid>
           <GroupPageAddImagesDialog
             groupId={groupId}
-            groupImages={groupImages}
             getGroupImages={getGroupImages}
             isOpen={addImagesDialogIsOpen}
             handleClose={closeAddImagesDialog}

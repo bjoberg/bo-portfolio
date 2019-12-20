@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  RootRef, CircularProgress, makeStyles, Typography,
+} from '@material-ui/core';
 
 import ImageGridStyles from './image-grid.styles';
 import ImageGridItem from './components/image-grid-item/image-grid-item.component';
@@ -11,7 +12,7 @@ const useStyles = makeStyles(ImageGridStyles);
 const ImageGrid = (props) => {
   const classes = useStyles();
   const {
-    images, selectedImages, isLoading, isEditable, handleImageSelect,
+    domRef, images, selectedImages, isLoading, isEditable, handleImageSelect,
   } = props;
 
   /**
@@ -31,21 +32,23 @@ const ImageGrid = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        {images.map(item => (
-          <ImageGridItem
-            id={item.id}
-            key={item.id}
-            title={item.title}
-            imageUrl={item.imageUrl}
-            imageHeight={item.height}
-            imageWidth={item.width}
-            isEditable={isEditable}
-            isSelected={getIsSelected(item.id)}
-            handleImageSelect={handleImageSelect}
-          />
-        ))}
-      </div>
+      <RootRef rootRef={domRef}>
+        <div className={classes.root}>
+          {images.map(item => (
+            <ImageGridItem
+              id={item.id}
+              key={item.id}
+              title={item.title}
+              imageUrl={item.imageUrl}
+              imageHeight={item.height}
+              imageWidth={item.width}
+              isEditable={isEditable}
+              isSelected={getIsSelected(item.id)}
+              handleImageSelect={handleImageSelect}
+            />
+          ))}
+        </div>
+      </RootRef>
       {isLoading && (
         <div className={classes.circularProgressContainer}>
           <CircularProgress />
@@ -56,6 +59,12 @@ const ImageGrid = (props) => {
 };
 
 ImageGrid.propTypes = {
+  domRef: PropTypes.oneOfType([
+    // Either a function
+    PropTypes.func,
+    // Or the instance of a DOM native element (see the note about SSR)
+    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) }),
+  ]),
   images: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
@@ -70,6 +79,7 @@ ImageGrid.propTypes = {
 };
 
 ImageGrid.defaultProps = {
+  domRef: null,
   images: [],
   selectedImages: [],
   isLoading: false,

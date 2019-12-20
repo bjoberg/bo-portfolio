@@ -1,9 +1,9 @@
 import React, {
-  Fragment, useState, useEffect, useCallback,
+  Fragment, useState, useEffect, useCallback, useRef, forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Dialog, Slide, CircularProgress,
+  RootRef, makeStyles, Dialog, Slide, CircularProgress,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
@@ -13,23 +13,56 @@ import ActionBar from '../../../../components/action-bar';
 import ImageService from '../../../../services/image.service';
 import { ImageGrid } from '../../../../components/image-grid';
 import ErrorPage from '../../../error/error.page';
+import useInfiniteScrollModal from '../../../../hooks/infinite-scroll-modal.hook';
 
 const useStyles = makeStyles(GroupPageAddImagesDialogStyles);
 const imageService = new ImageService();
+const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+const Transition = forwardRef((props, ref) => (<Slide direction="up" ref={ref} {...props} />));
 
 const GroupPageAddImagesDialog = (props) => {
   const classes = useStyles();
   const {
-    groupId, groupImages, isOpen, handleClose, isEditable, getGroupImages,
+    groupId, isOpen, handleClose, isEditable, getGroupImages,
   } = props;
+  const limit = 30;
+
+  const imageGridRef = React.createRef();
+  const containerRef = React.createRef();
 
   const [dialogIsLoaded, setDialogIsLoaded] = useState(false);
   const [dialogHasError, setDialogHasError] = useState(false);
   const [dialogError, setDialogError] = useState();
   const [images, setImages] = useState([]);
-  const [isLoadingImages, setIsLoadingImages] = useState(false);
+  const [imagesPage, setImagesPage] = useState(0);
+  const [isEndOfImages, setIsEndOfImages] = useState(false);
+  const [hasErrorFetchingImages, setHasErrorFetchingImages] = useState(false);
+
+  /**
+   * Request next page of images
+   *
+   * @param {boolean} isFetching status of the image request
+   */
+  const handlePaginateImages = useCallback((isFetching) => {
+    const paginateImages = async () => {
+      try {
+        const next = imagesPage + 1;
+        const result = await imageService.getImagesNotForGroup(limit, next, groupId);
+        setImages(prevState => [...prevState, ...result.data]);
+        setIsEndOfImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setImagesPage(next);
+      } catch (error) {
+        setHasErrorFetchingImages(true);
+        isFetching(false);
+      }
+    };
+    paginateImages();
+  }, [groupId, imagesPage]);
+
+  const [isLoadingImages] = useInfiniteScrollModal(handlePaginateImages, isEndOfImages,
+    hasErrorFetchingImages, imageGridRef, containerRef);
   const [selectedImages, setSelectedImages] = useState([]);
 
   /**
@@ -84,7 +117,7 @@ const GroupPageAddImagesDialog = (props) => {
    */
   const handleAddImagesToGroup = async () => {
     try {
-      setIsLoadingImages(true);
+      // setIsLoadingImages(true);
       await imageService.addImagesToGroup(groupId, selectedImages);
       await getGroupImages();
       handleClose();
@@ -93,7 +126,7 @@ const GroupPageAddImagesDialog = (props) => {
       const defaultStatusMessage = 'Unknown error has occured while adding images to group';
       displayDialogError(defaultStatusCode, defaultStatusMessage, error);
     } finally {
-      setIsLoadingImages(false);
+      // setIsLoadingImages(false);
     }
   };
 
@@ -102,13 +135,11 @@ const GroupPageAddImagesDialog = (props) => {
    */
   useEffect(() => {
     const loadDialogData = async () => { await getImages(); };
-    if (isEditable) {
-      setIsLoadingImages(true);
+    if (isEditable && isOpen) {
       loadDialogData();
       setDialogIsLoaded(true);
-      setIsLoadingImages(false);
     }
-  }, [getImages, isEditable, groupImages]);
+  }, [getImages, isEditable, isOpen]);
 
   /**
    * When the dialog is toggled, clear the selected items
@@ -116,7 +147,11 @@ const GroupPageAddImagesDialog = (props) => {
   useEffect(() => { setSelectedImages([]); }, [isOpen]);
 
   return (
-    <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      TransitionComponent={Transition}
+    >
       <ActionBar
         handleClose={() => handleClose()}
         actionButtonColor="secondary"
@@ -139,10 +174,11 @@ const GroupPageAddImagesDialog = (props) => {
         </div>
       )}
       {(!dialogHasError && dialogIsLoaded) && (
-        <div className={classes.dialogContentContainer}>
+        <div ref={containerRef} className={classes.dialogContentContainer}>
           <div className={classes.dialogContent}>
             <div className={classes.toolbar} />
             <ImageGrid
+              domRef={imageGridRef}
               images={images}
               isEditable
               isLoading={isLoadingImages}
@@ -158,7 +194,6 @@ const GroupPageAddImagesDialog = (props) => {
 
 GroupPageAddImagesDialog.propTypes = {
   groupId: PropTypes.string.isRequired,
-  groupImages: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
   isEditable: PropTypes.bool,
@@ -167,7 +202,6 @@ GroupPageAddImagesDialog.propTypes = {
 
 GroupPageAddImagesDialog.defaultProps = {
   isOpen: false,
-  groupImages: [],
   handleClose: () => { },
   isEditable: false,
   getGroupImages: () => { },

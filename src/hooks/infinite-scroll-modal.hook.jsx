@@ -7,13 +7,13 @@ import { useState, useEffect, useCallback } from 'react';
  * @param {number} pixelsFromBottom number of pixels from bottom of screen reload should be
  * triggered
  */
-const isAtReloadPoint = (ref, pixelsFromBottom = 0) => {
-  const reloadPoint = window.innerHeight + pixelsFromBottom;
+const isAtReloadPoint = (ref, pixelsFromBottom = 0, container = global) => {
+  const reloadPoint = container.innerHeight + pixelsFromBottom;
   if (!ref) return false;
   return Math.floor(ref.getBoundingClientRect().bottom) <= reloadPoint;
 };
 
-const useInfiniteScroll = (callback, isEnd, hasError, ref) => {
+const useInfiniteScrollModal = (callback, isEnd, hasError, ref, container) => {
   const [isFetching, setIsFetching] = useState(false);
 
   /**
@@ -28,9 +28,10 @@ const useInfiniteScroll = (callback, isEnd, hasError, ref) => {
    * Add the scroll listener
    */
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+    if (container && container.current) {
+      container.current.addEventListener('scroll', handleScroll);
+    }
+  }, [container, handleScroll]);
 
   /**
    * Fetch more data
@@ -43,4 +44,4 @@ const useInfiniteScroll = (callback, isEnd, hasError, ref) => {
   return [isFetching];
 };
 
-export default useInfiniteScroll;
+export default useInfiniteScrollModal;

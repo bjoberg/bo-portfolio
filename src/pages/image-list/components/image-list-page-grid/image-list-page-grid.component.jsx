@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import useInfiniteScroll from '../../../../hooks/infinite-scroll.hook';
@@ -11,6 +13,8 @@ const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 const ImageListPageGrid = (props) => {
   const limit = 30;
   const { openSnackbar, handlePageIsLoaded, handlePageHasError } = props;
+
+  const imageGridRef = useRef(null);
 
   const [images, setImages] = useState([]);
   const [imagesPage, setImagesPage] = useState(0);
@@ -36,7 +40,7 @@ const ImageListPageGrid = (props) => {
   }, [imagesPage, openSnackbar]);
 
   const [isFetchingImages] = useInfiniteScroll(handlePaginateImages, isEndOfImages,
-    hasErrorFetchingImages);
+    hasErrorFetchingImages, imageGridRef);
 
   useEffect(() => {
     const getInitialImages = async () => {
@@ -54,7 +58,7 @@ const ImageListPageGrid = (props) => {
     getInitialImages();
   }, [handlePageHasError, handlePageIsLoaded]);
 
-  return (<ImageGrid images={images} isLoading={isFetchingImages} />);
+  return (<ImageGrid domRef={imageGridRef} images={images} isLoading={isFetchingImages} />);
 };
 
 ImageListPageGrid.propTypes = {
