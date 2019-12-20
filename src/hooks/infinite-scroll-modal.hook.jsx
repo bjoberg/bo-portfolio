@@ -28,9 +28,11 @@ const useInfiniteScrollModal = (callback, isEnd, hasError, ref, container) => {
    * Add the scroll listener
    */
   useEffect(() => {
-    if (container && container.current) {
-      container.current.addEventListener('scroll', handleScroll);
-    }
+    const el = container.current;
+    if (el) { el.addEventListener('scroll', handleScroll); }
+    return () => {
+      if (el) { el.addEventListener('scroll', handleScroll); }
+    };
   }, [container, handleScroll]);
 
   /**

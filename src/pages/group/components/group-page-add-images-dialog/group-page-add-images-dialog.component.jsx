@@ -1,9 +1,9 @@
 import React, {
-  Fragment, useState, useEffect, useCallback, useRef, forwardRef,
+  Fragment, useState, useEffect, useCallback, forwardRef, createRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  RootRef, makeStyles, Dialog, Slide, CircularProgress,
+  makeStyles, Dialog, Slide, CircularProgress,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
@@ -28,8 +28,8 @@ const GroupPageAddImagesDialog = (props) => {
   } = props;
   const limit = 30;
 
-  const imageGridRef = React.createRef();
-  const containerRef = React.createRef();
+  const imageGridRef = createRef();
+  const containerRef = createRef();
 
   const [dialogIsLoaded, setDialogIsLoaded] = useState(false);
   const [dialogHasError, setDialogHasError] = useState(false);
@@ -117,7 +117,6 @@ const GroupPageAddImagesDialog = (props) => {
    */
   const handleAddImagesToGroup = async () => {
     try {
-      // setIsLoadingImages(true);
       await imageService.addImagesToGroup(groupId, selectedImages);
       await getGroupImages();
       handleClose();
@@ -125,8 +124,6 @@ const GroupPageAddImagesDialog = (props) => {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while adding images to group';
       displayDialogError(defaultStatusCode, defaultStatusMessage, error);
-    } finally {
-      // setIsLoadingImages(false);
     }
   };
 
@@ -144,7 +141,15 @@ const GroupPageAddImagesDialog = (props) => {
   /**
    * When the dialog is toggled, clear the selected items
    */
-  useEffect(() => { setSelectedImages([]); }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) {
+      setImages([]);
+      setImagesPage(0);
+      setIsEndOfImages(false);
+      setHasErrorFetchingImages(false);
+      setSelectedImages([]);
+    }
+  }, [isOpen]);
 
   return (
     <Dialog
@@ -157,7 +162,7 @@ const GroupPageAddImagesDialog = (props) => {
         actionButtonColor="secondary"
         showSave
         handleSave={handleAddImagesToGroup}
-        isDisabled={isLoadingImages}
+        isDisabled={isLoadingImages || selectedImages <= 0}
       />
       {dialogHasError && (
         <Fragment>
