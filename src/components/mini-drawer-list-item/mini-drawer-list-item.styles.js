@@ -18,7 +18,7 @@ const MiniDrawerListItemStyles = theme => ({
   },
   linkIsActive: {
     textDecoration: 'none',
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.primary.dark,
   },
 });
 

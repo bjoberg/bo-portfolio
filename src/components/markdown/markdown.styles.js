@@ -22,6 +22,9 @@ const MarkdownStyles = theme => ({
     p: {
       ...theme.typography.body1,
     },
+    a: {
+      color: theme.palette.primary.main,
+    },
   },
 });
 
