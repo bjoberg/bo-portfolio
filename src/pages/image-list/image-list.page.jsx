@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { LinearProgress, makeStyles } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ImageListPageStyles from './image-list.styles';
 import ImageListPageGrid from './components/image-list-page-grid/image-list-page-grid.component';

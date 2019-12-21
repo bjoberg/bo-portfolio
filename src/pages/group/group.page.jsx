@@ -3,7 +3,8 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
-import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import GroupPageStyles from './group.styles';

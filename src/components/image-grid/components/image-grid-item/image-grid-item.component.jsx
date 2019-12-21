@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import {
-  useTheme, makeStyles, useMediaQuery, Checkbox,
+  useMediaQuery, Checkbox,
 } from '@material-ui/core';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 

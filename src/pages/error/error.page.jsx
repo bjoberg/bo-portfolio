@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Typography, Button, Grid, makeStyles,
+  Typography, Button, Grid,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 import ErrorPageStyles from './error.styles';
