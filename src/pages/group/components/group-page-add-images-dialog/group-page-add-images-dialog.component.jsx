@@ -3,8 +3,9 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  makeStyles, Dialog, Slide, CircularProgress,
+  Dialog, Slide, CircularProgress,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
 
 import GroupPageAddImagesDialogStyles from './group-page-add-images-dialog.styles';

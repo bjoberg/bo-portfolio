@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, TextField, Typography } from '@material-ui/core';
+import { TextField, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import GroupPageHeaderStyles from './group-page-header.styles';
 

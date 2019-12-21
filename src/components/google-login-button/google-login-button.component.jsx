@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import GoogleLoginButtonStyles from './google-login-button.styles';
 import * as GoogleSignInButton from '../../media/google-sign-in-button.png';
@@ -27,7 +28,7 @@ GoogleLoginButton.propTypes = {
 };
 
 GoogleLoginButton.defaultProps = {
-  handleOnClick: () => {},
+  handleOnClick: () => { },
 };
 
 export default GoogleLoginButton;

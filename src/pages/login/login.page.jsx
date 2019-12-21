@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import LoginPageStyles from './login.styles';
 import GoogleLoginButton from '../../components/google-login-button/google-login-button.component';
