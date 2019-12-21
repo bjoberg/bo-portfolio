@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ClickAwayListener, makeStyles } from '@material-ui/core';
+import { ClickAwayListener } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import NavContainerStyles from './nav-container.styles';
 import Header from '../header/header.component';
