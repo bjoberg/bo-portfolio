@@ -3,12 +3,12 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
-import {
-  Grid, CircularProgress,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Grid, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
+import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
+import { displayPageError } from '../utils';
 import GroupPageStyles from './group.styles';
 import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
@@ -18,7 +18,6 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import ActionBar from '../../components/action-bar';
-import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
@@ -79,23 +78,6 @@ const GroupPage = (props) => {
   const handleGoBack = () => history.push('/groups');
 
   /**
-   * Evaluate error a display status to user
-   *
-   * @param {number|string} defaultStatusCode error status code to display if error object does not
-   * have status prop
-   * @param {string} defaultStatusMessage error message details to display if error object does not
-   * have message prop
-   * @param {any} error error that was thrown
-   */
-  const displayPageError = (defaultStatusCode, defaultStatusMessage, error) => {
-    const { status, message } = error;
-    const title = `${status}` || `${defaultStatusCode}`;
-    const details = message || defaultStatusMessage;
-    setPageError({ title, details });
-    setPageHasError(true);
-  };
-
-  /**
    * Make request to retrieve group data
    */
   const getGroupData = useCallback(async () => {
@@ -105,7 +87,8 @@ const GroupPage = (props) => {
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group details';
-      displayPageError(defaultStatusCode, defaultStatusMessage, error);
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
     }
   }, [groupId]);
 
@@ -122,7 +105,8 @@ const GroupPage = (props) => {
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
-      displayPageError(defaultStatusCode, defaultStatusMessage, error);
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
     }
   }, [groupId]);
 
@@ -173,13 +157,13 @@ const GroupPage = (props) => {
   };
 
   /**
-   * Get all of the groups data
+   * Load the initial data for the group being displayed
    */
   useEffect(() => {
     const loadPageData = async () => {
-      await getGroupData();
-      await getGroupImages();
-      setPageIsLoaded(true);
+      Promise.all([getGroupData(), getGroupImages()]).then(() => {
+        setPageIsLoaded(true);
+      });
     };
     loadPageData();
   }, [getGroupData, getGroupImages]);
@@ -250,6 +234,7 @@ const GroupPage = (props) => {
             isOpen={addImagesDialogIsOpen}
             handleClose={closeAddImagesDialog}
             isEditable={isEditable}
+            openSnackbar={openSnackbar}
           />
         </Fragment>
       )}
