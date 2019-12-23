@@ -6,19 +6,19 @@ import { isAtEnd, isAtReloadPoint } from './utils';
  * Trigger function (pagination request) when a user has reached a certain point on the screen.
  *
  * @param {Function} callback function to call when scroll ref hits the reload point
- * @param {boolean} isEnd switch determining is application if data is at the end of data
+ * @param {boolean} isEnd switch determining if application is at the end of data
  * @param {boolean} hasError switch determining if application received error while fetching data
- * @param {HTMLElement} scrollRef html element to defining the scroll element
+ * @param {HTMLElement} scrollRef html element defining the scroll element
  * @param {HTMLElement} containerRef html element defining the scroll container
- * @returns {boolean} loading (fetching) state of the container
+ * @returns {boolean} loading state of the container
  */
 const useInfiniteScroll = (callback, isEnd, hasError, scrollRef, containerRef = window) => {
   const [isFetching, setIsFetching] = useState(false);
 
   /**
-   * Get the element of the containerRef
-   *
-   * Note: if the element is not the same as the window, it is ref and should be set to ref.current
+   * Get the element of the containerRef.
+   * Note: if the element is not the same as the window, it is a ref and should be set
+   * to ref.current
    */
   const getContainerEl = useCallback(() => {
     let el = containerRef;
