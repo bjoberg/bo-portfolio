@@ -1,65 +1,88 @@
 import React, {
-  Fragment, useState, useEffect, useCallback,
+  Fragment, useState, useEffect, useCallback, forwardRef, createRef,
 } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Dialog, Slide, CircularProgress,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
+import { Dialog, Slide, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
+import { isAtEnd, useInfiniteScroll } from '../../../../hooks/infinite-scroll';
+import { displayPageError } from '../../../utils';
+import { ImageGrid } from '../../../../components/image-grid';
 import GroupPageAddImagesDialogStyles from './group-page-add-images-dialog.styles';
 import ActionBar from '../../../../components/action-bar';
 import ImageService from '../../../../services/image.service';
-import { ImageGrid } from '../../../../components/image-grid';
 import ErrorPage from '../../../error/error.page';
 
-const useStyles = makeStyles(GroupPageAddImagesDialogStyles);
 const imageService = new ImageService();
+const useStyles = makeStyles(GroupPageAddImagesDialogStyles);
 
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+/**
+ * Transition for displaying dialog
+ */
+const Transition = forwardRef((props, ref) => (<Slide direction="up" ref={ref} {...props} />));
 
 const GroupPageAddImagesDialog = (props) => {
   const classes = useStyles();
   const {
-    groupId, groupImages, isOpen, handleClose, isEditable, getGroupImages,
+    groupId, isOpen, handleClose, isEditable, getGroupImages, openSnackbar,
   } = props;
+  const limit = 30;
+
+  const imageGridRef = createRef();
+  const containerRef = createRef();
 
   const [dialogIsLoaded, setDialogIsLoaded] = useState(false);
   const [dialogHasError, setDialogHasError] = useState(false);
   const [dialogError, setDialogError] = useState();
   const [images, setImages] = useState([]);
-  const [isLoadingImages, setIsLoadingImages] = useState(false);
+  const [imagesPage, setImagesPage] = useState(0);
+  const [isEndOfImages, setIsEndOfImages] = useState(false);
+  const [hasErrorFetchingImages, setHasErrorFetchingImages] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
 
   /**
-   * Evaluate error a display status to user
+   * Request next page of images
    *
-   * @param {number|string} defaultStatusCode error status code to display if error object does not
-   * have status prop
-   * @param {string} defaultStatusMessage error message details to display if error object does not
-   * have message prop
-   * @param {any} error error that was thrown
+   * @param {boolean} isFetching status of the image request
    */
-  const displayDialogError = (defaultStatusCode, defaultStatusMessage, error) => {
-    const { status, message } = error;
-    const title = `${status}` || `${defaultStatusCode}`;
-    const details = message || defaultStatusMessage;
-    setDialogError({ title, details });
-    setDialogHasError(true);
-  };
+  const handlePaginateImages = useCallback((isFetching) => {
+    const paginateImages = async () => {
+      try {
+        const next = imagesPage + 1;
+        const result = await imageService.getImagesNotForGroup(limit, next, groupId);
+        setImages(prevState => [...prevState, ...result.data]);
+        setIsEndOfImages(isAtEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setImagesPage(next);
+      } catch (error) {
+        setHasErrorFetchingImages(true);
+        isFetching(false);
+        openSnackbar('error', `${error.message} Refresh to try again.`);
+      }
+    };
+    paginateImages();
+  }, [groupId, imagesPage, openSnackbar]);
+
+  const [isLoadingImages] = useInfiniteScroll(handlePaginateImages, isEndOfImages,
+    hasErrorFetchingImages, imageGridRef, containerRef);
 
   /**
    * Make request to retrieve group images
    */
   const getImages = useCallback(async () => {
     try {
-      const result = await imageService.getImagesNotForGroup(30, 0, groupId);
-      setImages(result.data);
+      setDialogIsLoaded(false);
+      const { data, totalItems } = await imageService.getImagesNotForGroup(30, 0, groupId);
+      setImages(data);
+      setIsEndOfImages(isAtEnd(totalItems, limit, 1));
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
-      displayDialogError(defaultStatusCode, defaultStatusMessage, error);
+      displayPageError(setDialogError, setDialogHasError, defaultStatusCode, defaultStatusMessage,
+        error);
+    } finally {
+      setDialogIsLoaded(true);
     }
   }, [groupId]);
 
@@ -84,45 +107,47 @@ const GroupPageAddImagesDialog = (props) => {
    */
   const handleAddImagesToGroup = async () => {
     try {
-      setIsLoadingImages(true);
       await imageService.addImagesToGroup(groupId, selectedImages);
       await getGroupImages();
       handleClose();
     } catch (error) {
-      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
-      const defaultStatusMessage = 'Unknown error has occured while adding images to group';
-      displayDialogError(defaultStatusCode, defaultStatusMessage, error);
-    } finally {
-      setIsLoadingImages(false);
+      openSnackbar('error', `${error.message}`);
     }
   };
 
   /**
-   * Retrieve image data
+   * Load the initial data for the group being displayed
    */
   useEffect(() => {
     const loadDialogData = async () => { await getImages(); };
-    if (isEditable) {
-      setIsLoadingImages(true);
-      loadDialogData();
-      setDialogIsLoaded(true);
-      setIsLoadingImages(false);
-    }
-  }, [getImages, isEditable, groupImages]);
+    if (isEditable && isOpen) loadDialogData();
+  }, [getImages, isEditable, isOpen]);
 
   /**
-   * When the dialog is toggled, clear the selected items
+   * When the dialog is closed, clear the dialog data
    */
-  useEffect(() => { setSelectedImages([]); }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) {
+      setImages([]);
+      setImagesPage(0);
+      setIsEndOfImages(false);
+      setHasErrorFetchingImages(false);
+      setSelectedImages([]);
+    }
+  }, [isOpen]);
 
   return (
-    <Dialog fullScreen open={isOpen} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      TransitionComponent={Transition}
+    >
       <ActionBar
         handleClose={() => handleClose()}
         actionButtonColor="secondary"
         showSave
         handleSave={handleAddImagesToGroup}
-        isDisabled={isLoadingImages}
+        isDisabled={isLoadingImages || selectedImages <= 0}
       />
       {dialogHasError && (
         <Fragment>
@@ -139,26 +164,29 @@ const GroupPageAddImagesDialog = (props) => {
         </div>
       )}
       {(!dialogHasError && dialogIsLoaded) && (
-        <div className={classes.dialogContentContainer}>
-          <div className={classes.dialogContent}>
-            <div className={classes.toolbar} />
-            <ImageGrid
-              images={images}
-              isEditable
-              isLoading={isLoadingImages}
-              selectedImages={selectedImages}
-              handleImageSelect={handleImageSelect}
-            />
+        <Fragment>
+          <div className={classes.toolbar} />
+          <div ref={containerRef} className={classes.dialogContentContainer}>
+            <div className={classes.dialogContent}>
+              <ImageGrid
+                domRef={imageGridRef}
+                images={images}
+                isEditable
+                isLoading={isLoadingImages}
+                selectedImages={selectedImages}
+                handleImageSelect={handleImageSelect}
+              />
+            </div>
           </div>
-        </div>
+        </Fragment>
       )}
     </Dialog>
   );
 };
 
 GroupPageAddImagesDialog.propTypes = {
+  openSnackbar: PropTypes.func,
   groupId: PropTypes.string.isRequired,
-  groupImages: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
   isEditable: PropTypes.bool,
@@ -166,8 +194,8 @@ GroupPageAddImagesDialog.propTypes = {
 };
 
 GroupPageAddImagesDialog.defaultProps = {
+  openSnackbar: () => { },
   isOpen: false,
-  groupImages: [],
   handleClose: () => { },
   isEditable: false,
   getGroupImages: () => { },

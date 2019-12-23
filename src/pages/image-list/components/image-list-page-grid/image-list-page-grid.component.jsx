@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 
-import useInfiniteScroll from '../../../../hooks/infinite-scroll.hook';
+import { isAtEnd, useInfiniteScroll } from '../../../../hooks/infinite-scroll';
 import ImageService from '../../../../services/image.service';
 import { ImageGrid } from '../../../../components/image-grid';
 
 const imageService = new ImageService();
-const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 
 const ImageListPageGrid = (props) => {
   const limit = 30;
   const { openSnackbar, handlePageIsLoaded, handlePageHasError } = props;
+
+  const imageGridRef = useRef(null);
 
   const [images, setImages] = useState([]);
   const [imagesPage, setImagesPage] = useState(0);
@@ -23,7 +26,7 @@ const ImageListPageGrid = (props) => {
         const next = imagesPage + 1;
         const result = await imageService.getImages(limit, next);
         setImages(prevState => [...prevState, ...result.data]);
-        setIsEndOfImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        setIsEndOfImages(isAtEnd(result.totalItems, limit, next + 1));
         isFetching(false);
         setImagesPage(next);
       } catch (error) {
@@ -36,14 +39,14 @@ const ImageListPageGrid = (props) => {
   }, [imagesPage, openSnackbar]);
 
   const [isFetchingImages] = useInfiniteScroll(handlePaginateImages, isEndOfImages,
-    hasErrorFetchingImages);
+    hasErrorFetchingImages, imageGridRef);
 
   useEffect(() => {
     const getInitialImages = async () => {
       try {
         handlePageIsLoaded(false);
         const result = await imageService.getImages(limit);
-        setIsEndOfImages(evaluateIsEnd(result.totalItems, limit, 1));
+        setIsEndOfImages(isAtEnd(result.totalItems, limit, 1));
         setImages(result.data);
       } catch (error) {
         handlePageHasError(true);
@@ -54,7 +57,7 @@ const ImageListPageGrid = (props) => {
     getInitialImages();
   }, [handlePageHasError, handlePageIsLoaded]);
 
-  return (<ImageGrid images={images} isLoading={isFetchingImages} />);
+  return (<ImageGrid domRef={imageGridRef} images={images} isLoading={isFetchingImages} />);
 };
 
 ImageListPageGrid.propTypes = {

@@ -1,12 +1,14 @@
 import React, {
-  Fragment, useState, useEffect, useCallback,
+  Fragment, useState, useEffect, useCallback, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
+import { displayPageError } from '../utils';
 import GroupPageStyles from './group.styles';
 import GroupPageActionBar from './components/group-page-action-bar/group-page-action-bar.component';
 import GroupPageHeader from './components/group-page-header/group-page-header.component';
@@ -16,11 +18,9 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import ActionBar from '../../components/action-bar';
-import useInfiniteScroll from '../../hooks/infinite-scroll.hook';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
-const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 const useStyles = makeStyles(GroupPageStyles);
 
 const GroupPage = (props) => {
@@ -30,6 +30,8 @@ const GroupPage = (props) => {
   } = props;
   const limit = 30;
   const groupId = match.params.id;
+
+  const groupImageGridRef = useRef(null);
 
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [pageHasError, setPageHasError] = useState(false);
@@ -55,7 +57,7 @@ const GroupPage = (props) => {
         const next = groupImagesPage + 1;
         const result = await imageService.getImagesForGroup(limit, next, groupId);
         setGroupImages(prevState => [...prevState, ...result.data]);
-        setIsEndOfGroupImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        setIsEndOfGroupImages(isAtEnd(result.totalItems, limit, next + 1));
         isFetching(false);
         setGroupImagesPage(next);
       } catch (error) {
@@ -68,29 +70,12 @@ const GroupPage = (props) => {
   }, [groupId, groupImagesPage, openSnackbar]);
 
   const [isLoadingGroupImages] = useInfiniteScroll(handlePaginateGroupImages, isEndOfGroupImages,
-    hasErrorFetchingGroupImages);
+    hasErrorFetchingGroupImages, groupImageGridRef);
 
   const resetSelectedImages = () => setGroupSelectedImages([]);
   const openAddImagesDialog = () => setAddImagesDialogIsOpen(true);
   const closeAddImagesDialog = () => setAddImagesDialogIsOpen(false);
   const handleGoBack = () => history.push('/groups');
-
-  /**
-   * Evaluate error a display status to user
-   *
-   * @param {number|string} defaultStatusCode error status code to display if error object does not
-   * have status prop
-   * @param {string} defaultStatusMessage error message details to display if error object does not
-   * have message prop
-   * @param {any} error error that was thrown
-   */
-  const displayPageError = (defaultStatusCode, defaultStatusMessage, error) => {
-    const { status, message } = error;
-    const title = `${status}` || `${defaultStatusCode}`;
-    const details = message || defaultStatusMessage;
-    setPageError({ title, details });
-    setPageHasError(true);
-  };
 
   /**
    * Make request to retrieve group data
@@ -102,7 +87,8 @@ const GroupPage = (props) => {
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group details';
-      displayPageError(defaultStatusCode, defaultStatusMessage, error);
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
     }
   }, [groupId]);
 
@@ -112,14 +98,15 @@ const GroupPage = (props) => {
   const getGroupImages = useCallback(async () => {
     try {
       const images = await imageService.getImagesForGroup(30, 0, groupId);
-      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 1));
+      setIsEndOfGroupImages(isAtEnd(images.totalItems, limit, 1));
       setGroupImagesPage(0);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting group images';
-      displayPageError(defaultStatusCode, defaultStatusMessage, error);
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
     }
   }, [groupId]);
 
@@ -170,13 +157,13 @@ const GroupPage = (props) => {
   };
 
   /**
-   * Get all of the groups data
+   * Load the initial data for the group being displayed
    */
   useEffect(() => {
     const loadPageData = async () => {
-      await getGroupData();
-      await getGroupImages();
-      setPageIsLoaded(true);
+      Promise.all([getGroupData(), getGroupImages()]).then(() => {
+        setPageIsLoaded(true);
+      });
     };
     loadPageData();
   }, [getGroupData, getGroupImages]);
@@ -232,6 +219,7 @@ const GroupPage = (props) => {
             </Grid>
             <Grid item>
               <GroupPageGrid
+                domRef={groupImageGridRef}
                 images={groupImages}
                 selectedImages={groupSelectedImages}
                 isEditable={isEditable}
@@ -242,11 +230,11 @@ const GroupPage = (props) => {
           </Grid>
           <GroupPageAddImagesDialog
             groupId={groupId}
-            groupImages={groupImages}
             getGroupImages={getGroupImages}
             isOpen={addImagesDialogIsOpen}
             handleClose={closeAddImagesDialog}
             isEditable={isEditable}
+            openSnackbar={openSnackbar}
           />
         </Fragment>
       )}
