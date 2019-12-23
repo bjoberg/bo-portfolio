@@ -18,11 +18,10 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import ActionBar from '../../components/action-bar';
-import useInfiniteScroll from '../../hooks/infinite-scroll.hook';
+import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
-const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 const useStyles = makeStyles(GroupPageStyles);
 
 const GroupPage = (props) => {
@@ -59,7 +58,7 @@ const GroupPage = (props) => {
         const next = groupImagesPage + 1;
         const result = await imageService.getImagesForGroup(limit, next, groupId);
         setGroupImages(prevState => [...prevState, ...result.data]);
-        setIsEndOfGroupImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        setIsEndOfGroupImages(isAtEnd(result.totalItems, limit, next + 1));
         isFetching(false);
         setGroupImagesPage(next);
       } catch (error) {
@@ -116,7 +115,7 @@ const GroupPage = (props) => {
   const getGroupImages = useCallback(async () => {
     try {
       const images = await imageService.getImagesForGroup(30, 0, groupId);
-      setIsEndOfGroupImages(evaluateIsEnd(images.totalItems, limit, 1));
+      setIsEndOfGroupImages(isAtEnd(images.totalItems, limit, 1));
       setGroupImagesPage(0);
       setGroupImages(images.data);
       setTotalGroupImages(images.totalItems);

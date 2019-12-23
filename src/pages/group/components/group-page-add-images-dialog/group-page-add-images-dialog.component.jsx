@@ -13,11 +13,10 @@ import ActionBar from '../../../../components/action-bar';
 import ImageService from '../../../../services/image.service';
 import { ImageGrid } from '../../../../components/image-grid';
 import ErrorPage from '../../../error/error.page';
-import useInfiniteScrollModal from '../../../../hooks/infinite-scroll-modal.hook';
+import { isAtEnd, useInfiniteScroll } from '../../../../hooks/infinite-scroll';
 
 const useStyles = makeStyles(GroupPageAddImagesDialogStyles);
 const imageService = new ImageService();
-const evaluateIsEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 
 const Transition = forwardRef((props, ref) => (<Slide direction="up" ref={ref} {...props} />));
 
@@ -50,7 +49,7 @@ const GroupPageAddImagesDialog = (props) => {
         const next = imagesPage + 1;
         const result = await imageService.getImagesNotForGroup(limit, next, groupId);
         setImages(prevState => [...prevState, ...result.data]);
-        setIsEndOfImages(evaluateIsEnd(result.totalItems, limit, next + 1));
+        setIsEndOfImages(isAtEnd(result.totalItems, limit, next + 1));
         isFetching(false);
         setImagesPage(next);
       } catch (error) {
@@ -61,7 +60,7 @@ const GroupPageAddImagesDialog = (props) => {
     paginateImages();
   }, [groupId, imagesPage]);
 
-  const [isLoadingImages] = useInfiniteScrollModal(handlePaginateImages, isEndOfImages,
+  const [isLoadingImages] = useInfiniteScroll(handlePaginateImages, isEndOfImages,
     hasErrorFetchingImages, imageGridRef, containerRef);
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -179,19 +178,21 @@ const GroupPageAddImagesDialog = (props) => {
         </div>
       )}
       {(!dialogHasError && dialogIsLoaded) && (
-        <div ref={containerRef} className={classes.dialogContentContainer}>
-          <div className={classes.dialogContent}>
-            <div className={classes.toolbar} />
-            <ImageGrid
-              domRef={imageGridRef}
-              images={images}
-              isEditable
-              isLoading={isLoadingImages}
-              selectedImages={selectedImages}
-              handleImageSelect={handleImageSelect}
-            />
+        <Fragment>
+          <div className={classes.toolbar} />
+          <div ref={containerRef} className={classes.dialogContentContainer}>
+            <div className={classes.dialogContent}>
+              <ImageGrid
+                domRef={imageGridRef}
+                images={images}
+                isEditable
+                isLoading={isLoadingImages}
+                selectedImages={selectedImages}
+                handleImageSelect={handleImageSelect}
+              />
+            </div>
           </div>
-        </div>
+        </Fragment>
       )}
     </Dialog>
   );
