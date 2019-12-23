@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-  RootRef, CircularProgress, makeStyles, Typography,
+  RootRef, CircularProgress, Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import ImageGridStyles from './image-grid.styles';
 import ImageGridItem from './components/image-grid-item/image-grid-item.component';
