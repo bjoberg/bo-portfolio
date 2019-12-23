@@ -5,11 +5,12 @@ import { ImageGrid } from '../../../../components/image-grid';
 
 const GroupPageGrid = (props) => {
   const {
-    images, selectedImages, isEditable, isLoading, handleImageSelect,
+    domRef, images, selectedImages, isEditable, isLoading, handleImageSelect,
   } = props;
 
   return (
     <ImageGrid
+      domRef={domRef}
       images={images}
       selectedImages={selectedImages}
       isEditable={isEditable}
@@ -20,6 +21,7 @@ const GroupPageGrid = (props) => {
 };
 
 GroupPageGrid.propTypes = {
+  domRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   images: PropTypes.arrayOf(PropTypes.object),
   selectedImages: PropTypes.arrayOf(PropTypes.string),
   isEditable: PropTypes.bool,
@@ -28,6 +30,7 @@ GroupPageGrid.propTypes = {
 };
 
 GroupPageGrid.defaultProps = {
+  domRef: null,
   images: [],
   selectedImages: [],
   isEditable: false,
