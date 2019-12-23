@@ -21,10 +21,7 @@ const GroupPageGrid = (props) => {
 };
 
 GroupPageGrid.propTypes = {
-  domRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) }),
-  ]),
+  domRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   images: PropTypes.arrayOf(PropTypes.object),
   selectedImages: PropTypes.arrayOf(PropTypes.string),
   isEditable: PropTypes.bool,

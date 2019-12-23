@@ -60,12 +60,7 @@ const ImageGrid = (props) => {
 };
 
 ImageGrid.propTypes = {
-  domRef: PropTypes.oneOfType([
-    // Either a function
-    PropTypes.func,
-    // Or the instance of a DOM native element (see the note about SSR)
-    PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) }),
-  ]),
+  domRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   images: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
