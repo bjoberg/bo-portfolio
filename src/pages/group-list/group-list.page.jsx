@@ -1,6 +1,4 @@
-import React, {
-  Fragment, useState, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
@@ -50,15 +48,12 @@ const GroupListPage = () => {
 
   if (pageHasError) {
     return (
-      <Fragment>
-        <div className={classes.toolbar} />
-        <ErrorPage
-          title={pageError.title}
-          details={pageError.details}
-          actionButtonLink="/"
-          actionButtonTitle="Go Home"
-        />
-      </Fragment>
+      <ErrorPage
+        title={pageError.title}
+        details={pageError.details}
+        actionButtonLink="/"
+        actionButtonTitle="Go Home"
+      />
     );
   }
 
