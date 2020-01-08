@@ -7,7 +7,6 @@ import GroupService from '../../services/group.service';
 import Group from '../../components/group/group.component';
 import GroupListPageStyles from './group-list.styles';
 
-
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
 
