@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import GroupService from '../../services/group.service';
 import Group from '../../components/group/group.component';
@@ -13,28 +12,39 @@ const useStyles = makeStyles(GroupListPageStyles);
 
 const GroupListPage = (props) => {
   const classes = useStyles();
-  const { history } = props;
-  const [groups, setGroups] = useState([{}]);
-  const [pageIsLoaded, setPageIsLoaded] = useState(false);
 
-  useEffect(() => {
-    async function getGroupsAsync() {
-      try {
-        setPageIsLoaded(false);
-        setGroups(await groupService.getGroups());
-      } catch (error) {
-        history.push('/error');
-      } finally {
-        setPageIsLoaded(true);
-      }
+  const { history } = props;
+
+  const [pageIsLoaded, setPageIsLoaded] = useState(false);
+  const [groups, setGroups] = useState();
+
+  /**
+   * Make request to get group data
+   */
+  const getGroups = useCallback(async () => {
+    try {
+      setPageIsLoaded(false);
+      const result = await groupService.getGroups();
+      setGroups(result);
+    } catch (error) {
+      history.push('/error');
+    } finally {
+      setPageIsLoaded(true);
     }
-    getGroupsAsync();
   }, [history]);
+
+  /**
+   * Load the group data when the page is loaded
+   */
+  useEffect(() => {
+    const loadPageData = async () => getGroups();
+    loadPageData();
+  }, [getGroups]);
 
   if (!pageIsLoaded) {
     return (
       <div className={classes.progressBarContainer}>
-        <LinearProgress />
+        <CircularProgress />
       </div>
     );
   }
