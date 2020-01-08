@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import httpStatus from 'http-status';
 
 import GroupService from '../../services/group.service';
+import { displayPageError } from '../utils';
+import ErrorPage from '../error/error.page';
 import Group from '../../components/group/group.component';
 import GroupListPageStyles from './group-list.styles';
 
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
 
-const GroupListPage = (props) => {
+const GroupListPage = () => {
   const classes = useStyles();
 
-  const { history } = props;
-
+  const [pageHasError, setPageHasError] = useState(false);
+  const [pageError, setPageError] = useState();
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [groups, setGroups] = useState();
 
@@ -27,11 +29,14 @@ const GroupListPage = (props) => {
       const result = await groupService.getGroups();
       setGroups(result);
     } catch (error) {
-      history.push('/error');
+      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
+      const defaultStatusMessage = 'Unknown error has occured while getting groups';
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
     } finally {
       setPageIsLoaded(true);
     }
-  }, [history]);
+  }, []);
 
   /**
    * Load the group data when the page is loaded
@@ -41,7 +46,18 @@ const GroupListPage = (props) => {
     loadPageData();
   }, [getGroups]);
 
-  if (!pageIsLoaded) {
+  if (pageHasError) {
+    return (
+      <ErrorPage
+        title={pageError.title}
+        details={pageError.details}
+        actionButtonLink="/"
+        actionButtonTitle="Go Home"
+      />
+    );
+  }
+
+  if (!pageHasError && !pageIsLoaded) {
     return (
       <div className={classes.progressBarContainer}>
         <CircularProgress />
@@ -73,28 +89,6 @@ const GroupListPage = (props) => {
       </Grid>
     </div>
   );
-};
-
-GroupListPage.propTypes = {
-  history: PropTypes.shape({
-    action: PropTypes.string,
-    block: PropTypes.func,
-    createHref: PropTypes.func,
-    go: PropTypes.func,
-    goBack: PropTypes.func,
-    goForward: PropTypes.func,
-    length: PropTypes.number,
-    listen: PropTypes.func,
-    location: PropTypes.shape({
-      pathname: PropTypes.string,
-      search: PropTypes.string,
-      hash: PropTypes.string,
-      state: PropTypes.string,
-      key: PropTypes.string,
-    }),
-    push: PropTypes.func,
-    replace: PropTypes.func,
-  }).isRequired,
 };
 
 export default GroupListPage;
