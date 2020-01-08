@@ -8,7 +8,6 @@ const AppStyles = theme => ({
     marginBottom: theme.spacing(2),
   },
   navContainer: {
-    flexGrow: 1,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
