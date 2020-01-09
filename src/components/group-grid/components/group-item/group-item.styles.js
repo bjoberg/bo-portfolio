@@ -1,4 +1,4 @@
-const GroupStyles = theme => ({
+const GroupItemStyles = theme => ({
   imgContainer: {
     maxHeight: 400,
     minHeight: 300,
@@ -25,4 +25,4 @@ const GroupStyles = theme => ({
   },
 });
 
-export default GroupStyles;
+export default GroupItemStyles;

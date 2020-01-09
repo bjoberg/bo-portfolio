@@ -2,9 +2,6 @@ const GroupListPageStyles = theme => ({
   root: {
     flexGrow: 1,
   },
-  grid: {
-    width: '100%',
-  },
   progressBarContainer: {
     display: 'flex',
     alignItems: 'center',

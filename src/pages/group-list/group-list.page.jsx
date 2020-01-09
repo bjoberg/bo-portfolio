@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
 
 import GroupService from '../../services/group.service';
 import { displayPageError } from '../utils';
 import ErrorPage from '../error/error.page';
-import Group from '../../components/group/group.component';
 import GroupListPageStyles from './group-list.styles';
+import { GroupGrid } from '../../components/group-grid';
 
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
@@ -67,26 +67,7 @@ const GroupListPage = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        {groups.map(item => (
-          <Grid
-            key={item.id}
-            className={classes.grid}
-            item
-            xs={12}
-            sm={6}
-            md={6}
-            lg={2}
-            xl={2}
-          >
-            <Group
-              id={item.id}
-              title={item.title}
-              imageUrl={item.imageUrl}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <GroupGrid groups={groups} />
     </div>
   );
 };

@@ -4,11 +4,11 @@ import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
-import GroupStyles from './group.styles';
+import GroupItemStyles from './group-item.styles';
 
-const useStyles = makeStyles(GroupStyles);
+const useStyles = makeStyles(GroupItemStyles);
 
-const Group = (props) => {
+const GroupItem = (props) => {
   const classes = useStyles();
   const { id, imageUrl, title } = props;
 
@@ -31,10 +31,10 @@ const Group = (props) => {
   );
 };
 
-Group.propTypes = {
+GroupItem.propTypes = {
   id: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-export default Group;
+export default GroupItem;
