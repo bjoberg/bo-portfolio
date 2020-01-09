@@ -1,7 +1,7 @@
 const GroupItemStyles = theme => ({
   root: {
-    maxHeight: 400,
-    minHeight: 300,
+    height: theme.image.height.large,
+    maxWidth: theme.image.height.large,
     overflow: 'hidden',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.grey[100],
