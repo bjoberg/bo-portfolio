@@ -1,12 +1,15 @@
 const GroupItemStyles = theme => ({
-  imgContainer: {
+  root: {
     maxHeight: 400,
     minHeight: 300,
     overflow: 'hidden',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[200],
-    display: 'block',
+    backgroundColor: theme.palette.grey[100],
     position: 'relative',
+  },
+  imgContainer: {
+    display: 'block',
+    borderRadius: theme.shape.borderRadius,
   },
   textContainer: {
     paddingTop: theme.spacing(1),
@@ -22,6 +25,10 @@ const GroupItemStyles = theme => ({
   link: {
     textDecoration: 'none',
     color: 'inherit',
+  },
+  actionBar: {
+    position: 'absolute',
+    zIndex: theme.zIndex.modal - 1,
   },
 });
 

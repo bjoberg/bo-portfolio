@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import httpStatus from 'http-status';
@@ -12,8 +13,10 @@ import { GroupGrid } from '../../components/group-grid';
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
 
-const GroupListPage = () => {
+const GroupListPage = (props) => {
   const classes = useStyles();
+
+  const { isEditable } = props;
 
   const [pageHasError, setPageHasError] = useState(false);
   const [pageError, setPageError] = useState();
@@ -67,9 +70,20 @@ const GroupListPage = () => {
 
   return (
     <div className={classes.root}>
-      <GroupGrid groups={groups} />
+      <GroupGrid
+        groups={groups}
+        isRemovable={isEditable}
+      />
     </div>
   );
+};
+
+GroupListPage.propTypes = {
+  isEditable: PropTypes.bool,
+};
+
+GroupListPage.defaultProps = {
+  isEditable: false,
 };
 
 export default GroupListPage;
