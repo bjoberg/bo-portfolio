@@ -77,7 +77,12 @@ const Routes = (props) => {
         path="/groups"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<GroupListPage {...routeProps} />);
+          return (
+            <GroupListPage
+              {...routeProps}
+              isEditable={isEditable}
+            />
+          );
         }}
       />
       <Route
