@@ -95,6 +95,7 @@ const App = () => {
           toggleDrawer={toggleDrawer}
           user={user}
           handleLogout={logoutGoogle}
+          isEditable={isEditable}
         />
       )}
       <main className={clsx(displayNavContainer ? classes.navContainer : classes.container)}>
