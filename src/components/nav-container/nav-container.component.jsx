@@ -14,7 +14,7 @@ const useStyles = makeStyles(NavContainerStyles);
 const NavContainer = (props) => {
   const classes = useStyles();
   const {
-    closeDrawer, title, drawerIsOpen, toggleDrawer, user, handleLogout,
+    closeDrawer, title, drawerIsOpen, toggleDrawer, user, handleLogout, isEditable,
   } = props;
 
   return (
@@ -28,6 +28,7 @@ const NavContainer = (props) => {
             handleToggle={toggleDrawer}
             user={user}
             handleLogout={handleLogout}
+            isEditable={isEditable}
           />
           <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
           <MiniDrawer />
@@ -45,6 +46,7 @@ NavContainer.propTypes = {
   toggleDrawer: PropTypes.func,
   user: PropTypes.instanceOf(GoogleUser),
   handleLogout: PropTypes.func,
+  isEditable: PropTypes.bool,
 };
 
 NavContainer.defaultProps = {
@@ -54,6 +56,7 @@ NavContainer.defaultProps = {
   toggleDrawer: () => { },
   user: undefined,
   handleLogout: () => { },
+  isEditable: false,
 };
 
 export default NavContainer;
