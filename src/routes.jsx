@@ -2,10 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
-import EntityType from './utils/constants';
 import ImageListPage from './pages/image-list/image-list.page';
 import LoginPage from './pages/login/login.page';
 import HomePage from './pages/home/home.page';
@@ -47,33 +45,6 @@ const Routes = (props) => {
       />
       <Route
         exact
-        path="/image"
-        render={(routeProps) => {
-          toggleNavContainer(true);
-          return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.IMAGE}
-              openSnackbar={openSnackbar}
-            />
-          );
-        }}
-      />
-      <Route
-        path="/image/:id"
-        render={(routeProps) => {
-          toggleNavContainer(true);
-          return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.IMAGE}
-              openSnackbar={openSnackbar}
-            />
-          );
-        }}
-      />
-      <Route
-        exact
         path="/groups"
         render={(routeProps) => {
           toggleNavContainer(true);
@@ -81,20 +52,6 @@ const Routes = (props) => {
             <GroupListPage
               {...routeProps}
               isEditable={isEditable}
-            />
-          );
-        }}
-      />
-      <Route
-        exact
-        path="/group"
-        render={(routeProps) => {
-          toggleNavContainer(true);
-          return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.GROUP}
-              openSnackbar={openSnackbar}
             />
           );
         }}

@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import LoginPageStyles from './login.styles';
-import GoogleLoginButton from '../../components/google-login-button/google-login-button.component';
+import GoogleLoginButton from '../../components/google-login-button';
 import AuthService from '../../services/auth.service';
 
 const useStyles = makeStyles(LoginPageStyles);

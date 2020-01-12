@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import PhotoIcon from '@material-ui/icons/Photo';
 import { Link } from 'react-router-dom';
-import Markdown from '../../components/markdown/markdown.component';
+import Markdown from '../../components/markdown';
 import HomePageStyles from './home.styles';
 import src from '../../media/profile.png';
 import content from '../../content/overview.md';

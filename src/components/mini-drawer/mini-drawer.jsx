@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import { Drawer } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-import NavigationItems from '../../utils/navigation-items';
-import MiniDrawerListItem from '../mini-drawer-list-item/mini-drawer-list-item.component';
 import MiniDrawerStyles from './mini-drawer.styles';
+import MiniDrawerListItem from './components/mini-drawer-list-item/mini-drawer-list-item';
+import NavigationItems from '../../utils/navigation-items';
 
 const useStyles = makeStyles(MiniDrawerStyles);
 

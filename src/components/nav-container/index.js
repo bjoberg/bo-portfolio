@@ -1,3 +1,1 @@
-import NavContainer from './nav-container.component';
-
-export default NavContainer;
+export { default } from './nav-container';
