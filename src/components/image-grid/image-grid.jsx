@@ -6,7 +6,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import ImageGridStyles from './image-grid.styles';
-import ImageGridItem from './components/image-grid-item/image-grid-item.component';
+import ImageGridItem from './components/image-grid-item/image-grid-item';
 
 const useStyles = makeStyles(ImageGridStyles);
 

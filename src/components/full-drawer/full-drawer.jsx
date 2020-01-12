@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, List } from '@material-ui/core';
 
-import NavigationItems from '../../utils/navigation-items';
-import FullDrawerListItem from '../full-drawer-list-item/full-drawer-list-item.component';
 import FullDrawerStyles from './full-drawer.styles';
-import FullDrawerHeader from '../full-drawer-header/full-drawer-header.component';
+import FullDrawerListItem from './components/full-drawer-list-item/full-drawer-list-item';
+import FullDrawerHeader from './components/full-drawer-header/full-drawer-header';
 
 const useStyles = makeStyles(FullDrawerStyles);
 
@@ -46,7 +45,7 @@ FullDrawer.propTypes = {
 };
 
 FullDrawer.defaultProps = {
-  items: NavigationItems,
+  items: [],
   isOpen: false,
   handleClose: () => { },
 };
