@@ -17,7 +17,7 @@ import GroupPageAddImagesDialog from './components/group-page-add-images-dialog/
 import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
-import ActionBar from '../../components/action-bar';
+import { ActionBar } from '../../components/action-bar';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
@@ -181,9 +181,9 @@ const GroupPage = (props) => {
       )}
       {(!groupSelectedImages || groupSelectedImages.length === 0) && (
         <ActionBar
-          handleClose={() => handleGoBack()}
+          handleNav={() => handleGoBack()}
           elevateOnScroll
-          closeButton={<ArrowBackIcon />}
+          navButton={<ArrowBackIcon />}
           showInfo
           showAddPhoto={isEditable}
           handleAddPhoto={openAddImagesDialog}

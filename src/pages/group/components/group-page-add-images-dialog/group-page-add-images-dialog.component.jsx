@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
 import { Dialog, Slide, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { isAtEnd, useInfiniteScroll } from '../../../../hooks/infinite-scroll';
 import { displayPageError } from '../../../utils';
 import { ImageGrid } from '../../../../components/image-grid';
 import GroupPageAddImagesDialogStyles from './group-page-add-images-dialog.styles';
-import ActionBar from '../../../../components/action-bar';
+import { ActionBar } from '../../../../components/action-bar';
 import ImageService from '../../../../services/image.service';
 import ErrorPage from '../../../error/error.page';
 
@@ -143,7 +144,8 @@ const GroupPageAddImagesDialog = (props) => {
       TransitionComponent={Transition}
     >
       <ActionBar
-        handleClose={() => handleClose()}
+        navButton={<CloseIcon />}
+        handleNav={handleClose}
         actionButtonColor="secondary"
         showSave
         handleSave={handleAddImagesToGroup}

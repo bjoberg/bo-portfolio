@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import Routes from './routes';
-import SnackbarContentWrapper from './components/snackbar-content/snackbar-content.component';
+import SnackbarContentWrapper from './components/snackbar-content';
 import AppStyles from './app.styles';
 import UserService from './services/user.service';
 import AuthService from './services/auth.service';

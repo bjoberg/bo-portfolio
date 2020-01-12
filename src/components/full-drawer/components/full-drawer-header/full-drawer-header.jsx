@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Divider } from '@material-ui/core';
 
 import FullDrawerHeaderStyles from './full-drawer-header.styles';
-import personalData from '../../utils/personal-data';
+import personalData from '../../../../utils/personal-data';
 
 const useStyles = makeStyles(FullDrawerHeaderStyles);
 

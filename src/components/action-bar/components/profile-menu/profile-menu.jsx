@@ -6,7 +6,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
 
 import ProfileMenuStyles from './profile-menu.styles';
-import ProfilePopover from '../profile-popover/profile-popover.component';
+import ProfilePopover from '../profile-popover/profile-popover';
 import GoogleUser from '../../../../models/google-user.model';
 
 const useStyles = makeStyles(ProfileMenuStyles);

@@ -4,10 +4,11 @@ import { ClickAwayListener } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NavContainerStyles from './nav-container.styles';
-import Header from '../header/header.component';
-import FullDrawer from '../full-drawer/full-drawer.component';
-import MiniDrawer from '../mini-drawer/mini-drawer.component';
+import { FullDrawer } from '../full-drawer';
+import { MiniDrawer } from '../mini-drawer';
+import { ActionBar } from '../action-bar';
 import GoogleUser from '../../models/google-user.model';
+import NavigationItems from '../../utils/navigation-items';
 
 const useStyles = makeStyles(NavContainerStyles);
 
@@ -22,15 +23,16 @@ const NavContainer = (props) => {
       <ClickAwayListener onClickAway={closeDrawer}>
         {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
         <div>
-          <Header
+          <ActionBar
             title={title}
-            drawerIsOpen={drawerIsOpen}
-            handleToggle={toggleDrawer}
             user={user}
+            elevateOnScroll
+            showAddGroup={isEditable}
+            showAvatar={isEditable}
+            handleNav={toggleDrawer}
             handleLogout={handleLogout}
-            isEditable={isEditable}
           />
-          <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} />
+          <FullDrawer isOpen={drawerIsOpen} handleClose={closeDrawer} items={NavigationItems} />
           <MiniDrawer />
         </div>
       </ClickAwayListener>
