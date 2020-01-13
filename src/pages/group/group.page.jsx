@@ -18,6 +18,7 @@ import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
 import { ActionBar } from '../../components/action-bar';
+import GoogleUser from '../../models/google-user.model';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
@@ -26,7 +27,7 @@ const useStyles = makeStyles(GroupPageStyles);
 const GroupPage = (props) => {
   const classes = useStyles();
   const {
-    match, history, openSnackbar, isEditable,
+    match, history, openSnackbar, isEditable, user, handleLogout,
   } = props;
   const limit = 30;
   const groupId = match.params.id;
@@ -186,6 +187,9 @@ const GroupPage = (props) => {
           navButton={<ArrowBackIcon />}
           showInfo
           showAddPhoto={isEditable}
+          showAvatar={isEditable}
+          user={user}
+          handleLogout={handleLogout}
           handleAddPhoto={openAddImagesDialog}
         />
       )}
@@ -272,11 +276,15 @@ GroupPage.propTypes = {
   }).isRequired,
   openSnackbar: PropTypes.func,
   isEditable: PropTypes.bool,
+  user: PropTypes.instanceOf(GoogleUser),
+  handleLogout: PropTypes.func,
 };
 
 GroupPage.defaultProps = {
   openSnackbar: () => { },
   isEditable: false,
+  user: undefined,
+  handleLogout: () => { },
 };
 
 export default GroupPage;

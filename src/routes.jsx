@@ -8,9 +8,10 @@ import ImageListPage from './pages/image-list/image-list.page';
 import LoginPage from './pages/login/login.page';
 import HomePage from './pages/home/home.page';
 import GroupPage from './pages/group/group.page';
+import GoogleUser from './models/google-user.model';
 
 const Routes = (props) => {
-  const { openSnackbar, toggleNavContainer, isEditable } = props;
+  const { openSnackbar, toggleNavContainer, isEditable, user, handleLogout } = props;
 
   return (
     <Switch>
@@ -65,6 +66,8 @@ const Routes = (props) => {
               {...routeProps}
               openSnackbar={openSnackbar}
               isEditable={isEditable}
+              user={user}
+              handleLogout={handleLogout}
             />
           );
         }}
@@ -78,10 +81,14 @@ Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
   toggleNavContainer: PropTypes.func.isRequired,
   isEditable: PropTypes.bool,
+  user: PropTypes.instanceOf(GoogleUser),
+  handleLogout: PropTypes.func
 };
 
 Routes.defaultProps = {
   isEditable: false,
+  user: undefined,
+  handleLogout: () => { }
 };
 
 export default Routes;
