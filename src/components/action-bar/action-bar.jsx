@@ -4,6 +4,7 @@ import {
   AppBar, Toolbar, Typography, IconButton, Button, Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
@@ -51,6 +52,7 @@ const ActionBar = (props) => {
             color={navButtonColor}
             className={classes.navButton}
             aria-label="navigation"
+            edge="start"
             onClick={() => handleNav()}
           >
             {navButton}
@@ -58,12 +60,13 @@ const ActionBar = (props) => {
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
-          <div className={classes.actionButtonGroup}>
+          <div className={clsx(showAvatar && classes.actionButtonGroup)}>
             {showDelete && (
               <Tooltip title="Delete">
                 <IconButton
                   color={actionButtonColor}
                   aria-label="delete"
+                  edge="start"
                   onClick={() => handleDelete()}
                   disabled={isDisabled}
                 >
@@ -76,6 +79,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="add-image"
+                  edge="end"
                   onClick={() => handleAddPhoto()}
                   disabled={isDisabled}
                 >
@@ -88,6 +92,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="add-group"
+                  edge="end"
                   onClick={() => handleAddGroup()}
                   disabled={isDisabled}
                 >
@@ -110,6 +115,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="info"
+                  edge="end"
                   onClick={() => handleInfo()}
                   disabled={isDisabled}
                 >
