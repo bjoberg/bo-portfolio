@@ -79,6 +79,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="add-image"
+                  edge="end"
                   onClick={() => handleAddPhoto()}
                   disabled={isDisabled}
                 >
@@ -91,6 +92,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="add-group"
+                  edge="end"
                   onClick={() => handleAddGroup()}
                   disabled={isDisabled}
                 >
@@ -113,6 +115,7 @@ const ActionBar = (props) => {
                 <IconButton
                   color={actionButtonColor}
                   aria-label="info"
+                  edge="end"
                   onClick={() => handleInfo()}
                   disabled={isDisabled}
                 >

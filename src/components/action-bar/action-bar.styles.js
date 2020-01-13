@@ -7,7 +7,7 @@ const ActionBarStyles = theme => ({
     marginRight: theme.spacing(2),
   },
   actionButtonGroup: {
-    marginRight: theme.spacing(3),
+    marginRight: theme.spacing(4),
   },
   title: {
     flexGrow: 1,
