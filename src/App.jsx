@@ -103,6 +103,8 @@ const App = () => {
           openSnackbar={openSnackbar}
           toggleNavContainer={toggleNavContainer}
           isEditable={isEditable}
+          user={user}
+          handleLogout={logoutGoogle}
         />
       </main>
       <Snackbar

@@ -2,9 +2,9 @@ import { miniDrawerWidth } from './utils/theme';
 
 const AppStyles = theme => ({
   container: {
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(3),
     marginTop: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(3),
     marginBottom: theme.spacing(2),
   },
   navContainer: {
