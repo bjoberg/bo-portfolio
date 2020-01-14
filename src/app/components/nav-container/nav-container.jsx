@@ -4,18 +4,25 @@ import { ClickAwayListener } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NavContainerStyles from './nav-container.styles';
-import { FullDrawer } from '../full-drawer';
-import { MiniDrawer } from '../mini-drawer';
-import { ActionBar } from '../action-bar';
-import GoogleUser from '../../models/google-user.model';
-import NavigationItems from '../../utils/navigation-items';
+import { FullDrawer } from '../../../components/full-drawer';
+import { MiniDrawer } from '../../../components/mini-drawer';
+import { ActionBar } from '../../../components/action-bar';
+import GoogleUser from '../../../models/google-user.model';
+import NavigationItems from '../../../utils/navigation-items';
 
 const useStyles = makeStyles(NavContainerStyles);
 
 const NavContainer = (props) => {
   const classes = useStyles();
   const {
-    closeDrawer, title, drawerIsOpen, toggleDrawer, user, handleLogout, isEditable,
+    closeDrawer,
+    title,
+    drawerIsOpen,
+    toggleDrawer,
+    user,
+    handleLogout,
+    isEditable,
+    handleOpenAddGroupDialog,
   } = props;
 
   return (
@@ -28,6 +35,7 @@ const NavContainer = (props) => {
             user={user}
             elevateOnScroll
             showAddGroup={isEditable}
+            handleAddGroup={handleOpenAddGroupDialog}
             showAvatar={isEditable}
             handleNav={toggleDrawer}
             handleLogout={handleLogout}
@@ -49,6 +57,7 @@ NavContainer.propTypes = {
   user: PropTypes.instanceOf(GoogleUser),
   handleLogout: PropTypes.func,
   isEditable: PropTypes.bool,
+  handleOpenAddGroupDialog: PropTypes.func,
 };
 
 NavContainer.defaultProps = {
@@ -59,6 +68,7 @@ NavContainer.defaultProps = {
   user: undefined,
   handleLogout: () => { },
   isEditable: false,
+  handleOpenAddGroupDialog: () => { },
 };
 
 export default NavContainer;

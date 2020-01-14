@@ -1,4 +1,4 @@
-import { miniDrawerWidth } from './utils/theme';
+import { miniDrawerWidth } from '../utils/theme';
 
 const AppStyles = theme => ({
   container: {
