@@ -6,14 +6,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import Routes from './routes';
-import SnackbarContentWrapper from './components/snackbar-content';
 import AppStyles from './app.styles';
-import UserService from './services/user.service';
-import AuthService from './services/auth.service';
-import GoogleUser from './models/google-user.model';
-import Roles from './utils/roles';
-import NavContainer from './components/nav-container';
+import NavContainer from './components/nav-container/nav-container';
+import Routes from '../routes';
+import SnackbarContentWrapper from '../components/snackbar-content';
+import UserService from '../services/user.service';
+import AuthService from '../services/auth.service';
+import GoogleUser from '../models/google-user.model';
+import Roles from '../utils/roles';
+import AddGroupDialog from './components/add-group-dialog/add-group-dialog';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
@@ -29,11 +30,14 @@ const App = () => {
   const [snackbarStatus, setSnackbarStatus] = useState('success');
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
+  const [addGroupDialogIsOpen, setAddGroupDialogIsOpen] = useState(false);
 
   const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
   const closeDrawer = () => setDrawerIsOpen(false);
   const closeSnackbar = () => setSnackBarIsOpen(false);
   const logoutGoogle = () => AuthService.logoutGoogle();
+  const closeAddGroupDialog = () => setAddGroupDialogIsOpen(false);
+  const openAddGroupDialog = () => setAddGroupDialogIsOpen(true);
 
   /**
    * Open the snackbar as a notification
@@ -96,6 +100,7 @@ const App = () => {
           user={user}
           handleLogout={logoutGoogle}
           isEditable={isEditable}
+          handleOpenAddGroupDialog={openAddGroupDialog}
         />
       )}
       <main className={clsx(displayNavContainer ? classes.navContainer : classes.container)}>
@@ -118,6 +123,7 @@ const App = () => {
           message={snackbarContent}
         />
       </Snackbar>
+      <AddGroupDialog isOpen={addGroupDialogIsOpen} handleClose={closeAddGroupDialog} />
     </Fragment>
   );
 };

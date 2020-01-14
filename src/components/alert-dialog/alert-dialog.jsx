@@ -43,7 +43,6 @@ const AlertDialog = (props) => {
         <Button
           onClick={handleConfirm}
           color="primary"
-          variant="contained"
           autoFocus
           disabled={isDisabled}
         >
