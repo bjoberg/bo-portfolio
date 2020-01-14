@@ -10,11 +10,11 @@ const AddGroupDialog = (props) => {
     <Dialog
       open={isOpen}
       onClose={handleClose}
-      aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description"
+      aria-labelledby="add-group-title"
+      aria-describedby="add-group-body"
     >
-      <DialogTitle id="scroll-dialog-title">New Group</DialogTitle>
-      <DialogContent dividers>
+      <DialogTitle id="add-group-title">New Group</DialogTitle>
+      <DialogContent id="add-group-body" dividers>
         <TextField
           id="title"
           label="Title"
