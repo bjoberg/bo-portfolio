@@ -8,7 +8,11 @@ const MiniDrawerListItemStyles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    margin: theme.spacing(0.5),
+    marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    // paddingLeft: theme.spacing(1),
+
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
       borderRadius: miniDrawerWidth,

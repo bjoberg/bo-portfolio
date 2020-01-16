@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider, Link } from '@material-ui/core';
 
 import FullDrawerHeaderStyles from './full-drawer-header.styles';
 import personalData from '../../../../utils/personal-data';
@@ -15,12 +15,12 @@ const FullDrawerHeader = (props) => {
   return (
     <Fragment>
       <div className={classes.root}>
-        <Typography variant="h5" className={classes.title}>
+        <Typography variant="h5">
           {title}
         </Typography>
-        <Typography variant="subtitle2" className={classes.title}>
+        <Link href="mailto:subtitle" variant="subtitle2">
           {subtitle}
-        </Typography>
+        </Link>
       </div>
       <Divider />
     </Fragment>
