@@ -11,8 +11,6 @@ const MiniDrawerListItemStyles = theme => ({
     marginLeft: theme.spacing(1),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    // paddingLeft: theme.spacing(1),
-
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
       borderRadius: miniDrawerWidth,

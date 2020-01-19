@@ -18,7 +18,7 @@ const FullDrawerHeader = (props) => {
         <Typography variant="h5">
           {title}
         </Typography>
-        <Link href="mailto:subtitle" variant="subtitle2">
+        <Link href={`mailto:${subtitle}`} variant="subtitle2">
           {subtitle}
         </Link>
       </div>
