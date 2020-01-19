@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { green, deepOrange, grey } from '@material-ui/core/colors';
 
-const miniDrawerWidth = 80;
+const miniDrawerWidth = 60;
 const drawerWidth = 250;
 
 const theme = createMuiTheme({
