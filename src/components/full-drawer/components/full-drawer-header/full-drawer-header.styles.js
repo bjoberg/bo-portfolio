@@ -3,7 +3,7 @@ const FullDrawerHeaderStyles = theme => ({
     display: 'flex',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    margin: theme.spacing(1),
+    marginLeft: theme.spacing(2),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
