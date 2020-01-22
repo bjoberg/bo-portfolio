@@ -19,8 +19,12 @@ export default class GroupService {
     let status = defaultStatusCode;
     let message = defaultMessage;
     if (error.response) {
-      ({ status } = error.response);
-      ({ message } = error.response.data);
+      if (error.response.status) {
+        ({ status } = error.response);
+      }
+      if (error.response.message) {
+        ({ message } = error.response.data);
+      }
     }
     return new ApiError(status, message);
   }
@@ -134,7 +138,7 @@ export default class GroupService {
 
       return response.data;
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, 'Unable to update create group');
+      const apiError = GroupService.createNewApiError(error, 500, 'Unable to create group');
       throw apiError;
     }
   }

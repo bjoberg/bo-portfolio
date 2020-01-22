@@ -123,7 +123,11 @@ const App = () => {
           message={snackbarContent}
         />
       </Snackbar>
-      <AddGroupDialog isOpen={addGroupDialogIsOpen} handleClose={closeAddGroupDialog} />
+      <AddGroupDialog
+        isOpen={addGroupDialogIsOpen}
+        handleClose={closeAddGroupDialog}
+        openSnackbar={openSnackbar}
+      />
     </Fragment>
   );
 };

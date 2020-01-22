@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField,
+  Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, CircularProgress,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  isValidTitle, isValidDescription, isValidThumbailUrl, isValidImageUrl,
+  defaultTitle, defaultThumbnailUrl, defaultImageUrl, defaultDescription, isNotEmpty, isValidUrl,
 } from './utils';
+import AddGroupDialogStyles from './add-group-dialog.styles';
+import GroupService from '../../../services/group.service';
+
+const useStyles = makeStyles(AddGroupDialogStyles);
+const groupService = new GroupService();
 
 const AddGroupDialog = (props) => {
-  const { isOpen, handleClose } = props;
+  const classes = useStyles();
+  const { isOpen, handleClose, openSnackbar } = props;
 
-  const [isValidForm, setIsValidForm] = useState(false);
+  const [formIsLoading, setFormIsLoading] = useState(false);
 
   // Title
-  const [title, setTitle] = useState({
-    hasError: false,
-    isRequired: true,
-    helperText: '',
-    value: '',
-  });
+  const [title, setTitle] = useState(defaultTitle);
   const updateTitle = (e) => {
     setTitle({ ...title, value: e.target.value });
   };
@@ -28,12 +30,7 @@ const AddGroupDialog = (props) => {
   };
 
   // Thumbnail Url
-  const [thumbnailUrl, setThumbnailUrl] = useState({
-    hasError: false,
-    isRequired: true,
-    helperText: '',
-    value: '',
-  });
+  const [thumbnailUrl, setThumbnailUrl] = useState(defaultThumbnailUrl);
   const updateThumbnailUrl = (e) => {
     setThumbnailUrl({ ...thumbnailUrl, value: e.target.value });
   };
@@ -42,12 +39,7 @@ const AddGroupDialog = (props) => {
   };
 
   // Image Url
-  const [imageUrl, setImageUrl] = useState({
-    hasError: false,
-    isRequired: true,
-    helperText: '',
-    value: '',
-  });
+  const [imageUrl, setImageUrl] = useState(defaultImageUrl);
   const updateImageUrl = (e) => {
     setImageUrl({ ...imageUrl, value: e.target.value });
   };
@@ -56,12 +48,7 @@ const AddGroupDialog = (props) => {
   };
 
   // Description
-  const [description, setDescription] = useState({
-    hasError: false,
-    isRequired: false,
-    helperText: '',
-    value: '',
-  });
+  const [description, setDescription] = useState(defaultDescription);
   const updateDescription = (e) => {
     setDescription({ ...description, value: e.target.value });
   };
@@ -69,80 +56,141 @@ const AddGroupDialog = (props) => {
     setDescription({ ...description, hasError, helperText });
   };
 
-  const validateTitle = () => {
-    let isValid = false;
-    try {
-      if (isValidTitle(title.value)) {
-        updateTitleError(false, '');
-        isValid = true;
-      }
-    } catch (error) {
-      updateTitleError(true, error.message);
+  /**
+   * Check to see if the group's title is valid
+   */
+  const isValidTitle = () => {
+    const input = title.value;
+
+    // Title is required, so it cannot be empty
+    if (!isNotEmpty(input)) {
+      updateTitleError(true, 'Title is required');
+      return false;
     }
-    return isValid;
+
+    // Title has resource constraints in the database
+    if (input > 255) {
+      updateTitleError(true, 'Title cannot be more than 255 characters');
+      return false;
+    }
+
+    updateTitleError(false, '');
+    return true;
   };
 
-  const validateThumbnailUrl = () => {
-    let isValid = false;
-    try {
-      if (isValidThumbailUrl(thumbnailUrl.value)) {
-        updateThumbnailUrlError(false, '');
-        isValid = true;
-      }
-    } catch (error) {
-      updateThumbnailUrlError(true, error.message);
+  /**
+   * Check to see if the group's thumbnail url value is valid
+   */
+  const isValidThumbnailUrl = () => {
+    const input = thumbnailUrl.value;
+
+    // Thumbnail url is required, so it cannot be empty
+    if (!isNotEmpty(input)) {
+      updateThumbnailUrlError(true, 'Thumbnail url is required');
+      return false;
     }
-    return isValid;
+
+    // Thumbnail url must be a valid url
+    if (!isValidUrl(input)) {
+      updateThumbnailUrlError(true, 'Must be a valid url');
+      return false;
+    }
+
+    updateThumbnailUrlError(false, '');
+    return true;
   };
 
-  const validateImageUrl = () => {
-    let isValid = false;
-    try {
-      if (isValidImageUrl(imageUrl.value)) {
-        updateImageUrlError(false, '');
-        isValid = true;
-      }
-    } catch (error) {
-      updateImageUrlError(true, error.message);
+  /**
+   * Check to see if the group's image url value is valid
+   */
+  const isValidImageUrl = () => {
+    const input = imageUrl.value;
+
+    // Image url is required, so it cannot be empty
+    if (!isNotEmpty(input)) {
+      updateImageUrlError(true, 'Image url is required');
+      return false;
     }
-    return isValid;
+
+    // Image url must be a valid url
+    if (!isValidUrl(input)) {
+      updateImageUrlError(true, 'Must be a valid url');
+      return false;
+    }
+
+    updateImageUrlError(false, '');
+    return true;
   };
 
-  const validateDescription = () => {
-    let isValid = false;
-    try {
-      if (isValidDescription(description.value)) {
-        updateDescriptionError(false, '');
-        isValid = true;
-      }
-    } catch (error) {
-      updateDescriptionError(true, error.message);
+  /**
+   * Check to see if the group's description value is valid
+   */
+  const isValidDescription = () => {
+    const input = description.value;
+
+    // Description has resource constraints in the database
+    if (input > 1234) {
+      updateDescriptionError(true, 'Description cannot be more than 1234 characters');
+      return false;
     }
-    return isValid;
+
+    updateDescriptionError(false, '');
+    return true;
   };
 
-  const validateForm = () => {
+  /**
+   * Check to make sure the whole form is valid
+   */
+  const isValidForm = () => {
     let isValid = true;
-    if (!title.hasError) isValid = false;
-    if (!thumbnailUrl.hasError) isValid = false;
-    if (!imageUrl.hasErro) isValid = false;
-    if (!description.hasError) isValid = false;
+    if (!isValidTitle()) isValid = false;
+    if (!isValidThumbnailUrl()) isValid = false;
+    if (!isValidImageUrl()) isValid = false;
+    if (!isValidDescription()) isValid = false;
     return isValid;
+  };
+
+  /**
+   * Reset the form's data
+   */
+  const resetForm = () => {
+    setTitle(defaultTitle);
+    setThumbnailUrl(defaultThumbnailUrl);
+    setImageUrl(defaultImageUrl);
+    setDescription(defaultDescription);
+    setFormIsLoading(false);
   };
 
   /**
    * Save the group based on the defined group data
    */
-  const handleSave = () => {
-    if (validateForm) {
-      const group = {
-        title: title.value,
-        description: description.value,
-        thumbnailUrl: thumbnailUrl.value,
-        imageUrl: imageUrl.value,
-      };
-      console.log(group);
+  const handleSave = async () => {
+    if (isValidForm()) {
+      try {
+        setFormIsLoading(true);
+        const group = {
+          title: title.value,
+          description: description.value,
+          thumbnailUrl: thumbnailUrl.value,
+          imageUrl: imageUrl.value,
+        };
+        await groupService.createGroup(group);
+        resetForm();
+        handleClose();
+      } catch (error) {
+        openSnackbar('error', error.message);
+      } finally {
+        setFormIsLoading(false);
+      }
     }
+  };
+
+  /**
+   * Reset and cancel the current form changes
+   */
+  const handleCancel = () => {
+    resetForm();
+    handleClose();
   };
 
   return (
@@ -160,12 +208,12 @@ const AddGroupDialog = (props) => {
           margin="normal"
           variant="outlined"
           fullWidth
+          disabled={formIsLoading}
           value={title.value}
           required={title.isRequired}
           error={title.hasError}
           helperText={title.helperText}
           onChange={e => updateTitle(e)}
-          onBlur={() => validateTitle()}
         />
         <TextField
           id="thumbnailUrl"
@@ -173,12 +221,12 @@ const AddGroupDialog = (props) => {
           margin="normal"
           variant="outlined"
           fullWidth
+          disabled={formIsLoading}
           value={thumbnailUrl.value}
           required={thumbnailUrl.isRequired}
           error={thumbnailUrl.hasError}
           helperText={thumbnailUrl.helperText}
           onChange={e => updateThumbnailUrl(e)}
-          onBlur={() => validateThumbnailUrl()}
         />
         <TextField
           id="imageUrl"
@@ -186,12 +234,12 @@ const AddGroupDialog = (props) => {
           margin="normal"
           variant="outlined"
           fullWidth
+          disabled={formIsLoading}
           value={imageUrl.value}
           required={imageUrl.isRequired}
           error={imageUrl.hasError}
           helperText={imageUrl.helperText}
           onChange={e => updateImageUrl(e)}
-          onBlur={() => validateImageUrl()}
         />
         <TextField
           multiline
@@ -201,27 +249,31 @@ const AddGroupDialog = (props) => {
           variant="outlined"
           fullWidth
           rows="4"
+          disabled={formIsLoading}
           required={description.isRequired}
           error={description.hasError}
           helperText={description.helperText}
           onChange={e => updateDescription(e)}
-          onBlur={() => validateDescription()}
         />
       </DialogContent>
       <DialogActions>
         <Button
           color="primary"
-          onClick={() => handleClose()}
+          onClick={() => handleCancel()}
+          disabled={formIsLoading}
         >
           Cancel
         </Button>
-        <Button
-          color="primary"
-          disabled={!isValidForm}
-          onClick={() => handleSave()}
-        >
-          Save
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            color="primary"
+            onClick={() => handleSave()}
+            disabled={formIsLoading}
+          >
+            Save
+          </Button>
+          {formIsLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </div>
       </DialogActions>
     </Dialog>
   );
@@ -230,11 +282,13 @@ const AddGroupDialog = (props) => {
 AddGroupDialog.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
+  openSnackbar: PropTypes.func,
 };
 
 AddGroupDialog.defaultProps = {
   isOpen: false,
   handleClose: () => { },
+  openSnackbar: () => { },
 };
 
 export default AddGroupDialog;

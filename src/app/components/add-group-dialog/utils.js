@@ -1,21 +1,39 @@
-/**
- * Validate the provided value as a group title
- *
- * @param {string} title value of the title
- */
-const isValidTitle = (title) => {
-  if (!title || title.length === 0) throw new Error('Title is required');
-  if (title.length > 255) throw new Error('Title cannot be more than 255 characters');
-  return true;
+
+const defaultTitle = {
+  hasError: false,
+  isRequired: true,
+  helperText: '',
+  value: '',
+};
+
+const defaultThumbnailUrl = {
+  hasError: false,
+  isRequired: true,
+  helperText: '',
+  value: '',
+};
+
+const defaultImageUrl = {
+  hasError: false,
+  isRequired: true,
+  helperText: '',
+  value: '',
+};
+
+const defaultDescription = {
+  hasError: false,
+  isRequired: false,
+  helperText: '',
+  value: '',
 };
 
 /**
- * Validate the provided value as a group description
+ * Check to make sure the provided value exists
  *
- * @param {string} description value of the description
+ * @param {string} value value to evaluate
  */
-const isValidDescription = (description) => {
-  if (description.length > 1234) throw new Error('Description cannot be more than 1234 characters');
+const isNotEmpty = (value) => {
+  if (!value || value.length === 0) return false;
   return true;
 };
 
@@ -35,28 +53,6 @@ const isValidUrl = (url) => {
   return pattern.test(url);
 };
 
-/**
- * Validate the provided thumbnail url
- *
- * @param {string} url value of the thumbnail url
- */
-const isValidThumbailUrl = (url) => {
-  if (!url || url.length === 0) throw new Error('Thumbnail Url is required');
-  if (!isValidUrl(url)) throw new Error('Must be a valid url');
-  return true;
-};
-
-/**
- * Validate the provided image url
- *
- * @param {string} url value of the thumbnail url
- */
-const isValidImageUrl = (url) => {
-  if (!url || url.length === 0) throw new Error('Image Url is required');
-  if (!isValidUrl(url)) throw new Error('Must be a valid url');
-  return true;
-};
-
 export {
-  isValidTitle, isValidDescription, isValidThumbailUrl, isValidImageUrl,
+  defaultTitle, defaultThumbnailUrl, defaultImageUrl, defaultDescription, isNotEmpty, isValidUrl,
 };
