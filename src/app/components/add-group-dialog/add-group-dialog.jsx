@@ -62,7 +62,7 @@ const AddGroupDialog = (props) => {
     }
 
     // Title has resource constraints in the database
-    if (input > 255) {
+    if (input.length > 255) {
       updateTitleError(true, 'Title cannot be more than 255 characters');
       return false;
     }
@@ -122,7 +122,7 @@ const AddGroupDialog = (props) => {
     const input = description.value;
 
     // Description has resource constraints in the database
-    if (input > 1234) {
+    if (input.length > 1234) {
       updateDescriptionError(true, 'Description cannot be more than 1234 characters');
       return false;
     }
@@ -172,7 +172,6 @@ const AddGroupDialog = (props) => {
         handleClose();
       } catch (error) {
         openSnackbar('error', error.message);
-      } finally {
         setFormIsLoading(false);
       }
     }
