@@ -1,4 +1,3 @@
-
 const defaultTitle = {
   hasError: false,
   isRequired: true,

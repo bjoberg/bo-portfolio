@@ -19,36 +19,29 @@ const AddGroupDialog = (props) => {
   const { isOpen, handleClose, openSnackbar } = props;
 
   const [formIsLoading, setFormIsLoading] = useState(false);
-
-  // Title
   const [title, setTitle] = useState(defaultTitle);
+  const [thumbnailUrl, setThumbnailUrl] = useState(defaultThumbnailUrl);
+  const [imageUrl, setImageUrl] = useState(defaultImageUrl);
+  const [description, setDescription] = useState(defaultDescription);
+
   const updateTitle = (e) => {
     setTitle({ ...title, value: e.target.value });
   };
   const updateTitleError = (hasError, helperText) => {
     setTitle({ ...title, hasError, helperText });
   };
-
-  // Thumbnail Url
-  const [thumbnailUrl, setThumbnailUrl] = useState(defaultThumbnailUrl);
   const updateThumbnailUrl = (e) => {
     setThumbnailUrl({ ...thumbnailUrl, value: e.target.value });
   };
   const updateThumbnailUrlError = (hasError, helperText) => {
     setThumbnailUrl({ ...thumbnailUrl, hasError, helperText });
   };
-
-  // Image Url
-  const [imageUrl, setImageUrl] = useState(defaultImageUrl);
   const updateImageUrl = (e) => {
     setImageUrl({ ...imageUrl, value: e.target.value });
   };
   const updateImageUrlError = (hasError, helperText) => {
     setImageUrl({ ...imageUrl, hasError, helperText });
   };
-
-  // Description
-  const [description, setDescription] = useState(defaultDescription);
   const updateDescription = (e) => {
     setDescription({ ...description, value: e.target.value });
   };
