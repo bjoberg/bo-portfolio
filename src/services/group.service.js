@@ -1,28 +1,11 @@
 import axios from 'axios';
 
 import HttpMethods from '../models/http-methods';
-import ApiError from '../models/api-error.model';
+import { createNewApiError } from './service-helpers';
 
 export default class GroupService {
   constructor() {
     this.service = axios;
-  }
-
-  /**
-   * Create a new ApiError based on input
-   *
-   * @param {Error} error error that was triggered
-   * @param {number} defaultStatusCode default status code if error is unknown
-   * @param {string} defaultMessage default status message if error is unknown
-   */
-  static createNewApiError(error, defaultStatusCode, defaultMessage) {
-    let status = defaultStatusCode;
-    let message = defaultMessage;
-    if (error.response) {
-      ({ status } = error.response);
-      ({ message } = error.response.data);
-    }
-    return new ApiError(status, message);
   }
 
   /**
@@ -41,7 +24,7 @@ export default class GroupService {
 
       return response.data;
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, `Unable to get group: ${id}`);
+      const apiError = createNewApiError(error, 500, `Unable to get group: ${id}`);
       throw apiError;
     }
   }
@@ -61,7 +44,7 @@ export default class GroupService {
 
       return response.data.rows;
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, 'Unable to get groups');
+      const apiError = createNewApiError(error, 500, 'Unable to get groups');
       throw apiError;
     }
   }
@@ -80,7 +63,7 @@ export default class GroupService {
         url: `/api/v1/group/${id}`,
       });
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, `Unable to delete group: ${id}`);
+      const apiError = createNewApiError(error, 500, `Unable to delete group: ${id}`);
       throw apiError;
     }
   }
@@ -107,7 +90,7 @@ export default class GroupService {
         data: response.data[1][0],
       };
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, `Unable to update group: ${group.id}`);
+      const apiError = createNewApiError(error, 500, `Unable to update group: ${group.id}`);
       throw apiError;
     }
   }
@@ -134,7 +117,7 @@ export default class GroupService {
 
       return response.data;
     } catch (error) {
-      const apiError = GroupService.createNewApiError(error, 500, 'Unable to update create group');
+      const apiError = createNewApiError(error, 500, 'Unable to create group');
       throw apiError;
     }
   }

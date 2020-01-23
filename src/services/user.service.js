@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import HttpMethods from '../models/http-methods';
-import ApiError from '../models/api-error.model';
+import { createNewApiError } from './service-helpers';
 
 export default class UserService {
   constructor() {
@@ -22,7 +22,8 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve user info');
+      const apiError = createNewApiError(error, 404, 'Unable to retrieve user info');
+      throw apiError;
     }
   }
 
@@ -41,7 +42,8 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve user role');
+      const apiError = createNewApiError(error, 404, 'Unable to retrieve user role');
+      throw apiError;
     }
   }
 }
