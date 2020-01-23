@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import HttpMethods from '../models/http-methods';
-import ApiError from '../models/api-error.model';
+import { createNewApiError } from './service-helpers';
 
 export default class ImageService {
   constructor() {
@@ -24,7 +24,8 @@ export default class ImageService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(404, `Error retrieving image: ${id}`);
+      const apiError = createNewApiError(error, 404, `Error retrieving image: ${id}`);
+      throw apiError;
     }
   }
 
@@ -49,7 +50,8 @@ export default class ImageService {
         data: response.data.rows,
       };
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve images.');
+      const apiError = createNewApiError(error, 404, 'Unable to retrieve images.');
+      throw apiError;
     }
   }
 
@@ -73,7 +75,8 @@ export default class ImageService {
         data: response.data.rows,
       };
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve images for group.');
+      const apiError = createNewApiError(error, 404, 'Unable to retrieve images for group.');
+      throw apiError;
     }
   }
 
@@ -97,7 +100,8 @@ export default class ImageService {
         data: response.data.rows,
       };
     } catch (error) {
-      throw new ApiError(404, 'Unable to retrieve images not associated with group.');
+      const apiError = createNewApiError(error, 404, 'Unable to retrieve images not associated with group.');
+      throw apiError;
     }
   }
 
@@ -121,7 +125,8 @@ export default class ImageService {
         url: `/api/v1/group/${groupId}/images${query}`,
       });
     } catch (error) {
-      throw new ApiError(500, `Error adding images to ${groupId}`);
+      const apiError = createNewApiError(error, 500, `Error adding images to ${groupId}`);
+      throw apiError;
     }
   }
 
@@ -139,7 +144,8 @@ export default class ImageService {
         url: `/api/v1/image/${id}`,
       });
     } catch (error) {
-      throw new ApiError(500, `Error deleting image: ${id}`);
+      const apiError = createNewApiError(error, 500, `Error deleting image: ${id}`);
+      throw apiError;
     }
   }
 
@@ -163,7 +169,8 @@ export default class ImageService {
         url: `/api/v1/group/${groupId}/images${query}`,
       });
     } catch (error) {
-      throw new ApiError(500, `Error deleting images from ${groupId}`);
+      const apiError = createNewApiError(error, 500, `Error deleting images from ${groupId}`);
+      throw apiError;
     }
   }
 
@@ -189,7 +196,8 @@ export default class ImageService {
         data: response.data[1][0],
       };
     } catch (error) {
-      throw new ApiError(500, `Error updating image: ${image.id}`);
+      const apiError = createNewApiError(error, 500, `Error updating image: ${image.id}`);
+      throw apiError;
     }
   }
 
@@ -216,7 +224,8 @@ export default class ImageService {
 
       return response.data;
     } catch (error) {
-      throw new ApiError(500, 'Error creating image');
+      const apiError = createNewApiError(error, 500, 'Error creating image');
+      throw apiError;
     }
   }
 }
