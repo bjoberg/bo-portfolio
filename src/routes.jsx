@@ -11,7 +11,9 @@ import GroupPage from './pages/group/group.page';
 import GoogleUser from './models/google-user.model';
 
 const Routes = (props) => {
-  const { openSnackbar, toggleNavContainer, isEditable, user, handleLogout } = props;
+  const {
+    openSnackbar, toggleNavContainer, isEditable, user, handleLogout,
+  } = props;
 
   return (
     <Switch>
@@ -53,6 +55,7 @@ const Routes = (props) => {
             <GroupListPage
               {...routeProps}
               isEditable={isEditable}
+              openSnackbar={openSnackbar}
             />
           );
         }}
@@ -82,13 +85,13 @@ Routes.propTypes = {
   toggleNavContainer: PropTypes.func.isRequired,
   isEditable: PropTypes.bool,
   user: PropTypes.instanceOf(GoogleUser),
-  handleLogout: PropTypes.func
+  handleLogout: PropTypes.func,
 };
 
 Routes.defaultProps = {
   isEditable: false,
   user: undefined,
-  handleLogout: () => { }
+  handleLogout: () => { },
 };
 
 export default Routes;
