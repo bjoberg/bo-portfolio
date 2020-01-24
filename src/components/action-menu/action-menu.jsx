@@ -7,9 +7,9 @@ const ActionMenu = (props) => {
   const { options, parentId } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const isOpen = Boolean(anchorEl);
 
-  const handleClick = event => setAnchorEl(event.currentTarget);
+  const isOpen = Boolean(anchorEl);
+  const handleClick = e => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
   return (
