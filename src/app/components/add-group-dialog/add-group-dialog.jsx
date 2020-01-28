@@ -167,9 +167,13 @@ const AddGroupDialog = (props) => {
           thumbnailUrl: thumbnailUrl.value,
           imageUrl: imageUrl.value,
         };
-        await groupService.createGroup(group);
+        const response = await groupService.createGroup(group);
         resetForm();
         handleClose();
+
+        // I know... this is kind of hacky. Not proud of this, but at the current time this
+        // component does not have access to the router, so I cannot use react-router to solve this
+        document.location.href = `#/group/${response.id}`;
       } catch (error) {
         openSnackbar('error', error.message);
         setFormIsLoading(false);

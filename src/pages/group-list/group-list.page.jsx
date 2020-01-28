@@ -24,6 +24,23 @@ const GroupListPage = (props) => {
   const [groups, setGroups] = useState();
 
   /**
+   * Make request to remove group from db and splice it from the group list.
+   *
+   * @param {string} groupId Id of the group to remove
+   */
+  const removeGroup = async (groupId) => {
+    try {
+      await groupService.deleteGroup(groupId);
+      const tempGroups = groups;
+      const index = tempGroups.map(group => group.id).indexOf(groupId);
+      tempGroups.splice(index, 1);
+      setGroups([...tempGroups]);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    }
+  };
+
+  /**
    * Make request to get group data
    */
   const getGroups = useCallback(async () => {
@@ -41,25 +58,10 @@ const GroupListPage = (props) => {
     }
   }, []);
 
-  const removeGroup = async (groupId) => {
-    try {
-      await groupService.deleteGroup(groupId);
-      const temp = groups;
-      const index = temp.map(group => group.id).indexOf(groupId);
-      temp.splice(index, 1);
-      setGroups([...temp]);
-    } catch (error) {
-      openSnackbar('error', error.message);
-    }
-  };
-
   /**
    * Load the group data when the page is loaded
    */
-  useEffect(() => {
-    const loadPageData = async () => getGroups();
-    loadPageData();
-  }, [getGroups]);
+  useEffect(() => { getGroups(); }, [getGroups]);
 
   if (pageHasError) {
     return (
