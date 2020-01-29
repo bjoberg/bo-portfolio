@@ -35,6 +35,7 @@ const NavContainer = (props) => {
             user={user}
             elevateOnScroll
             showAddGroup={isEditable}
+            showAddPhoto={isEditable}
             handleAddGroup={handleOpenAddGroupDialog}
             showAvatar={isEditable}
             handleNav={toggleDrawer}
