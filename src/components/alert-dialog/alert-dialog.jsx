@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+import AlertDialogStyles from './alert-dialog.styles';
+
+const useStyles = makeStyles(AlertDialogStyles);
 
 const AlertDialog = (props) => {
+  const classes = useStyles();
   const {
     handleClose,
     handleConfirm,
@@ -40,14 +43,17 @@ const AlertDialog = (props) => {
         >
           {closeButtonText}
         </Button>
-        <Button
-          onClick={handleConfirm}
-          color="primary"
-          autoFocus
-          disabled={isDisabled}
-        >
-          {confirmButtonText}
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            onClick={handleConfirm}
+            color="primary"
+            autoFocus
+            disabled={isDisabled}
+          >
+            {confirmButtonText}
+          </Button>
+          {isDisabled && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </div>
       </DialogActions>
     </Dialog>
   );
