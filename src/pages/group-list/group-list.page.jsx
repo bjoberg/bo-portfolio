@@ -16,12 +16,29 @@ const useStyles = makeStyles(GroupListPageStyles);
 const GroupListPage = (props) => {
   const classes = useStyles();
 
-  const { isEditable } = props;
+  const { isEditable, openSnackbar } = props;
 
   const [pageHasError, setPageHasError] = useState(false);
   const [pageError, setPageError] = useState();
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [groups, setGroups] = useState();
+
+  /**
+   * Make request to remove group from db and splice it from the group list.
+   *
+   * @param {string} groupId Id of the group to remove
+   */
+  const removeGroup = async (groupId) => {
+    try {
+      await groupService.deleteGroup(groupId);
+      const tempGroups = groups;
+      const index = tempGroups.map(group => group.id).indexOf(groupId);
+      tempGroups.splice(index, 1);
+      setGroups([...tempGroups]);
+    } catch (error) {
+      openSnackbar('error', error.message);
+    }
+  };
 
   /**
    * Make request to get group data
@@ -44,10 +61,7 @@ const GroupListPage = (props) => {
   /**
    * Load the group data when the page is loaded
    */
-  useEffect(() => {
-    const loadPageData = async () => getGroups();
-    loadPageData();
-  }, [getGroups]);
+  useEffect(() => { getGroups(); }, [getGroups]);
 
   if (pageHasError) {
     return (
@@ -73,6 +87,7 @@ const GroupListPage = (props) => {
       <GroupGrid
         groups={groups}
         isRemovable={isEditable}
+        handleRemoveOnClick={removeGroup}
       />
     </div>
   );
@@ -80,10 +95,12 @@ const GroupListPage = (props) => {
 
 GroupListPage.propTypes = {
   isEditable: PropTypes.bool,
+  openSnackbar: PropTypes.func,
 };
 
 GroupListPage.defaultProps = {
   isEditable: false,
+  openSnackbar: () => { },
 };
 
 export default GroupListPage;
