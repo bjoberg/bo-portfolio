@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 import GroupItem from './components/group-item/group-item';
 
 const GroupGrid = (props) => {
-  const { groups, isRemovable } = props;
+  const { groups, isRemovable, handleRemoveOnClick } = props;
 
   if (groups.length === 0) {
     return (<Typography>No groups to display.</Typography>);
@@ -27,6 +27,7 @@ const GroupGrid = (props) => {
             title={item.title}
             imageUrl={item.imageUrl}
             isRemovable={isRemovable}
+            handleRemoveOnClick={handleRemoveOnClick}
           />
         </Grid>
       ))}
@@ -45,11 +46,13 @@ GroupGrid.propTypes = {
     updatedAt: PropTypes.string,
   })),
   isRemovable: PropTypes.bool,
+  handleRemoveOnClick: PropTypes.func,
 };
 
 GroupGrid.defaultProps = {
   groups: [],
   isRemovable: false,
+  handleRemoveOnClick: () => { },
 };
 
 export default GroupGrid;
