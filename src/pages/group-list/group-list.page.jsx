@@ -115,7 +115,7 @@ const GroupListPage = (props) => {
         isOpen={deleteDialogIsOpen}
         isDisabled={deleteDialogIsDisabled}
         title="Remove group?"
-        body={`You are about to remove group ${selectedGroupId}. This will not delete the images, it will only disassociate the images from the group.`}
+        body={`You are about to remove group ${selectedGroupId}. This will not delete the images, it will only disassociate the images from the group and then delete the group.`}
         closeButtonText="Cancel"
         confirmButtonText="Delete"
         handleClose={closeDeleteDialog}
