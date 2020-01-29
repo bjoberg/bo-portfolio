@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
@@ -15,6 +16,8 @@ const Routes = (props) => {
     openSnackbar, toggleNavContainer, isEditable, user, handleLogout,
   } = props;
 
+  const appTitle = 'Brett Oberg Photography';
+
   return (
     <Switch>
       <Route
@@ -22,7 +25,14 @@ const Routes = (props) => {
         path="/"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<HomePage {...routeProps} />);
+          return (
+            <Fragment>
+              <Helmet>
+                <title>{appTitle}</title>
+              </Helmet>
+              <HomePage {...routeProps} />
+            </Fragment>
+          );
         }}
       />
       <Route
@@ -30,7 +40,14 @@ const Routes = (props) => {
         path="/login"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<LoginPage {...routeProps} />);
+          return (
+            <Fragment>
+              <Helmet>
+                <title>{`Login - ${appTitle}`}</title>
+              </Helmet>
+              <LoginPage {...routeProps} />
+            </Fragment>
+          );
         }}
       />
       <Route
@@ -39,10 +56,15 @@ const Routes = (props) => {
         render={(routeProps) => {
           toggleNavContainer(true);
           return (
-            <ImageListPage
-              {...routeProps}
-              openSnackbar={openSnackbar}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{`Images - ${appTitle}`}</title>
+              </Helmet>
+              <ImageListPage
+                {...routeProps}
+                openSnackbar={openSnackbar}
+              />
+            </Fragment>
           );
         }}
       />
@@ -52,11 +74,16 @@ const Routes = (props) => {
         render={(routeProps) => {
           toggleNavContainer(true);
           return (
-            <GroupListPage
-              {...routeProps}
-              isEditable={isEditable}
-              openSnackbar={openSnackbar}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{`Groups - ${appTitle}`}</title>
+              </Helmet>
+              <GroupListPage
+                {...routeProps}
+                isEditable={isEditable}
+                openSnackbar={openSnackbar}
+              />
+            </Fragment>
           );
         }}
       />
@@ -65,17 +92,31 @@ const Routes = (props) => {
         render={(routeProps) => {
           toggleNavContainer(false);
           return (
-            <GroupPage
-              {...routeProps}
-              openSnackbar={openSnackbar}
-              isEditable={isEditable}
-              user={user}
-              handleLogout={handleLogout}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{appTitle}</title>
+              </Helmet>
+              <GroupPage
+                {...routeProps}
+                appTitle={appTitle}
+                openSnackbar={openSnackbar}
+                isEditable={isEditable}
+                user={user}
+                handleLogout={handleLogout}
+              />
+            </Fragment>
           );
         }}
       />
-      <Route component={ErrorPage} />
+      <Route render={() => (
+        <Fragment>
+          <Helmet>
+            <title>{`Error - ${appTitle}`}</title>
+          </Helmet>
+          <ErrorPage />
+        </Fragment>
+      )}
+      />
     </Switch>
   );
 };

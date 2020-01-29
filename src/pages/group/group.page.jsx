@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
+import { Helmet } from 'react-helmet';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(GroupPageStyles);
 const GroupPage = (props) => {
   const classes = useStyles();
   const {
-    match, history, openSnackbar, isEditable, user, handleLogout,
+    match, history, appTitle, openSnackbar, isEditable, user, handleLogout,
   } = props;
   const limit = 30;
   const groupId = match.params.id;
@@ -211,6 +212,9 @@ const GroupPage = (props) => {
       )}
       {(!pageHasError && pageIsLoaded) && (
         <Fragment>
+          <Helmet>
+            <title>{`${groupDetails.title} - ${appTitle}`}</title>
+          </Helmet>
           <div className={classes.toolbar} />
           <Grid container className={classes.gridContainer} pacing={2} direction="column">
             <Grid item>
@@ -274,6 +278,7 @@ GroupPage.propTypes = {
     push: PropTypes.func,
     replace: PropTypes.func,
   }).isRequired,
+  appTitle: PropTypes.string,
   openSnackbar: PropTypes.func,
   isEditable: PropTypes.bool,
   user: PropTypes.instanceOf(GoogleUser),
@@ -282,6 +287,7 @@ GroupPage.propTypes = {
 
 GroupPage.defaultProps = {
   openSnackbar: () => { },
+  appTitle: 'Brett Oberg Photography',
   isEditable: false,
   user: undefined,
   handleLogout: () => { },
