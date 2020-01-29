@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, Fragment,
+} from 'react';
 import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,6 +11,7 @@ import { displayPageError } from '../utils';
 import ErrorPage from '../error/error.page';
 import GroupListPageStyles from './group-list.styles';
 import { GroupGrid } from '../../components/group-grid';
+import AlertDialog from '../../components/alert-dialog';
 
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
@@ -22,21 +25,37 @@ const GroupListPage = (props) => {
   const [pageError, setPageError] = useState();
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
   const [groups, setGroups] = useState();
+  const [selectedGroupId, setSelectedGroupId] = useState();
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogIsDisabled, setDeleteDialogIsDisabled] = useState(false);
+
+  const openDeleteDialog = (groupId) => {
+    setSelectedGroupId(groupId);
+    setDeleteDialogIsOpen(true);
+  };
+  const closeDeleteDialog = () => {
+    setSelectedGroupId(undefined);
+    setDeleteDialogIsOpen(false);
+  };
 
   /**
    * Make request to remove group from db and splice it from the group list.
    *
    * @param {string} groupId Id of the group to remove
    */
-  const removeGroup = async (groupId) => {
+  const removeGroup = async () => {
     try {
-      await groupService.deleteGroup(groupId);
+      setDeleteDialogIsDisabled(true);
+      await groupService.deleteGroup(selectedGroupId);
       const tempGroups = groups;
-      const index = tempGroups.map(group => group.id).indexOf(groupId);
+      const index = tempGroups.map(group => group.id).indexOf(selectedGroupId);
       tempGroups.splice(index, 1);
       setGroups([...tempGroups]);
+      closeDeleteDialog();
     } catch (error) {
       openSnackbar('error', error.message);
+    } finally {
+      setDeleteDialogIsDisabled(false);
     }
   };
 
@@ -83,13 +102,26 @@ const GroupListPage = (props) => {
   }
 
   return (
-    <div className={classes.root}>
-      <GroupGrid
-        groups={groups}
-        isRemovable={isEditable}
-        handleRemoveOnClick={removeGroup}
+    <Fragment>
+      <div className={classes.root}>
+        <GroupGrid
+          groups={groups}
+          isRemovable={isEditable}
+          handleRemoveOnClick={openDeleteDialog}
+        />
+      </div>
+      <AlertDialog
+        id="alert-dialog--delete"
+        isOpen={deleteDialogIsOpen}
+        isDisabled={deleteDialogIsDisabled}
+        title="Remove group?"
+        body={`You are about to remove group ${selectedGroupId}. This will not delete the images, it will only disassociate the images from the group.`}
+        closeButtonText="Cancel"
+        confirmButtonText="Delete"
+        handleClose={closeDeleteDialog}
+        handleConfirm={removeGroup}
       />
-    </div>
+    </Fragment>
   );
 };
 
