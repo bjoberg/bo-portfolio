@@ -15,6 +15,7 @@ import AuthService from '../services/auth.service';
 import GoogleUser from '../models/google-user.model';
 import Roles from '../utils/roles';
 import AddGroupDialog from './components/add-group-dialog/add-group-dialog';
+import AddImageDialog from './components/add-image-dialog/add-image-dialog';
 
 const useStyles = makeStyles(AppStyles);
 const userService = new UserService();
@@ -31,6 +32,7 @@ const App = () => {
   const [snackbarContent, setSnackbarContent] = useState('');
   const [snackbarIsOpen, setSnackBarIsOpen] = useState(false);
   const [addGroupDialogIsOpen, setAddGroupDialogIsOpen] = useState(false);
+  const [addImageDialogIsOpen, setAddImageDialogIsOpen] = useState(false);
 
   const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen);
   const closeDrawer = () => setDrawerIsOpen(false);
@@ -38,6 +40,8 @@ const App = () => {
   const logoutGoogle = () => AuthService.logoutGoogle();
   const closeAddGroupDialog = () => setAddGroupDialogIsOpen(false);
   const openAddGroupDialog = () => setAddGroupDialogIsOpen(true);
+  const closeAddImageDialog = () => setAddImageDialogIsOpen(false);
+  const openAddImageDialog = () => setAddImageDialogIsOpen(true);
 
   /**
    * Open the snackbar as a notification
@@ -101,6 +105,7 @@ const App = () => {
           handleLogout={logoutGoogle}
           isEditable={isEditable}
           handleOpenAddGroupDialog={openAddGroupDialog}
+          handleOpenAddImageDialog={openAddImageDialog}
         />
       )}
       <main className={clsx(displayNavContainer ? classes.navContainer : classes.container)}>
@@ -127,6 +132,10 @@ const App = () => {
         isOpen={addGroupDialogIsOpen}
         handleClose={closeAddGroupDialog}
         openSnackbar={openSnackbar}
+      />
+      <AddImageDialog
+        isOpen={addImageDialogIsOpen}
+        handleClose={closeAddImageDialog}
       />
     </Fragment>
   );
