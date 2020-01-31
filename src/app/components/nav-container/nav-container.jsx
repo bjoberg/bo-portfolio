@@ -23,6 +23,7 @@ const NavContainer = (props) => {
     handleLogout,
     isEditable,
     handleOpenAddGroupDialog,
+    handleOpenAddImageDialog,
   } = props;
 
   return (
@@ -37,6 +38,7 @@ const NavContainer = (props) => {
             showAddGroup={isEditable}
             showAddPhoto={isEditable}
             handleAddGroup={handleOpenAddGroupDialog}
+            handleAddPhoto={handleOpenAddImageDialog}
             showAvatar={isEditable}
             handleNav={toggleDrawer}
             handleLogout={handleLogout}
@@ -59,6 +61,7 @@ NavContainer.propTypes = {
   handleLogout: PropTypes.func,
   isEditable: PropTypes.bool,
   handleOpenAddGroupDialog: PropTypes.func,
+  handleOpenAddImageDialog: PropTypes.func,
 };
 
 NavContainer.defaultProps = {
@@ -70,6 +73,7 @@ NavContainer.defaultProps = {
   handleLogout: () => { },
   isEditable: false,
   handleOpenAddGroupDialog: () => { },
+  handleOpenAddImageDialog: () => { },
 };
 
 export default NavContainer;
