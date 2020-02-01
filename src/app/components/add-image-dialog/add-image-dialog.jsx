@@ -70,16 +70,24 @@ const AddImageDialog = (props) => {
     >
       <DialogTitle id="add-image-title">New Image</DialogTitle>
       <DialogContent id="add-image-body" dividers>
-        <Grid container spacing={2}>
+        <Grid container justify="center" spacing={1}>
           <Grid item>
             <div className={classes.imgContainer}>
-              <img alt="imageUrl" src={imageUrl.value} />
+              <img
+                alt="imageUrl"
+                src={imageUrl.value}
+                className={classes.img}
+              />
             </div>
             <Typography variant="caption">Image Url</Typography>
           </Grid>
           <Grid item>
             <div className={classes.imgContainer}>
-              <img alt="thumbnailUrl" src={thumbnailUrl.value} />
+              <img
+                alt="thumbnailUrl"
+                src={thumbnailUrl.value}
+                className={classes.img}
+              />
             </div>
             <Typography variant="caption">Thumbnail Url</Typography>
           </Grid>
