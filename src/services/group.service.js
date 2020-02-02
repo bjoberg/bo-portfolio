@@ -32,17 +32,23 @@ export default class GroupService {
   /**
    * Retrieve a list of groups
    *
+   * @param {number} limit Number of elements to retrieve
+   * @param {number} page Elements to retrieve based on limit and number of elements in db
    * @returns {JSON} object of groups
    * @throws ApiError
    */
-  async getGroups() {
+  async getGroups(limit = 30, page = 0) {
     try {
+      const paginationQuery = `?limit=${limit}&page=${page}`;
       const response = await this.service({
         method: HttpMethods.get,
-        url: '/api/v1/groups',
+        url: `/api/v1/groups${paginationQuery}`,
       });
 
-      return response.data.rows;
+      return {
+        totalItems: response.data.totalItems,
+        data: response.data.rows,
+      };
     } catch (error) {
       const apiError = createNewApiError(error, 500, 'Unable to get groups');
       throw apiError;
