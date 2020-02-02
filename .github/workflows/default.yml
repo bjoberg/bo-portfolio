@@ -44,5 +44,5 @@ jobs:
         REPO: portfolio-dashboard
         VERSION: ${{ node -pe "require('./package.json').version"}}
       run: |
-      echo $VERSION
-      docker build . --file Dockerfile --tag $ORG/$REPO:$(date +%s)
+        echo $VERSION
+        docker build . --file Dockerfile --tag $ORG/$REPO:$(date +%s)
