@@ -1,90 +1,173 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useCallback, Fragment, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import httpStatus from 'http-status';
 
 import GroupService from '../../services/group.service';
-import Group from '../../components/group/group.component';
+import { displayPageError } from '../utils';
+import ErrorPage from '../error/error.page';
 import GroupListPageStyles from './group-list.styles';
+import { GroupGrid } from '../../components/group-grid';
+import AlertDialog from '../../components/alert-dialog';
+import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
 
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
 
 const GroupListPage = (props) => {
   const classes = useStyles();
-  const { history } = props;
-  const [groups, setGroups] = useState([{}]);
+
+  const { isEditable, openSnackbar } = props;
+  const limit = 30;
+
+  const groupGridRef = useRef(null);
+
+  const [pageHasError, setPageHasError] = useState(false);
+  const [pageError, setPageError] = useState();
   const [pageIsLoaded, setPageIsLoaded] = useState(false);
+  const [groups, setGroups] = useState();
+  const [selectedGroupId, setSelectedGroupId] = useState();
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
+  const [deleteDialogIsDisabled, setDeleteDialogIsDisabled] = useState(false);
+  const [groupsPage, setGroupsPage] = useState(0);
+  const [isEndOfGroups, setIsEndOfGroups] = useState(false);
+  const [hasErrorFetchingGroups, setHasErrorFetchingGroups] = useState(false);
 
-  useEffect(() => {
-    async function getGroupsAsync() {
+  /**
+   * Request next page of groups
+   *
+   * @param {boolean} isFetching status of the group request
+   */
+  const handlePaginateGroups = useCallback((isFetching) => {
+    const paginateGroups = async () => {
       try {
-        setPageIsLoaded(false);
-        setGroups(await groupService.getGroups());
+        const next = groupsPage + 1;
+        const result = await groupService.getGroups(limit, next);
+        setGroups(prevState => [...prevState, ...result.data]);
+        setIsEndOfGroups(isAtEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setGroupsPage(next);
       } catch (error) {
-        history.push('/error');
-      } finally {
-        setPageIsLoaded(true);
+        setHasErrorFetchingGroups(true);
+        isFetching(false);
+        openSnackbar('error', `${error.message} Refresh to try again.`);
       }
-    }
-    getGroupsAsync();
-  }, [history]);
+    };
+    paginateGroups();
+  }, [groupsPage, openSnackbar]);
 
-  if (!pageIsLoaded) {
+  const [isLoadingGroups] = useInfiniteScroll(handlePaginateGroups, isEndOfGroups,
+    hasErrorFetchingGroups, groupGridRef);
+
+  const openDeleteDialog = (groupId) => {
+    setSelectedGroupId(groupId);
+    setDeleteDialogIsOpen(true);
+  };
+  const closeDeleteDialog = () => {
+    setSelectedGroupId(undefined);
+    setDeleteDialogIsOpen(false);
+  };
+
+  /**
+   * Make request to remove group from db and splice it from the group list.
+   *
+   * @param {string} groupId Id of the group to remove
+   */
+  const removeGroup = async () => {
+    try {
+      setDeleteDialogIsDisabled(true);
+      await groupService.deleteGroup(selectedGroupId);
+      const tempGroups = groups;
+      const index = tempGroups.map(group => group.id).indexOf(selectedGroupId);
+      tempGroups.splice(index, 1);
+      setGroups([...tempGroups]);
+      closeDeleteDialog();
+    } catch (error) {
+      openSnackbar('error', error.message);
+    } finally {
+      setDeleteDialogIsDisabled(false);
+    }
+  };
+
+  /**
+   * Make request to get group data
+   */
+  const getGroups = useCallback(async () => {
+    try {
+      setPageIsLoaded(false);
+      const result = await groupService.getGroups();
+      setGroups(result.data);
+    } catch (error) {
+      const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
+      const defaultStatusMessage = 'Unknown error has occured while getting groups';
+      displayPageError(setPageError, setPageHasError, defaultStatusCode, defaultStatusMessage,
+        error);
+    } finally {
+      setPageIsLoaded(true);
+    }
+  }, []);
+
+  /**
+   * Load the group data when the page is loaded
+   */
+  useEffect(() => { getGroups(); }, [getGroups]);
+
+  if (pageHasError) {
+    return (
+      <ErrorPage
+        title={pageError.title}
+        details={pageError.details}
+        actionButtonLink="/"
+        actionButtonTitle="Go Home"
+      />
+    );
+  }
+
+  if (!pageHasError && !pageIsLoaded) {
     return (
       <div className={classes.progressBarContainer}>
-        <LinearProgress />
+        <CircularProgress />
       </div>
     );
   }
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        {groups.map(item => (
-          <Grid
-            key={item.id}
-            className={classes.grid}
-            item
-            xs={12}
-            sm={6}
-            md={6}
-            lg={2}
-            xl={2}
-          >
-            <Group
-              id={item.id}
-              title={item.title}
-              imageUrl={item.imageUrl}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+    <Fragment>
+      <div className={classes.root}>
+        <GroupGrid
+          domRef={groupGridRef}
+          groups={groups}
+          isRemovable={isEditable}
+          handleRemoveOnClick={openDeleteDialog}
+          isLoading={isLoadingGroups}
+        />
+      </div>
+      <AlertDialog
+        id="alert-dialog--delete"
+        isOpen={deleteDialogIsOpen}
+        isDisabled={deleteDialogIsDisabled}
+        title="Remove group?"
+        body={`You are about to remove group ${selectedGroupId}. This will not delete the images, it will only disassociate the images from the group and then delete the group.`}
+        closeButtonText="Cancel"
+        confirmButtonText="Delete"
+        handleClose={closeDeleteDialog}
+        handleConfirm={removeGroup}
+      />
+    </Fragment>
   );
 };
 
 GroupListPage.propTypes = {
-  history: PropTypes.shape({
-    action: PropTypes.string,
-    block: PropTypes.func,
-    createHref: PropTypes.func,
-    go: PropTypes.func,
-    goBack: PropTypes.func,
-    goForward: PropTypes.func,
-    length: PropTypes.number,
-    listen: PropTypes.func,
-    location: PropTypes.shape({
-      pathname: PropTypes.string,
-      search: PropTypes.string,
-      hash: PropTypes.string,
-      state: PropTypes.string,
-      key: PropTypes.string,
-    }),
-    push: PropTypes.func,
-    replace: PropTypes.func,
-  }).isRequired,
+  isEditable: PropTypes.bool,
+  openSnackbar: PropTypes.func,
+};
+
+GroupListPage.defaultProps = {
+  isEditable: false,
+  openSnackbar: () => { },
 };
 
 export default GroupListPage;

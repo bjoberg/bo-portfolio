@@ -1,13 +1,14 @@
-const GroupListPageStyles = {
+const GroupListPageStyles = theme => ({
   root: {
     flexGrow: 1,
   },
-  grid: {
-    width: '100%',
-  },
   progressBarContainer: {
-    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // I know... this is weird, but couldn't figure out how to fill the remaining space
+    marginTop: theme.spacing(20),
   },
-};
+});
 
 export default GroupListPageStyles;

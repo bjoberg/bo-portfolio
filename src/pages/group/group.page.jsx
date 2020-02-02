@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import httpStatus from 'http-status';
+import { Helmet } from 'react-helmet';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,7 +18,8 @@ import GroupPageAddImagesDialog from './components/group-page-add-images-dialog/
 import ErrorPage from '../error/error.page';
 import GroupService from '../../services/group.service';
 import ImageService from '../../services/image.service';
-import ActionBar from '../../components/action-bar';
+import { ActionBar } from '../../components/action-bar';
+import GoogleUser from '../../models/google-user.model';
 
 const groupService = new GroupService();
 const imageService = new ImageService();
@@ -26,7 +28,7 @@ const useStyles = makeStyles(GroupPageStyles);
 const GroupPage = (props) => {
   const classes = useStyles();
   const {
-    match, history, openSnackbar, isEditable,
+    match, history, appTitle, openSnackbar, isEditable, user, handleLogout,
   } = props;
   const limit = 30;
   const groupId = match.params.id;
@@ -181,11 +183,14 @@ const GroupPage = (props) => {
       )}
       {(!groupSelectedImages || groupSelectedImages.length === 0) && (
         <ActionBar
-          handleClose={() => handleGoBack()}
+          handleNav={() => handleGoBack()}
           elevateOnScroll
-          closeButton={<ArrowBackIcon />}
+          navButton={<ArrowBackIcon />}
           showInfo
           showAddPhoto={isEditable}
+          showAvatar={isEditable}
+          user={user}
+          handleLogout={handleLogout}
           handleAddPhoto={openAddImagesDialog}
         />
       )}
@@ -207,6 +212,9 @@ const GroupPage = (props) => {
       )}
       {(!pageHasError && pageIsLoaded) && (
         <Fragment>
+          <Helmet>
+            <title>{`${groupDetails.title} - ${appTitle}`}</title>
+          </Helmet>
           <div className={classes.toolbar} />
           <Grid container className={classes.gridContainer} pacing={2} direction="column">
             <Grid item>
@@ -270,13 +278,19 @@ GroupPage.propTypes = {
     push: PropTypes.func,
     replace: PropTypes.func,
   }).isRequired,
+  appTitle: PropTypes.string,
   openSnackbar: PropTypes.func,
   isEditable: PropTypes.bool,
+  user: PropTypes.instanceOf(GoogleUser),
+  handleLogout: PropTypes.func,
 };
 
 GroupPage.defaultProps = {
   openSnackbar: () => { },
+  appTitle: 'Brett Oberg Photography',
   isEditable: false,
+  user: undefined,
+  handleLogout: () => { },
 };
 
 export default GroupPage;

@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
-import EntityDetailsPage from './pages/entity-details/entity-details.page';
 import GroupListPage from './pages/group-list/group-list.page';
 import ErrorPage from './pages/error/error.page';
-import EntityType from './utils/constants';
 import ImageListPage from './pages/image-list/image-list.page';
 import LoginPage from './pages/login/login.page';
 import HomePage from './pages/home/home.page';
 import GroupPage from './pages/group/group.page';
+import GoogleUser from './models/google-user.model';
 
 const Routes = (props) => {
-  const { openSnackbar, toggleNavContainer, isEditable } = props;
+  const {
+    openSnackbar, toggleNavContainer, isEditable, user, handleLogout,
+  } = props;
+
+  const appTitle = 'Brett Oberg Photography';
 
   return (
     <Switch>
@@ -21,7 +25,14 @@ const Routes = (props) => {
         path="/"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<HomePage {...routeProps} />);
+          return (
+            <Fragment>
+              <Helmet>
+                <title>{appTitle}</title>
+              </Helmet>
+              <HomePage {...routeProps} />
+            </Fragment>
+          );
         }}
       />
       <Route
@@ -29,7 +40,14 @@ const Routes = (props) => {
         path="/login"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<LoginPage {...routeProps} />);
+          return (
+            <Fragment>
+              <Helmet>
+                <title>{`Login - ${appTitle}`}</title>
+              </Helmet>
+              <LoginPage {...routeProps} />
+            </Fragment>
+          );
         }}
       />
       <Route
@@ -38,37 +56,15 @@ const Routes = (props) => {
         render={(routeProps) => {
           toggleNavContainer(true);
           return (
-            <ImageListPage
-              {...routeProps}
-              openSnackbar={openSnackbar}
-            />
-          );
-        }}
-      />
-      <Route
-        exact
-        path="/image"
-        render={(routeProps) => {
-          toggleNavContainer(true);
-          return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.IMAGE}
-              openSnackbar={openSnackbar}
-            />
-          );
-        }}
-      />
-      <Route
-        path="/image/:id"
-        render={(routeProps) => {
-          toggleNavContainer(true);
-          return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.IMAGE}
-              openSnackbar={openSnackbar}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{`Images - ${appTitle}`}</title>
+              </Helmet>
+              <ImageListPage
+                {...routeProps}
+                openSnackbar={openSnackbar}
+              />
+            </Fragment>
           );
         }}
       />
@@ -77,20 +73,17 @@ const Routes = (props) => {
         path="/groups"
         render={(routeProps) => {
           toggleNavContainer(true);
-          return (<GroupListPage {...routeProps} />);
-        }}
-      />
-      <Route
-        exact
-        path="/group"
-        render={(routeProps) => {
-          toggleNavContainer(true);
           return (
-            <EntityDetailsPage
-              {...routeProps}
-              entityType={EntityType.GROUP}
-              openSnackbar={openSnackbar}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{`Groups - ${appTitle}`}</title>
+              </Helmet>
+              <GroupListPage
+                {...routeProps}
+                isEditable={isEditable}
+                openSnackbar={openSnackbar}
+              />
+            </Fragment>
           );
         }}
       />
@@ -99,15 +92,31 @@ const Routes = (props) => {
         render={(routeProps) => {
           toggleNavContainer(false);
           return (
-            <GroupPage
-              {...routeProps}
-              openSnackbar={openSnackbar}
-              isEditable={isEditable}
-            />
+            <Fragment>
+              <Helmet>
+                <title>{appTitle}</title>
+              </Helmet>
+              <GroupPage
+                {...routeProps}
+                appTitle={appTitle}
+                openSnackbar={openSnackbar}
+                isEditable={isEditable}
+                user={user}
+                handleLogout={handleLogout}
+              />
+            </Fragment>
           );
         }}
       />
-      <Route component={ErrorPage} />
+      <Route render={() => (
+        <Fragment>
+          <Helmet>
+            <title>{`Error - ${appTitle}`}</title>
+          </Helmet>
+          <ErrorPage />
+        </Fragment>
+      )}
+      />
     </Switch>
   );
 };
@@ -116,10 +125,14 @@ Routes.propTypes = {
   openSnackbar: PropTypes.func.isRequired,
   toggleNavContainer: PropTypes.func.isRequired,
   isEditable: PropTypes.bool,
+  user: PropTypes.instanceOf(GoogleUser),
+  handleLogout: PropTypes.func,
 };
 
 Routes.defaultProps = {
   isEditable: false,
+  user: undefined,
+  handleLogout: () => { },
 };
 
 export default Routes;

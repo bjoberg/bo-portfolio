@@ -1,8 +1,9 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import CloseIcon from '@material-ui/icons/Close';
 
-import AlertDialog from '../../../../components/alert-dialog/alert-dialog.component';
-import ActionBar from '../../../../components/action-bar';
+import AlertDialog from '../../../../components/alert-dialog';
+import { ActionBar } from '../../../../components/action-bar';
 
 const GroupPageActionBar = (props) => {
   const {
@@ -26,7 +27,8 @@ const GroupPageActionBar = (props) => {
   return (
     <Fragment>
       <ActionBar
-        handleClose={handleClose}
+        navButton={<CloseIcon />}
+        handleNav={handleClose}
         isDisabled={isDisabled}
         title={`${selectedItems.length} selected`}
         actionButtonColor="secondary"
