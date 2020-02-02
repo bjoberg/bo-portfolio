@@ -258,6 +258,9 @@ const AddImageDialog = (props) => {
     return isValid;
   };
 
+  /**
+   * Save the image based on the defined image data
+   */
   const handleSave = () => {
     if (isValidForm()) {
       setFormIsLoading(true);
