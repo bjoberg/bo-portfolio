@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useCallback, Fragment,
+  useState, useEffect, useCallback, Fragment, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
@@ -12,6 +12,7 @@ import ErrorPage from '../error/error.page';
 import GroupListPageStyles from './group-list.styles';
 import { GroupGrid } from '../../components/group-grid';
 import AlertDialog from '../../components/alert-dialog';
+import { isAtEnd, useInfiniteScroll } from '../../hooks/infinite-scroll';
 
 const groupService = new GroupService();
 const useStyles = makeStyles(GroupListPageStyles);
@@ -20,6 +21,9 @@ const GroupListPage = (props) => {
   const classes = useStyles();
 
   const { isEditable, openSnackbar } = props;
+  const limit = 30;
+
+  const groupGridRef = useRef(null);
 
   const [pageHasError, setPageHasError] = useState(false);
   const [pageError, setPageError] = useState();
@@ -28,6 +32,35 @@ const GroupListPage = (props) => {
   const [selectedGroupId, setSelectedGroupId] = useState();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [deleteDialogIsDisabled, setDeleteDialogIsDisabled] = useState(false);
+  const [groupsPage, setGroupsPage] = useState(0);
+  const [isEndOfGroups, setIsEndOfGroups] = useState(false);
+  const [hasErrorFetchingGroups, setHasErrorFetchingGroups] = useState(false);
+
+  /**
+   * Request next page of groups
+   *
+   * @param {boolean} isFetching status of the group request
+   */
+  const handlePaginateGroups = useCallback((isFetching) => {
+    const paginateGroups = async () => {
+      try {
+        const next = groupsPage + 1;
+        const result = await groupService.getGroups(limit, next);
+        setGroups(prevState => [...prevState, ...result.data]);
+        setIsEndOfGroups(isAtEnd(result.totalItems, limit, next + 1));
+        isFetching(false);
+        setGroupsPage(next);
+      } catch (error) {
+        setHasErrorFetchingGroups(true);
+        isFetching(false);
+        openSnackbar('error', `${error.message} Refresh to try again.`);
+      }
+    };
+    paginateGroups();
+  }, [groupsPage, openSnackbar]);
+
+  const [isLoadingGroups] = useInfiniteScroll(handlePaginateGroups, isEndOfGroups,
+    hasErrorFetchingGroups, groupGridRef);
 
   const openDeleteDialog = (groupId) => {
     setSelectedGroupId(groupId);
@@ -66,7 +99,7 @@ const GroupListPage = (props) => {
     try {
       setPageIsLoaded(false);
       const result = await groupService.getGroups();
-      setGroups(result);
+      setGroups(result.data);
     } catch (error) {
       const defaultStatusCode = httpStatus.INTERNAL_SERVER_ERROR;
       const defaultStatusMessage = 'Unknown error has occured while getting groups';
@@ -105,9 +138,11 @@ const GroupListPage = (props) => {
     <Fragment>
       <div className={classes.root}>
         <GroupGrid
+          domRef={groupGridRef}
           groups={groups}
           isRemovable={isEditable}
           handleRemoveOnClick={openDeleteDialog}
+          isLoading={isLoadingGroups}
         />
       </div>
       <AlertDialog

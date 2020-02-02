@@ -29,7 +29,7 @@ const GroupItemStyles = theme => ({
   actionBar: {
     position: 'absolute',
     right: 0,
-    zIndex: theme.zIndex.modal - 1,
+    zIndex: theme.zIndex.appBar - 1,
   },
 });
 
