@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Grid, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography, CircularProgress,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Typography,
+  CircularProgress,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -16,12 +24,14 @@ import {
 } from './defaults';
 import AddImageDialogStyles from './add-image-dialog.styles';
 import { isNotEmpty, isValidUrl } from '../utils';
+import ImageService from '../../../services/image.service';
 
 const useStyles = makeStyles(AddImageDialogStyles);
+const imageService = new ImageService();
 
 const AddImageDialog = (props) => {
   const classes = useStyles();
-  const { isOpen, handleClose } = props;
+  const { isOpen, handleClose, openSnackbar } = props;
 
   const [formIsLoading, setFormIsLoading] = useState(false);
   const [title, setTitle] = useState(defaultTitle);
@@ -261,9 +271,26 @@ const AddImageDialog = (props) => {
   /**
    * Save the image based on the defined image data
    */
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isValidForm()) {
-      setFormIsLoading(true);
+      try {
+        setFormIsLoading(true);
+        const image = {
+          title: title.value,
+          description: description.value,
+          thumbnailUrl: thumbnailUrl.value,
+          imageUrl: imageUrl.value,
+          location: location.value,
+          width: width.value,
+          height: height.value,
+        };
+        await imageService.createImage(image);
+        resetForm();
+        handleClose();
+      } catch (error) {
+        openSnackbar('error', error.message);
+        setFormIsLoading(false);
+      }
     }
   };
 
@@ -425,11 +452,13 @@ const AddImageDialog = (props) => {
 AddImageDialog.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
+  openSnackbar: PropTypes.func,
 };
 
 AddImageDialog.defaultProps = {
   isOpen: false,
   handleClose: () => { },
+  openSnackbar: () => { },
 };
 
 export default AddImageDialog;

@@ -219,6 +219,8 @@ export default class ImageService {
           title: image.title,
           description: image.description,
           location: image.location,
+          width: image.width,
+          height: image.height,
         },
       });
 
