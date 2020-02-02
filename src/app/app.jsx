@@ -136,6 +136,7 @@ const App = () => {
       <AddImageDialog
         isOpen={addImageDialogIsOpen}
         handleClose={closeAddImageDialog}
+        openSnackbar={openSnackbar}
       />
     </Fragment>
   );
