@@ -1,31 +1,3 @@
-const defaultTitle = {
-  hasError: false,
-  isRequired: true,
-  helperText: '',
-  value: '',
-};
-
-const defaultThumbnailUrl = {
-  hasError: false,
-  isRequired: true,
-  helperText: '',
-  value: '',
-};
-
-const defaultImageUrl = {
-  hasError: false,
-  isRequired: true,
-  helperText: '',
-  value: '',
-};
-
-const defaultDescription = {
-  hasError: false,
-  isRequired: false,
-  helperText: '',
-  value: '',
-};
-
 /**
  * Check to make sure the provided value exists
  *
@@ -53,5 +25,5 @@ const isValidUrl = (url) => {
 };
 
 export {
-  defaultTitle, defaultThumbnailUrl, defaultImageUrl, defaultDescription, isNotEmpty, isValidUrl,
+  isNotEmpty, isValidUrl,
 };

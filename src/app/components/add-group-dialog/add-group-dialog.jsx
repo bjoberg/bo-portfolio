@@ -6,8 +6,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  defaultTitle, defaultThumbnailUrl, defaultImageUrl, defaultDescription, isNotEmpty, isValidUrl,
-} from './utils';
+  defaultTitle, defaultThumbnailUrl, defaultImageUrl, defaultDescription,
+} from './defaults';
+import { isNotEmpty, isValidUrl } from '../utils';
 import AddGroupDialogStyles from './add-group-dialog.styles';
 import GroupService from '../../../services/group.service';
 
@@ -246,6 +247,7 @@ const AddGroupDialog = (props) => {
           fullWidth
           rows="4"
           disabled={formIsLoading}
+          value={description.value}
           required={description.isRequired}
           error={description.hasError}
           helperText={description.helperText}
