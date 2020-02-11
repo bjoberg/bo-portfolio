@@ -103,7 +103,6 @@ module.exports = {
   output: {
     chunkFilename: 'static/js/[name].[hash:8].chunk.js',
     filename: 'static/js/[name].[hash:8].js',
-    publicPath: '/',
     path: path.resolve(__dirname, buildPath),
   },
   plugins: [

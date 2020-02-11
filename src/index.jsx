@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -9,12 +9,12 @@ import App from './app/app';
 import { theme } from './utils/theme';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </ThemeProvider>
-  </BrowserRouter>,
+  </HashRouter>,
   // eslint-disable-next-line no-undef
   document.getElementById('root'),
 );
