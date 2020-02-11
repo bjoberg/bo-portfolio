@@ -102,6 +102,11 @@ if (!isProduction) {
   });
 }
 
+// Fallback response. We need to send the index.html if no other routes pass
+app.get("*", (req: Request, res: Response) => {
+  res.sendFile(path.resolve(buildPath, "index.html"));
+});
+
 // Start the application
 app.listen(port, () => {
   // tslint:disable-next-line:no-console
