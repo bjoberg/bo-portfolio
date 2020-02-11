@@ -174,7 +174,7 @@ const AddGroupDialog = (props) => {
 
         // I know... this is kind of hacky. Not proud of this, but at the current time this
         // component does not have access to the router, so I cannot use react-router to solve this
-        document.location.href = `#/group/${response.id}`;
+        document.location.href = `group/${response.id}`;
       } catch (error) {
         openSnackbar('error', error.message);
         setFormIsLoading(false);

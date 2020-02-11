@@ -52,6 +52,7 @@
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.11",
     "react-router-dom": "^5.0.1",
@@ -118,7 +119,6 @@
     "html-loader": "^0.5.5",
     "markdown-loader": "^5.1.0",
     "react-dev-utils": "^9.0.1",
-    "react-dom": "^16.8.6",
     "react-markdown": "^4.2.2",
     "tslint": "^5.20.0",
     "webpack-cli": "^3.3.7"
