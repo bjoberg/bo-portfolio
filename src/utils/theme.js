@@ -4,7 +4,7 @@ import { green, deepOrange, grey } from '@material-ui/core/colors';
 const miniDrawerWidth = 60;
 const drawerWidth = 250;
 
-const theme = createMuiTheme({
+const Theme = createMuiTheme({
   palette: {
     primary: green,
     secondary: deepOrange,
@@ -32,7 +32,7 @@ const theme = createMuiTheme({
 });
 
 export {
-  theme,
+  Theme,
   miniDrawerWidth,
   drawerWidth,
 };
