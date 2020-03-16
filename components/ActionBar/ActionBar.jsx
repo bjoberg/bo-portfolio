@@ -151,7 +151,13 @@ ActionBar.propTypes = {
   showAddGroup: PropTypes.bool,
   showAvatar: PropTypes.bool,
   saveButtonText: PropTypes.string,
-  // user: PropTypes.instanceOf(GoogleUser),
+  user: PropTypes.shape({
+    given_name: PropTypes.string,
+    family_name: PropTypes.string,
+    nickname: PropTypes.string,
+    name: PropTypes.string,
+    picture: PropTypes.string
+  }),
   navButton: PropTypes.element,
   handleNav: PropTypes.func,
   handleDelete: PropTypes.func,

@@ -22,6 +22,10 @@ const ProfileMenu = (props) => {
 
   let avatar;
 
+  if (!user) {
+    return <a href="/api/login">Login</a>
+  }
+
   if (user && user.picture) {
     if (user.picture) {
       avatar = (
