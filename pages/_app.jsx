@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -28,6 +28,6 @@ const MyApp = (props) => {
       </ThemeProvider>
     </Fragment>
   );
-}
+};
 
 export default MyApp;

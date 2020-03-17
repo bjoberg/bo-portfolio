@@ -8,4 +8,4 @@ export default async (req, res) => {
   } catch (error) {
     res.status(error.status || 500).end(error.message);
   }
-}
+};
