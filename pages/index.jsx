@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Layout from '../components/layout';
+import Layout from '../components/Layout';
 import { useFetchUser } from '../lib/user';
 
 const Index = () => {
@@ -9,7 +9,7 @@ const Index = () => {
     elevateOnScroll: true,
     showAvatar: true,
     showAddPhoto: true,
-    showAddGroup: true
+    showAddGroup: true,
   };
 
   return (
@@ -17,6 +17,6 @@ const Index = () => {
       <div>Index</div>
     </Layout>
   );
-}
+};
 
 export default Index;
