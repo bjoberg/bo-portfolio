@@ -28,7 +28,7 @@ USER appuser
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/build ./build
+COPY --from=builder /usr/src/app/.next ./.next
 
 # Set app configuration
 ENV PORT 5000
