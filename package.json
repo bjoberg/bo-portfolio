@@ -1,6 +1,6 @@
 {
   "name": "bo-portfolio",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Brett Oberg's portfolio website",
   "private": true,
   "main": "./build/server.js",
