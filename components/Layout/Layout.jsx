@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import ActionBar from '../ActionBar/ActionBar';
 
-const Layout = props => {
+const Layout = (props) => {
   const { children, user, actionBarOptions } = props;
 
   return (
@@ -33,7 +33,7 @@ const Layout = props => {
       />
       <main>{children}</main>
     </Fragment>
-  )
+  );
 };
 
 Layout.propTypes = {
@@ -43,7 +43,7 @@ Layout.propTypes = {
     family_name: PropTypes.string,
     nickname: PropTypes.string,
     name: PropTypes.string,
-    picture: PropTypes.string
+    picture: PropTypes.string,
   }),
   actionBarOptions: PropTypes.shape({
     title: PropTypes.string,
@@ -71,7 +71,7 @@ Layout.propTypes = {
 
 Layout.defaultProps = {
   user: undefined,
-  actionBarOptions: undefined
-}
+  actionBarOptions: undefined,
+};
 
-export default Layout
+export default Layout;
