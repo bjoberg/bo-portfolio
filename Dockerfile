@@ -28,12 +28,11 @@ USER appuser
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/build ./build
+COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/next.config.js ./next.config.js
 
 # Set app configuration
-ENV PORT 5000
 ENV NODE_ENV production
-EXPOSE 5000
 
 # Start the application
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "start:production" ]
