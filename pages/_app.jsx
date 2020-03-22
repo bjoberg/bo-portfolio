@@ -11,11 +11,12 @@ import { useFetchUser } from '../lib/user';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
-  const { user, isFetchingUser } = useFetchUser();
+  const { user, isFetchingUser, isAdmin } = useFetchUser();
 
   const userObj = {
     profile: user,
     isFetchingUser,
+    isAdmin,
   };
 
   useEffect(() => {

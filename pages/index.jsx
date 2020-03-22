@@ -10,8 +10,8 @@ const Index = (props) => {
   const actionBarOptions = {
     elevateOnScroll: true,
     showAvatar: true,
-    showAddPhoto: true,
-    showAddGroup: true,
+    showAddPhoto: user.isAdmin,
+    showAddGroup: user.isAdmin,
   };
 
   return (
@@ -25,6 +25,7 @@ Index.propTypes = {
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
     isFetchingUser: PropTypes.bool,
+    isAdmin: PropTypes.bool,
   }),
 };
 

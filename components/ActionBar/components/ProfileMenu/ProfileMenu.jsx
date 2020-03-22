@@ -22,7 +22,7 @@ const ProfileMenu = (props) => {
 
   if (!profile && !isFetchingUser) {
     return (
-      <Button variant="outlined" onClick={handleLogin}>
+      <Button variant="outlined" size="small" onClick={handleLogin}>
         Login
       </Button>
     );
