@@ -47,9 +47,9 @@ const ProfileMenu = (props) => {
           anchorEl={popoverAnchorEl}
           handleClose={handleMenuClose}
           handleLogout={handleLogout}
-          name={user.profile.name}
-          email={user.profile.email}
-          role={user.profile.role}
+          name={profile.name}
+          email={profile.email}
+          role={profile.role}
         />
       </Fragment>
     );
