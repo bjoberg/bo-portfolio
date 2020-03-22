@@ -156,7 +156,7 @@ ActionBar.propTypes = {
     family_name: PropTypes.string,
     nickname: PropTypes.string,
     name: PropTypes.string,
-    picture: PropTypes.string
+    picture: PropTypes.string,
   }),
   navButton: PropTypes.element,
   handleNav: PropTypes.func,

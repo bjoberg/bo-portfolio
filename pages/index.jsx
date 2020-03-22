@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import Layout from '../components/Layout';
-import { useFetchUser } from '../lib/user';
+import AppContainer from '../components/AppContainer';
 
-const Index = () => {
-  const { user } = useFetchUser();
+const Index = (props) => {
+  const { user } = props;
+
   const actionBarOptions = {
     elevateOnScroll: true,
     showAvatar: true,
@@ -13,10 +14,25 @@ const Index = () => {
   };
 
   return (
-    <Layout user={user} actionBarOptions={actionBarOptions}>
+    <AppContainer user={user} actionBarOptions={actionBarOptions}>
       <div>Index</div>
-    </Layout>
+    </AppContainer>
   );
 };
+
+Index.propTypes = {
+  user: PropTypes.shape({
+    given_name: PropTypes.string,
+    family_name: PropTypes.string,
+    nickname: PropTypes.string,
+    name: PropTypes.string,
+    picture: PropTypes.string,
+  }),
+};
+
+Index.defaultProps = {
+  user: undefined,
+};
+
 
 export default Index;

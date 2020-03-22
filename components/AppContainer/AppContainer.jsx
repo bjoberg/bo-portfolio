@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import ActionBar from '../ActionBar/ActionBar';
 
-const Layout = (props) => {
+const AppContainer = (props) => {
   const { children, user, actionBarOptions } = props;
 
   return (
@@ -36,7 +36,7 @@ const Layout = (props) => {
   );
 };
 
-Layout.propTypes = {
+AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
   user: PropTypes.shape({
     given_name: PropTypes.string,
@@ -69,9 +69,9 @@ Layout.propTypes = {
   }),
 };
 
-Layout.defaultProps = {
+AppContainer.defaultProps = {
   user: undefined,
   actionBarOptions: undefined,
 };
 
-export default Layout;
+export default AppContainer;
