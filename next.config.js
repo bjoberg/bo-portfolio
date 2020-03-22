@@ -15,7 +15,5 @@ const env = {
 
 module.exports = {
   env,
-  publicRuntimeConfig: {
-    ...env,
-  },
+  publicRuntimeConfig: { ...env },
 };

@@ -1,8 +1,9 @@
 import ActionBar from './ActionBar';
-import ElevationScroll from './components/ElevationScroll/ElevationScroll';
-import ProfileMenu from './components/ProfileMenu/ProfileMenu';
-import ProfilePopover from './components/ProfilePopover/ProfilePopover';
+import ActionBarIconButton from './components/ActionBarIconButton';
+import ElevationScroll from './components/ElevationScroll';
+import ProfileMenu from './components/ProfileMenu';
+import ProfilePopover from './components/ProfilePopover';
 
 export {
-  ActionBar, ElevationScroll, ProfileMenu, ProfilePopover,
+  ActionBar, ActionBarIconButton, ElevationScroll, ProfileMenu, ProfilePopover,
 };

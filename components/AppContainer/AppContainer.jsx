@@ -2,9 +2,13 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import ActionBar from '../ActionBar/ActionBar';
+import User from '../../models/user';
 
-const Layout = (props) => {
+const AppContainer = (props) => {
   const { children, user, actionBarOptions } = props;
+
+  const handleLogin = () => { window.location.href = '/api/login'; };
+  const handleLogout = () => { window.location.href = '/api/logout'; };
 
   return (
     <Fragment>
@@ -29,21 +33,19 @@ const Layout = (props) => {
         handleAddPhoto={actionBarOptions.handleAddPhoto}
         handleAddGroup={actionBarOptions.handleAddGroup}
         handleSave={actionBarOptions.handleSave}
-        handleLogout={actionBarOptions.handleLogout}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
       />
       <main>{children}</main>
     </Fragment>
   );
 };
 
-Layout.propTypes = {
+AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
   user: PropTypes.shape({
-    given_name: PropTypes.string,
-    family_name: PropTypes.string,
-    nickname: PropTypes.string,
-    name: PropTypes.string,
-    picture: PropTypes.string,
+    profile: PropTypes.instanceOf(User),
+    isFetching: PropTypes.bool,
   }),
   actionBarOptions: PropTypes.shape({
     title: PropTypes.string,
@@ -65,13 +67,12 @@ Layout.propTypes = {
     handleAddPhoto: PropTypes.func,
     handleAddGroup: PropTypes.func,
     handleSave: PropTypes.func,
-    handleLogout: PropTypes.func,
   }),
 };
 
-Layout.defaultProps = {
+AppContainer.defaultProps = {
   user: undefined,
   actionBarOptions: undefined,
 };
 
-export default Layout;
+export default AppContainer;

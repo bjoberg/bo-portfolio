@@ -1,46 +1,34 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { IconButton } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import { IconButton, Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 
 import ProfileMenuStyles from './ProfileMenu.styles';
 import ProfilePopover from '../ProfilePopover/ProfilePopover';
-// import GoogleUser from '../../../../models/google-user.model';
+import User from '../../../../models/user';
 
 const useStyles = makeStyles(ProfileMenuStyles);
 
 const ProfileMenu = (props) => {
   const classes = useStyles();
-  const { user, handleLogout } = props;
+  const { user, handleLogout, handleLogin } = props;
+  const { profile, isFetching } = user;
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const popoverIsOpen = Boolean(popoverAnchorEl);
 
   const handleIconButtonOnClick = event => setPopoverAnchorEl(event.currentTarget);
   const handleMenuClose = () => setPopoverAnchorEl(null);
 
-  let avatar;
-
-  if (!user) {
-    return <a href="/api/login">Login</a>
+  if (!profile && !isFetching) {
+    return (
+      <Button variant="outlined" size="small" onClick={handleLogin}>
+        Login
+      </Button>
+    );
   }
 
-  if (user && user.picture) {
-    if (user.picture) {
-      avatar = (
-        <Avatar
-          alt={user.name}
-          src={user.picture}
-          className={classes.avatar}
-        />
-      );
-    } else {
-      avatar = (<AccountCircle />);
-    }
-  }
-
-  if (user) {
+  if (profile && !isFetching) {
     return (
       <Fragment>
         <IconButton
@@ -48,16 +36,20 @@ const ProfileMenu = (props) => {
           className={classes.iconButton}
           onClick={handleIconButtonOnClick}
         >
-          {avatar}
+          <Avatar
+            alt={profile.name}
+            src={profile.picture}
+            className={classes.avatar}
+          />
         </IconButton>
         <ProfilePopover
           isOpen={popoverIsOpen}
           anchorEl={popoverAnchorEl}
           handleClose={handleMenuClose}
           handleLogout={handleLogout}
-          name={user.name}
-          email={user.email}
-          role={user.role}
+          name={profile.name}
+          email={profile.email}
+          role={profile.role}
         />
       </Fragment>
     );
@@ -67,11 +59,16 @@ const ProfileMenu = (props) => {
 
 ProfileMenu.propTypes = {
   handleLogout: PropTypes.func,
-  // user: PropTypes.instanceOf(GoogleUser),
+  handleLogin: PropTypes.func,
+  user: PropTypes.shape({
+    profile: PropTypes.instanceOf(User),
+    isFetching: PropTypes.bool,
+  }),
 };
 
 ProfileMenu.defaultProps = {
   handleLogout: () => { },
+  handleLogin: () => { },
   user: undefined,
 };
 

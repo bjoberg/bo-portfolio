@@ -1,21 +1,28 @@
 import React, { Fragment, useEffect } from 'react';
-import Head from 'next/head';
 import PropTypes from 'prop-types';
-import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Head from 'next/head';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { DefaultSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
 import { Theme } from '../lib/theme';
+import { useFetchUser } from '../lib/user';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
+  const { user, isFetchingUser, isAdmin } = useFetchUser();
+
+  const userObj = {
+    profile: user,
+    isFetching: isFetchingUser,
+    isAdmin,
+  };
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    if (jssStyles) { jssStyles.parentElement.removeChild(jssStyles); }
   }, []);
 
   return (
@@ -27,7 +34,7 @@ const MyApp = (props) => {
       </Head>
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <Component {...pageProps} user={userObj} />
       </ThemeProvider>
     </Fragment>
   );
