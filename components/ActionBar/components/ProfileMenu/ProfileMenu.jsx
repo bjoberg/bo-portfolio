@@ -13,14 +13,14 @@ const useStyles = makeStyles(ProfileMenuStyles);
 const ProfileMenu = (props) => {
   const classes = useStyles();
   const { user, handleLogout, handleLogin } = props;
-  const { profile, isFetchingUser } = user;
+  const { profile, isFetching } = user;
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const popoverIsOpen = Boolean(popoverAnchorEl);
 
   const handleIconButtonOnClick = event => setPopoverAnchorEl(event.currentTarget);
   const handleMenuClose = () => setPopoverAnchorEl(null);
 
-  if (!profile && !isFetchingUser) {
+  if (!profile && !isFetching) {
     return (
       <Button variant="outlined" size="small" onClick={handleLogin}>
         Login
@@ -28,7 +28,7 @@ const ProfileMenu = (props) => {
     );
   }
 
-  if (profile && !isFetchingUser) {
+  if (profile && !isFetching) {
     return (
       <Fragment>
         <IconButton
@@ -62,7 +62,7 @@ ProfileMenu.propTypes = {
   handleLogin: PropTypes.func,
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
-    isFetchingUser: PropTypes.bool,
+    isFetching: PropTypes.bool,
   }),
 };
 

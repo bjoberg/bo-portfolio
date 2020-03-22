@@ -50,7 +50,7 @@ AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
-    isFetchingUser: PropTypes.bool,
+    isFetching: PropTypes.bool,
   }),
   actionBarOptions: PropTypes.shape({
     title: PropTypes.string,

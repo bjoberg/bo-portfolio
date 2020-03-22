@@ -134,7 +134,7 @@ ActionBar.propTypes = {
   showAvatar: PropTypes.bool,
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
-    isFetchingUser: PropTypes.bool,
+    isFetching: PropTypes.bool,
   }),
   navButton: PropTypes.element,
   handleNav: PropTypes.func,

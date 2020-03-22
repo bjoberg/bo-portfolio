@@ -15,7 +15,7 @@ const MyApp = (props) => {
 
   const userObj = {
     profile: user,
-    isFetchingUser,
+    isFetching: isFetchingUser,
     isAdmin,
   };
 

@@ -24,7 +24,7 @@ const Index = (props) => {
 Index.propTypes = {
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
-    isFetchingUser: PropTypes.bool,
+    isFetching: PropTypes.bool,
     isAdmin: PropTypes.bool,
   }),
 };
