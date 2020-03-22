@@ -7,13 +7,8 @@ import User from '../../models/user';
 const AppContainer = (props) => {
   const { children, user, actionBarOptions } = props;
 
-  const handleLogout = () => {
-    window.location.href = '/api/logout';
-  };
-
-  const handleLogin = () => {
-    window.location.href = '/api/login';
-  };
+  const handleLogin = () => { window.location.href = '/api/login'; };
+  const handleLogout = () => { window.location.href = '/api/logout'; };
 
   return (
     <Fragment>
