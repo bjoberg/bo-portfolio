@@ -5,8 +5,6 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Button,
-  Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -15,11 +13,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternateOutlined';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import SaveIcon from '@material-ui/icons/Save';
 
+import ProfileMenu from './components/ProfileMenu';
+import ElevationScroll from './components/ElevationScroll';
+import ActionBarIconButton from './components/ActionBarIconButton';
 import ActionBarStyles from './ActionBar.styles';
-import ProfileMenu from './components/ProfileMenu/ProfileMenu';
-import ElevationScroll from './components/ElevationScroll/ElevationScroll';
-// import GoogleUser from '../../models/google-user.model';
 
 const useStyles = makeStyles(ActionBarStyles);
 
@@ -37,7 +36,6 @@ const ActionBar = (props) => {
     showSave,
     showAddGroup,
     showAvatar,
-    saveButtonText,
     user,
     navButton,
     handleNav,
@@ -56,9 +54,8 @@ const ActionBar = (props) => {
           <IconButton
             color={navButtonColor}
             className={classes.navButton}
-            aria-label="navigation"
             edge="start"
-            onClick={() => handleNav()}
+            onClick={handleNav}
           >
             {navButton}
           </IconButton>
@@ -67,66 +64,49 @@ const ActionBar = (props) => {
           </Typography>
           <div className={clsx(showAvatar && classes.actionButtonGroup)}>
             {showDelete && (
-              <Tooltip title="Delete">
-                <IconButton
-                  color={actionButtonColor}
-                  aria-label="delete"
-                  edge="start"
-                  onClick={() => handleDelete()}
-                  disabled={isDisabled}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              <ActionBarIconButton
+                title="Delete"
+                color={actionButtonColor}
+                isDisabled={isDisabled}
+                handleOnClick={handleDelete}
+                icon={<DeleteIcon />}
+              />
             )}
             {showAddPhoto && (
-              <Tooltip title="Add Image">
-                <IconButton
-                  color={actionButtonColor}
-                  aria-label="add-image"
-                  edge="end"
-                  onClick={() => handleAddPhoto()}
-                  disabled={isDisabled}
-                >
-                  <AddPhotoIcon />
-                </IconButton>
-              </Tooltip>
+              <ActionBarIconButton
+                title="Add Image"
+                color={actionButtonColor}
+                isDisabled={isDisabled}
+                handleOnClick={handleAddPhoto}
+                icon={<AddPhotoIcon />}
+              />
             )}
             {showAddGroup && (
-              <Tooltip title="Add Group">
-                <IconButton
-                  color={actionButtonColor}
-                  aria-label="add-group"
-                  edge="end"
-                  onClick={() => handleAddGroup()}
-                  disabled={isDisabled}
-                >
-                  <PhotoLibraryIcon />
-                </IconButton>
-              </Tooltip>
+              <ActionBarIconButton
+                title="Add Group"
+                color={actionButtonColor}
+                isDisabled={isDisabled}
+                handleOnClick={handleAddGroup}
+                icon={<PhotoLibraryIcon />}
+              />
             )}
             {showSave && (
-              <Button
-                variant="contained"
+              <ActionBarIconButton
+                title="Save"
                 color={actionButtonColor}
-                onClick={() => handleSave()}
-                disabled={isDisabled}
-              >
-                {saveButtonText}
-              </Button>
+                isDisabled={isDisabled}
+                handleOnClick={handleSave}
+                icon={<SaveIcon />}
+              />
             )}
             {showInfo && (
-              <Tooltip title="Info">
-                <IconButton
-                  color={actionButtonColor}
-                  aria-label="info"
-                  edge="end"
-                  onClick={() => handleInfo()}
-                  disabled={isDisabled}
-                >
-                  <InfoIcon />
-                </IconButton>
-              </Tooltip>
+              <ActionBarIconButton
+                title="Info"
+                color={actionButtonColor}
+                isDisabled={isDisabled}
+                handleOnClick={handleInfo}
+                icon={<InfoIcon />}
+              />
             )}
           </div>
           {showAvatar && (
@@ -150,7 +130,6 @@ ActionBar.propTypes = {
   showSave: PropTypes.bool,
   showAddGroup: PropTypes.bool,
   showAvatar: PropTypes.bool,
-  saveButtonText: PropTypes.string,
   user: PropTypes.shape({
     given_name: PropTypes.string,
     family_name: PropTypes.string,
@@ -180,7 +159,6 @@ ActionBar.defaultProps = {
   showSave: false,
   showAddGroup: false,
   showAvatar: false,
-  saveButtonText: 'Save',
   user: undefined,
   navButton: <MenuIcon />,
   handleNav: () => { },
