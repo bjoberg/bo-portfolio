@@ -19,6 +19,7 @@ import ProfileMenu from './components/ProfileMenu';
 import ElevationScroll from './components/ElevationScroll';
 import ActionBarIconButton from './components/ActionBarIconButton';
 import ActionBarStyles from './ActionBar.styles';
+import User from '../../models/user';
 
 const useStyles = makeStyles(ActionBarStyles);
 
@@ -45,6 +46,7 @@ const ActionBar = (props) => {
     handleSave,
     handleAddGroup,
     handleLogout,
+    handleLogin,
   } = props;
 
   return (
@@ -110,7 +112,7 @@ const ActionBar = (props) => {
             )}
           </div>
           {showAvatar && (
-            <ProfileMenu user={user} handleLogout={handleLogout} />
+            <ProfileMenu user={user} handleLogout={handleLogout} handleLogin={handleLogin} />
           )}
         </Toolbar>
       </AppBar>
@@ -131,11 +133,8 @@ ActionBar.propTypes = {
   showAddGroup: PropTypes.bool,
   showAvatar: PropTypes.bool,
   user: PropTypes.shape({
-    given_name: PropTypes.string,
-    family_name: PropTypes.string,
-    nickname: PropTypes.string,
-    name: PropTypes.string,
-    picture: PropTypes.string,
+    profile: PropTypes.instanceOf(User),
+    isFetchingUser: PropTypes.bool,
   }),
   navButton: PropTypes.element,
   handleNav: PropTypes.func,
@@ -145,6 +144,7 @@ ActionBar.propTypes = {
   handleAddGroup: PropTypes.func,
   handleSave: PropTypes.func,
   handleLogout: PropTypes.func,
+  handleLogin: PropTypes.func,
 };
 
 ActionBar.defaultProps = {
@@ -168,6 +168,7 @@ ActionBar.defaultProps = {
   handleAddGroup: () => { },
   handleSave: () => { },
   handleLogout: () => { },
+  handleLogin: () => { },
 };
 
 export default ActionBar;

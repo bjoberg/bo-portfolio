@@ -11,7 +11,12 @@ import { useFetchUser } from '../lib/user';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
-  const { user } = useFetchUser();
+  const { user, isFetchingUser } = useFetchUser();
+
+  const userObj = {
+    profile: user,
+    isFetchingUser,
+  };
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -28,7 +33,7 @@ const MyApp = (props) => {
       </Head>
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <Component {...pageProps} user={user} />
+        <Component {...pageProps} user={userObj} />
       </ThemeProvider>
     </Fragment>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import AppContainer from '../components/AppContainer';
+import User from '../models/user';
 
 const Index = (props) => {
   const { user } = props;
@@ -22,11 +23,8 @@ const Index = (props) => {
 
 Index.propTypes = {
   user: PropTypes.shape({
-    given_name: PropTypes.string,
-    family_name: PropTypes.string,
-    nickname: PropTypes.string,
-    name: PropTypes.string,
-    picture: PropTypes.string,
+    profile: PropTypes.instanceOf(User),
+    isFetchingUser: PropTypes.bool,
   }),
 };
 

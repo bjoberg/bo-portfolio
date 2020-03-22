@@ -2,9 +2,18 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import ActionBar from '../ActionBar/ActionBar';
+import User from '../../models/user';
 
 const AppContainer = (props) => {
   const { children, user, actionBarOptions } = props;
+
+  const handleLogout = () => {
+    window.location.href = '/api/logout';
+  };
+
+  const handleLogin = () => {
+    window.location.href = '/api/login';
+  };
 
   return (
     <Fragment>
@@ -29,7 +38,8 @@ const AppContainer = (props) => {
         handleAddPhoto={actionBarOptions.handleAddPhoto}
         handleAddGroup={actionBarOptions.handleAddGroup}
         handleSave={actionBarOptions.handleSave}
-        handleLogout={actionBarOptions.handleLogout}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
       />
       <main>{children}</main>
     </Fragment>
@@ -39,11 +49,8 @@ const AppContainer = (props) => {
 AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
   user: PropTypes.shape({
-    given_name: PropTypes.string,
-    family_name: PropTypes.string,
-    nickname: PropTypes.string,
-    name: PropTypes.string,
-    picture: PropTypes.string,
+    profile: PropTypes.instanceOf(User),
+    isFetchingUser: PropTypes.bool,
   }),
   actionBarOptions: PropTypes.shape({
     title: PropTypes.string,
@@ -65,7 +72,6 @@ AppContainer.propTypes = {
     handleAddPhoto: PropTypes.func,
     handleAddGroup: PropTypes.func,
     handleSave: PropTypes.func,
-    handleLogout: PropTypes.func,
   }),
 };
 
