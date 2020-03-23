@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  makeStyles, Grid, Avatar, Typography,
+  makeStyles, Grid, Avatar, Typography, Button,
 } from '@material-ui/core';
 
 import IndexStyles from '../styles';
@@ -32,18 +32,28 @@ const Index = (props) => {
           container
           direction="column"
           alignItems="center"
-
         >
           <Grid item xs={12}>
-            <Avatar style={{ width: 150, height: 150, transform: 'translateY(-50%)' }} />
+            <Avatar
+              className={classes.avatar}
+              src="../static/media/profile.jpg"
+            />
           </Grid>
           <Grid item xs={12}>
-            <Typography>Brett Oberg</Typography>
-            <Typography>Subtitle</Typography>
-          </Grid>
-          <Grid item xs={12} style={{ marginLeft: 100, marginRight: 100 }}>
-            <Typography>Heyyooo 👋🏼, thanks for taking the time to visit my photography portfolio. My name is Brett Oberg, and in my spare time I take photos. I am inspired by nature and I use photography as an excuse to experience its beauty. Photography has helped give direction and purpose to my life, and I hope my images inspire you to go out and find what is special for you.</Typography>
-            <Typography>Aside from photography, I spend my time developing software (like this website 😜), cycling, golfing, playing tennis, and spening time with family.</Typography>
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Typography variant="h1" align="center" gutterBottom>Brett Oberg</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="subtitle2" align="center">Chicago-based landscape photographer, software engineer, and outdoor enthusiast</Typography>
+              </Grid>
+              <Grid>
+                <Typography align="center">Instagram Github LinkedIn</Typography>
+              </Grid>
+              <Grid item style={{ margin: 40 }}>
+                <Button variant="outlined" color="primary">Portfolio</Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 
