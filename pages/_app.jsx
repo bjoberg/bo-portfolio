@@ -6,8 +6,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { DefaultSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
-import { Theme } from '../lib/theme';
-import { useFetchUser } from '../lib/user';
+import { Theme } from '../src/lib/Theme';
+import { useFetchUser } from '../src/lib/User';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;

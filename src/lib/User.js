@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { useState, useEffect } from 'react';
 import fetch from 'isomorphic-unfetch';
-import User from '../models/user';
-import Roles from './roles';
+
+import User from '../models/User';
+import Roles from './Roles';
 
 /**
  * Get user profile information based on the provided options.

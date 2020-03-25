@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */ // disabled because google returns non camelCase
-import Roles from '../lib/roles';
+import Roles from '../lib/Roles';
 
 class User {
   constructor({

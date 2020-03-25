@@ -1,4 +1,4 @@
-import auth0 from '../../lib/auth0';
+import auth0 from '../../src/lib/Auth0';
 
 /**
  * Auth0 authentication logout.

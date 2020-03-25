@@ -1,4 +1,4 @@
-import auth0 from '../../lib/auth0';
+import auth0 from '../../src/lib/Auth0';
 
 /**
  * Get profile information using Auth0.
