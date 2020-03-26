@@ -74,7 +74,7 @@ const fetchUser = async (cookie = '') => {
  * @param {boolean} props.required flag determining if authentication is required
  * @returns {{ isFetchingUser: boolean, user: any }}
  */
-export const useFetchUser = (props = {}) => {
+const useFetchUser = (props = {}) => {
   const { required } = props;
   const [isFetchingUser, setIsLoadingUser] = useState(
     () => !(typeof window !== 'undefined' && window.__user),
@@ -114,3 +114,5 @@ export const useFetchUser = (props = {}) => {
 
   return { user, isAdmin, isFetchingUser };
 };
+
+export default useFetchUser;
