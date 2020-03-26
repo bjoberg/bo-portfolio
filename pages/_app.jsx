@@ -6,8 +6,9 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { DefaultSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
-import { Theme } from '../lib/theme';
-import { useFetchUser } from '../lib/user';
+import { Theme } from '../src/styles';
+import { useFetchUser } from '../src/hooks';
+import { PersonalData } from '../src/constants';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
@@ -27,7 +28,7 @@ const MyApp = (props) => {
 
   return (
     <Fragment>
-      <DefaultSeo {...SEO} />
+      <DefaultSeo {...SEO} description={PersonalData.bio} />
       <Head>
         <title>Brett Oberg Photography</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />

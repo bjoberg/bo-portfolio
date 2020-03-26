@@ -1,4 +1,4 @@
-import auth0 from '../../lib/auth0';
+import { Auth0 } from '../../src/utils/Auth0';
 
 /**
  * Auth0 authentication callback.
@@ -8,7 +8,7 @@ import auth0 from '../../lib/auth0';
  */
 export default async (req, res) => {
   try {
-    await auth0.handleCallback(req, res, { redirectTo: '/' });
+    await Auth0.handleCallback(req, res, { redirectTo: '/' });
   } catch (error) {
     res.status(error.status || 500).end(error.message);
   }

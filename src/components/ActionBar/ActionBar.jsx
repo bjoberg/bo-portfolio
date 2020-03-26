@@ -19,7 +19,7 @@ import ProfileMenu from './components/ProfileMenu';
 import ElevationScroll from './components/ElevationScroll';
 import ActionBarIconButton from './components/ActionBarIconButton';
 import ActionBarStyles from './ActionBar.styles';
-import User from '../../models/user';
+import User from '../../models/User';
 
 const useStyles = makeStyles(ActionBarStyles);
 

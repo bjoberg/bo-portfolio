@@ -6,7 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 import ProfileMenuStyles from './ProfileMenu.styles';
 import ProfilePopover from '../ProfilePopover/ProfilePopover';
-import User from '../../../../models/user';
+import User from '../../../../models/User';
 
 const useStyles = makeStyles(ProfileMenuStyles);
 

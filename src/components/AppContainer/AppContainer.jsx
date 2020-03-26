@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import ActionBar from '../ActionBar/ActionBar';
-import User from '../../models/user';
+import User from '../../models/User';
 
 const AppContainer = (props) => {
   const { children, user, actionBarOptions } = props;
