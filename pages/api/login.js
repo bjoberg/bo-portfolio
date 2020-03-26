@@ -1,4 +1,4 @@
-import auth0 from '../../src/lib/Auth0';
+import { Auth0 } from '../../src/utils/Auth0';
 
 /**
  * Auth0 authentication login.
@@ -8,7 +8,7 @@ import auth0 from '../../src/lib/Auth0';
  */
 export default async (req, res) => {
   try {
-    await auth0.handleLogin(req, res);
+    await Auth0.handleLogin(req, res);
   } catch (error) {
     res.status(error.status || 500).end(error.message);
   }

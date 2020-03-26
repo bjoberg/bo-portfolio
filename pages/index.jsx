@@ -4,10 +4,10 @@ import {
   makeStyles, Grid, Avatar, Typography, Button,
 } from '@material-ui/core';
 
-import IndexStyles from '../src/styles';
+import { IndexStyles } from '../src/styles';
 import AppContainer from '../src/components/AppContainer';
-import User from '../src/models/User';
-import PersonalData from '../src/lib/PersonalData';
+import { User } from '../src/models';
+import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
 
 const useStyles = makeStyles(IndexStyles);
@@ -66,8 +66,8 @@ const Index = (props) => {
               <Grid item>
                 <SocialButtons />
               </Grid>
-              <Grid item style={{ margin: 10, marginBottom: 60 }}>
-                <Button href="/groups" variant="outlined" margin="">Portfolio</Button>
+              <Grid item className={classes.actionButton}>
+                <Button href="/groups" variant="outlined">Portfolio</Button>
               </Grid>
               <Grid item>
                 <BodyContent />

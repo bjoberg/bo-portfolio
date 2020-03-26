@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import fetch from 'isomorphic-unfetch';
 
 import User from '../models/User';
-import Roles from './Roles';
+import Roles from '../constants/Roles';
 
 /**
  * Get user profile information based on the provided options.
@@ -12,7 +12,7 @@ import Roles from './Roles';
  * @param {string} cookie
  * @returns {Response} user profile response
  */
-export const fetchUserProfile = async (options = {}) => {
+const fetchUserProfile = async (options = {}) => {
   const res = await fetch('/api/me', options);
   if (!res.ok) return null;
   return res;
@@ -24,7 +24,7 @@ export const fetchUserProfile = async (options = {}) => {
  * @param {string} googleId user's google id
  * @return {Response} user role response
  */
-export const fetchUserRole = async (googleId) => {
+const fetchUserRole = async (googleId) => {
   const res = await fetch(`/api/user/${googleId}/role`);
   if (!res.ok) return null;
   return res;
@@ -36,7 +36,7 @@ export const fetchUserRole = async (googleId) => {
  * @param {string} cookie broswer cookie to fetch profile data with
  * @returns {any} user profile object
  */
-export const fetchUser = async (cookie = '') => {
+const fetchUser = async (cookie = '') => {
   if (typeof window !== 'undefined' && window.__user) return window.__user;
 
   const options = cookie

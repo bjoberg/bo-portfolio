@@ -20,6 +20,10 @@ const IndexStyles = theme => ({
   contentContainer: {
     maxWidth: theme.breakpoints.values.md,
   },
+  actionButton: {
+    margin: theme.spacing(2),
+    marginBottom: theme.spacing(6),
+  },
   avatar: {
     width: 150,
     height: 150,

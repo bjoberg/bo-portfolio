@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 import { faInstagram, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import FontAwesomeIconButton from '../../../components/FontAwesomeIconButton';
-import PersonalData from '../../../lib/PersonalData';
+import { PersonalData } from '../../../constants';
 
 const SocialButtons = () => {
   const { social } = PersonalData;
