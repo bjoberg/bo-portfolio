@@ -1,15 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef } from 'react';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
 
 import AppContainer from '../src/components/AppContainer';
+import { GroupGrid } from '../src/components/GroupGrid';
 import { User } from '../src/models';
 
 const { publicRuntimeConfig } = getConfig();
 
 const Groups = (props) => {
   const { user, groups } = props;
+  const groupGridRef = useRef(null);
 
   const actionBarOptions = {
     elevateOnScroll: true,
@@ -21,9 +23,16 @@ const Groups = (props) => {
   return (
     <AppContainer user={user} actionBarOptions={actionBarOptions}>
       <Fragment>
-        {groups.rows.length > 0 && groups.rows.map(group => (
+        <GroupGrid
+          domRef={groupGridRef}
+          groups={groups.rows}
+          isRemovable={user.isAdmin}
+        // handleRemoveOnClick={openDeleteDialog}
+        // isLoading={isLoadingGroups}
+        />
+        {/* {groups.rows.length > 0 && groups.rows.map(group => (
           <div key={group.id}>{group.title}</div>
-        ))}
+        ))} */}
       </Fragment>
     </AppContainer>
   );
