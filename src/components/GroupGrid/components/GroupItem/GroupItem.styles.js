@@ -44,6 +44,7 @@ const GroupItemStyles = theme => ({
   actionBar: {
     position: 'absolute',
     right: 0,
+    color: theme.palette.common.white,
     zIndex: theme.zIndex.appBar - 1,
   },
 });

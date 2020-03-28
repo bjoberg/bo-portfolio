@@ -33,6 +33,7 @@ const Groups = (props) => {
           <GroupGrid
             domRef={groupGridRef}
             groups={groups.rows}
+            showActionMenu={user.isAdmin}
             isRemovable={user.isAdmin}
           />
         </div>

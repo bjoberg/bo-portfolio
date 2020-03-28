@@ -12,7 +12,7 @@ const useStyles = makeStyles(GroupGridStyles);
 
 const GroupGrid = (props) => {
   const {
-    domRef, groups, isRemovable, handleRemoveOnClick, isLoading,
+    domRef, groups, showActionMenu, isRemovable, handleRemoveOnClick, isLoading,
   } = props;
   const classes = useStyles();
 
@@ -35,6 +35,7 @@ const GroupGrid = (props) => {
                 id={item.id}
                 title={item.title}
                 imageUrl={item.imageUrl}
+                showActionMenu={showActionMenu}
                 isRemovable={isRemovable}
                 handleRemoveOnClick={handleRemoveOnClick}
               />
@@ -62,6 +63,7 @@ GroupGrid.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
   })),
+  showActionMenu: PropTypes.bool,
   isRemovable: PropTypes.bool,
   handleRemoveOnClick: PropTypes.func,
   isLoading: PropTypes.bool,
@@ -70,6 +72,7 @@ GroupGrid.propTypes = {
 GroupGrid.defaultProps = {
   domRef: null,
   groups: [],
+  showActionMenu: false,
   isRemovable: false,
   handleRemoveOnClick: () => { },
   isLoading: false,

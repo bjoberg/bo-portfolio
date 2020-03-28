@@ -4,14 +4,14 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import GroupItemStyles from './GroupItem.styles';
-// import ActionMenu from '../../../ActionMenu';
+import ActionMenu from '../../../ActionMenu';
 
 const useStyles = makeStyles(GroupItemStyles);
 
 const GroupItem = (props) => {
   const classes = useStyles();
   const {
-    id, imageUrl, title, isRemovable, handleRemoveOnClick,
+    id, imageUrl, title, showActionMenu, isRemovable, handleRemoveOnClick,
   } = props;
   const [options, setOptions] = useState([]);
 
@@ -36,9 +36,11 @@ const GroupItem = (props) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.actionBar}>
-        {/* <ActionMenu parentId={id} options={options} /> */}
-      </div>
+      {showActionMenu && (
+        <div className={classes.actionBar}>
+          <ActionMenu parentId={id} options={options} />
+        </div>
+      )}
       <div className={classes.imgContainer}>
         <img
           id={id}
@@ -65,11 +67,13 @@ GroupItem.propTypes = {
   id: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  showActionMenu: PropTypes.bool,
   isRemovable: PropTypes.bool,
   handleRemoveOnClick: PropTypes.func,
 };
 
 GroupItem.defaultProps = {
+  showActionMenu: false,
   isRemovable: false,
   handleRemoveOnClick: () => { },
 };
