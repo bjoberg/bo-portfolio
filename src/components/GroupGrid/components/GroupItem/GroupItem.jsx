@@ -1,10 +1,7 @@
-import React, {
-  Fragment, useCallback, useState, useEffect,
-} from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Link from 'next/link';
 
 import GroupItemStyles from './GroupItem.styles';
 // import ActionMenu from '../../../ActionMenu';
@@ -38,30 +35,29 @@ const GroupItem = (props) => {
   }, [constructOptions]);
 
   return (
-    <Fragment>
-      <div className={classes.root}>
-        {isRemovable && (
-          <div className={classes.actionBar}>
-            {/* <ActionMenu parentId={id} options={options} /> */}
-          </div>
-        )}
+    <div className={classes.root}>
+      <div className={classes.actionBar}>
+        {/* <ActionMenu parentId={id} options={options} /> */}
+      </div>
+      <div className={classes.imgContainer}>
+        <img
+          id={id}
+          src={imageUrl}
+          alt={title}
+          className={classes.img}
+        />
+      </div>
+      <div className={classes.overlay} />
+      <div className={classes.linkContainer}>
         <a href={`/group/${id}`} className={classes.link}>
-          <div className={classes.imgContainer}>
-            <img
-              id={id}
-              src={imageUrl}
-              alt={title}
-              className={classes.img}
-            />
-          </div>
+          <Grid container justify="center" alignItems="center" style={{ height: '100%' }}>
+            <Grid item>
+              <Typography variant="h3">{title}</Typography>
+            </Grid>
+          </Grid>
         </a>
       </div>
-      <div className={classes.textContainer}>
-        <Typography variant="body1">
-          {title}
-        </Typography>
-      </div>
-    </Fragment>
+    </div>
   );
 };
 

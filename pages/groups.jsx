@@ -1,15 +1,20 @@
-import React, { Fragment, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
+import { makeStyles } from '@material-ui/core/styles';
 
+import { Typography } from '@material-ui/core';
 import AppContainer from '../src/components/AppContainer';
 import { GroupGrid } from '../src/components/GroupGrid';
 import { User } from '../src/models';
+import { GroupsStyles } from '../src/styles';
 
 const { publicRuntimeConfig } = getConfig();
+const useStyles = makeStyles(GroupsStyles);
 
 const Groups = (props) => {
+  const classes = useStyles();
   const { user, groups } = props;
   const groupGridRef = useRef(null);
 
@@ -22,18 +27,16 @@ const Groups = (props) => {
 
   return (
     <AppContainer user={user} actionBarOptions={actionBarOptions}>
-      <Fragment>
-        <GroupGrid
-          domRef={groupGridRef}
-          groups={groups.rows}
-          isRemovable={user.isAdmin}
-        // handleRemoveOnClick={openDeleteDialog}
-        // isLoading={isLoadingGroups}
-        />
-        {/* {groups.rows.length > 0 && groups.rows.map(group => (
-          <div key={group.id}>{group.title}</div>
-        ))} */}
-      </Fragment>
+      <div className={classes.root}>
+        <div className={classes.container}>
+          <Typography variant="h1" className={classes.title}>Groups</Typography>
+          <GroupGrid
+            domRef={groupGridRef}
+            groups={groups.rows}
+            isRemovable={user.isAdmin}
+          />
+        </div>
+      </div>
     </AppContainer>
   );
 };

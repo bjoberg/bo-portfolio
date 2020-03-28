@@ -28,11 +28,8 @@ const GroupGrid = (props) => {
             <Grid
               key={item.id}
               item
-              xs={6}
-              sm={4}
-              md={3}
-              lg={2}
-              xl={2}
+              xs={12}
+              md={6}
             >
               <GroupItem
                 id={item.id}
