@@ -52,7 +52,7 @@ const GroupItem = (props) => {
         <a href={`/group/${id}`} className={classes.link}>
           <Grid container justify="center" alignItems="center" style={{ height: '100%' }}>
             <Grid item>
-              <Typography variant="h3">{title}</Typography>
+              <Typography variant="h3" align="center">{title}</Typography>
             </Grid>
           </Grid>
         </a>

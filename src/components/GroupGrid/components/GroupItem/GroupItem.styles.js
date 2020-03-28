@@ -5,6 +5,7 @@ const GroupItemStyles = theme => ({
     backgroundColor: theme.palette.grey[100],
     overflow: 'hidden',
     position: 'relative',
+    boxShadow: theme.shadows[4],
   },
   overlay: {
     position: 'absolute',
