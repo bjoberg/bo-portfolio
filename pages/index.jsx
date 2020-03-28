@@ -27,6 +27,7 @@ const Index = (props) => {
   const fullName = `${firstName} ${lastName}`;
 
   const actionBarOptions = {
+    title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
     showAddPhoto: user.isAdmin,

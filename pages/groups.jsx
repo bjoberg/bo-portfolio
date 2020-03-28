@@ -5,6 +5,7 @@ import fetch from 'isomorphic-unfetch';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
+import httpStatus from 'http-status';
 
 import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
@@ -24,6 +25,7 @@ const Groups = (props) => {
   const groupGridRef = useRef(null);
 
   const actionBarOptions = {
+    title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
     showAddPhoto: user.isAdmin,
@@ -33,6 +35,8 @@ const Groups = (props) => {
   return (
     <Fragment>
       <NextSeo
+        noindex={groups.hasError}
+        nofollow={groups.hasError}
         title={seoTitle}
         canonical={url}
         openGraph={{
@@ -58,6 +62,7 @@ const Groups = (props) => {
               groups={groups.rows}
               showActionMenu={user.isAdmin}
               isRemovable={user.isAdmin}
+              hasError={groups.hasError}
             />
           </div>
         </div>
@@ -73,6 +78,7 @@ Groups.propTypes = {
     isAdmin: PropTypes.bool,
   }),
   groups: PropTypes.shape({
+    hasError: PropTypes.bool,
     limit: PropTypes.number,
     page: PropTypes.number,
     totalItems: PropTypes.number,
@@ -95,15 +101,22 @@ Groups.defaultProps = {
 
 Groups.getInitialProps = async () => {
   const res = await fetch(`${publicRuntimeConfig.BO_API_ENDPOINT}/groups`);
-  const data = await res.json();
-
+  if (res.status === httpStatus.OK) {
+    const data = await res.json();
+    return {
+      groups: {
+        hasError: false,
+        limit: data.limit,
+        page: data.page,
+        totalItems: data.totalItems,
+        pageCount: data.pageCount,
+        rows: data.rows,
+      },
+    };
+  }
   return {
     groups: {
-      limit: data.limit,
-      page: data.page,
-      totalItems: data.totalItems,
-      pageCount: data.pageCount,
-      rows: data.rows,
+      hasError: true,
     },
   };
 };

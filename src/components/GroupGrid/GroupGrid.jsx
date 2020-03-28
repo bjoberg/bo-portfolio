@@ -12,9 +12,15 @@ const useStyles = makeStyles(GroupGridStyles);
 
 const GroupGrid = (props) => {
   const {
-    domRef, groups, showActionMenu, isRemovable, handleRemoveOnClick, isLoading,
+    domRef, groups, showActionMenu, isRemovable, handleRemoveOnClick, isLoading, hasError,
   } = props;
   const classes = useStyles();
+
+  if (hasError) {
+    return (
+      <Typography>There was an error loading the groups! Please refresh to try again.</Typography>
+    );
+  }
 
   if (groups.length === 0) {
     return (<Typography>No groups to display.</Typography>);
@@ -63,6 +69,7 @@ GroupGrid.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
   })),
+  hasError: PropTypes.bool,
   showActionMenu: PropTypes.bool,
   isRemovable: PropTypes.bool,
   handleRemoveOnClick: PropTypes.func,
@@ -76,6 +83,7 @@ GroupGrid.defaultProps = {
   isRemovable: false,
   handleRemoveOnClick: () => { },
   isLoading: false,
+  hasError: false,
 };
 
 export default GroupGrid;
