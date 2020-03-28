@@ -37,7 +37,6 @@ const Index = (props) => {
     <Fragment>
       <NextSeo
         title={seoTitle}
-        canonical={url}
         openGraph={{
           url,
           title: seoTitle,
