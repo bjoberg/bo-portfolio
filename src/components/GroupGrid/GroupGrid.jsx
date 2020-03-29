@@ -16,13 +16,7 @@ const GroupGrid = (props) => {
   } = props;
   const classes = useStyles();
 
-  if (hasError) {
-    return (
-      <Typography>There was an error loading the groups! Please refresh to try again.</Typography>
-    );
-  }
-
-  if (groups.length === 0) {
+  if (!hasError && groups.length === 0) {
     return (<Typography>No groups to display.</Typography>);
   }
 
@@ -49,6 +43,13 @@ const GroupGrid = (props) => {
           ))}
         </Grid>
       </RootRef>
+      {hasError && (
+        <div className={classes.errorContainer}>
+          <Typography>
+            There was an error loading the groups! Please refresh to try again.
+          </Typography>
+        </div>
+      )}
       {isLoading && (
         <div className={classes.circularProgressContainer}>
           <CircularProgress />

@@ -1,17 +1,21 @@
-import React, { useRef, Fragment } from 'react';
+import React, {
+  createRef, Fragment, useCallback, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
+import httpStatus from 'http-status';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
-import httpStatus from 'http-status';
 
 import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
 import { GroupGrid } from '../src/components/GroupGrid';
 import { User } from '../src/models';
 import { GroupsStyles } from '../src/styles';
+import { isAtEnd } from '../src/utils/helpers';
+import { useInfiniteScroll } from '../src/hooks';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupsStyles);
@@ -21,8 +25,14 @@ const url = `${publicRuntimeConfig.ROOT_URL}/groups`;
 
 const Groups = (props) => {
   const classes = useStyles();
+  const groupGridRef = createRef();
   const { user, groups } = props;
-  const groupGridRef = useRef(null);
+  const hasMoreData = isAtEnd(groups.totalItems, groups.limit, groups.page + 1);
+
+  const [hasError, setHasError] = useState(groups.hasError);
+  const [isEndOfGroups, setIsEndOfGroups] = useState(hasMoreData);
+  const [groupPage, setGroupPage] = useState(groups.page);
+  const [items, setItems] = useState(groups.rows);
 
   const actionBarOptions = {
     title: SEO.title,
@@ -32,11 +42,40 @@ const Groups = (props) => {
     showAddGroup: user.isAdmin,
   };
 
+  /**
+   * Request next page of groups
+   * @param {Function} isFetching set the status of the fetching state
+   */
+  const handlePaginateImages = useCallback((isFetching) => {
+    const paginateGroups = async () => {
+      const next = groupPage + 1;
+      const result = await fetch(`/api/groups?limit=${groups.limit}&page=${next}`);
+      if (result.status === httpStatus.OK) {
+        const json = await result.json();
+        setItems(prevState => [...prevState, ...json.rows]);
+        setIsEndOfGroups(isAtEnd(json.totalItems, json.limit, next + 1));
+        isFetching(false);
+        setGroupPage(next);
+      } else {
+        setHasError(true);
+        isFetching(false);
+      }
+    };
+    paginateGroups();
+  }, [groupPage, groups.limit]);
+
+  const [isLoadingGroups] = useInfiniteScroll(
+    handlePaginateImages,
+    isEndOfGroups,
+    hasError,
+    groupGridRef,
+  );
+
   return (
     <Fragment>
       <NextSeo
-        noindex={groups.hasError}
-        nofollow={groups.hasError}
+        noindex={hasError}
+        nofollow={hasError}
         title={seoTitle}
         canonical={url}
         openGraph={{
@@ -59,10 +98,11 @@ const Groups = (props) => {
             <Typography variant="h1" className={classes.title}>{pageTitle}</Typography>
             <GroupGrid
               domRef={groupGridRef}
-              groups={groups.rows}
+              groups={items}
               showActionMenu={user.isAdmin}
               isRemovable={user.isAdmin}
-              hasError={groups.hasError}
+              isLoading={isLoadingGroups}
+              hasError={hasError}
             />
           </div>
         </div>
@@ -100,25 +140,25 @@ Groups.defaultProps = {
 };
 
 Groups.getInitialProps = async () => {
-  const res = await fetch(`${publicRuntimeConfig.BO_API_ENDPOINT}/groups`);
+  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/groups?limit=${30}&page=${0}`;
+  const res = await fetch(route);
+  let groups;
   if (res.status === httpStatus.OK) {
     const data = await res.json();
-    return {
-      groups: {
-        hasError: false,
-        limit: data.limit,
-        page: data.page,
-        totalItems: data.totalItems,
-        pageCount: data.pageCount,
-        rows: data.rows,
-      },
+    groups = {
+      hasError: false,
+      limit: data.limit,
+      page: data.page,
+      totalItems: data.totalItems,
+      pageCount: data.pageCount,
+      rows: data.rows,
+    };
+  } else {
+    groups = {
+      hasError: true,
     };
   }
-  return {
-    groups: {
-      hasError: true,
-    },
-  };
+  return { groups };
 };
 
 export default Groups;
