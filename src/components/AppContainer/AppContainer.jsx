@@ -1,10 +1,15 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 
+import AppContainerStyles from './AppContainer.styles';
 import ActionBar from '../ActionBar/ActionBar';
 import User from '../../models/User';
 
+const useStyles = makeStyles(AppContainerStyles);
+
 const AppContainer = (props) => {
+  const classes = useStyles();
   const { children, user, actionBarOptions } = props;
 
   const handleLogin = () => { window.location.href = '/api/login'; };
@@ -36,6 +41,7 @@ const AppContainer = (props) => {
         handleLogout={handleLogout}
         handleLogin={handleLogin}
       />
+      <div className={classes.toolbar} />
       <main>{children}</main>
     </Fragment>
   );

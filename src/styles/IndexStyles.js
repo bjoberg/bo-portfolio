@@ -1,6 +1,6 @@
 const IndexStyles = theme => ({
   background: {
-    backgroundImage: "url('/media/20190912-Acadia-263.jpg')",
+    backgroundImage: "url('/media/about/background.jpg')",
     minHeight: '100vh',
     backgroundAttachment: 'fixed',
     backgroundPosition: 'center',

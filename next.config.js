@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const env = {
   APP_ENV: process.env.APP_ENV,
+  ROOT_URL: 'https://www.brettoberg.com',
   BO_API_ENDPOINT: process.env.BO_API_ENDPOINT,
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,

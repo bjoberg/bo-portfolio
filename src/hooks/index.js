@@ -1,4 +1,4 @@
 import useFetchUser from './UseFetchUser';
+import useInfiniteScroll from './UseInfiniteScroll';
 
-// eslint-disable-next-line import/prefer-default-export
-export { useFetchUser };
+export { useFetchUser, useInfiniteScroll };
