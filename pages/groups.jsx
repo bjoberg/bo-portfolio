@@ -20,6 +20,7 @@ import { useInfiniteScroll } from '../src/hooks';
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupsStyles);
 const pageTitle = 'Groups';
+const pageSubtitle = 'Collections of different images curated to display my best work, favorite moments, and photographic style.';
 const seoTitle = `${pageTitle} - ${SEO.title}`;
 const url = `${publicRuntimeConfig.ROOT_URL}/groups`;
 
@@ -30,8 +31,8 @@ const Groups = (props) => {
   const hasMoreData = isAtEnd(groups.totalItems, groups.limit, groups.page + 1);
 
   const [hasError, setHasError] = useState(groups.hasError);
-  const [isEndOfGroups, setIsEndOfGroups] = useState(hasMoreData);
-  const [groupPage, setGroupPage] = useState(groups.page);
+  const [isEnd, setIsEnd] = useState(hasMoreData);
+  const [page, setPage] = useState(groups.page);
   const [items, setItems] = useState(groups.rows);
 
   const actionBarOptions = {
@@ -48,25 +49,25 @@ const Groups = (props) => {
    */
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateGroups = async () => {
-      const next = groupPage + 1;
+      const next = page + 1;
       const result = await fetch(`/api/groups?limit=${groups.limit}&page=${next}`);
       if (result.status === httpStatus.OK) {
         const json = await result.json();
         setItems(prevState => [...prevState, ...json.rows]);
-        setIsEndOfGroups(isAtEnd(json.totalItems, json.limit, next + 1));
+        setIsEnd(isAtEnd(json.totalItems, json.limit, next + 1));
         isFetching(false);
-        setGroupPage(next);
+        setPage(next);
       } else {
         setHasError(true);
         isFetching(false);
       }
     };
     paginateGroups();
-  }, [groupPage, groups.limit]);
+  }, [groups.limit, page]);
 
   const [isLoadingGroups] = useInfiniteScroll(
     handlePaginateImages,
-    isEndOfGroups,
+    isEnd,
     hasError,
     groupGridRef,
   );
@@ -77,17 +78,18 @@ const Groups = (props) => {
         noindex={hasError}
         nofollow={hasError}
         title={seoTitle}
+        description={pageSubtitle}
         canonical={url}
         openGraph={{
           url,
           title: seoTitle,
-          description: 'List of Brett Oberg Photography groups',
+          description: pageSubtitle,
           images: [
             {
-              url: '',
-              width: 800,
-              height: 600,
-              alt: '',
+              url: '/media/og/groups.jpg',
+              width: 1200,
+              height: 675,
+              alt: 'Brett Oberg Groups',
             },
           ],
         }}
@@ -95,7 +97,10 @@ const Groups = (props) => {
       <AppContainer user={user} actionBarOptions={actionBarOptions}>
         <div className={classes.root}>
           <div className={classes.container}>
-            <Typography variant="h1" className={classes.title}>{pageTitle}</Typography>
+            <div className={classes.title}>
+              <Typography variant="h1" gutterBottom>{pageTitle}</Typography>
+              <Typography variant="subtitle1">{pageSubtitle}</Typography>
+            </div>
             <GroupGrid
               domRef={groupGridRef}
               groups={items}

@@ -13,11 +13,23 @@ const Theme = createMuiTheme({
     },
   },
   typography: {
+    fontFamily: [
+      'Playfair Display',
+      'serif',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
     h1: {
       fontSize: '4.25rem',
-    },
-    subtitle1: {
-      fontWeight: 900,
+      fontWeight: 700,
     },
     subtitle2: {
       color: grey[700],
