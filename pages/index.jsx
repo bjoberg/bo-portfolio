@@ -41,13 +41,13 @@ const Index = (props) => {
         openGraph={{
           url,
           title: seoTitle,
-          description: `About Brett Oberg - ${bio}`,
+          description: bio,
           images: [
             {
-              url: '',
-              width: 800,
-              height: 600,
-              alt: '',
+              url: '/media/og/about.jpg',
+              width: 1200,
+              height: 900,
+              alt: 'About Brett Oberg',
             },
           ],
         }}
