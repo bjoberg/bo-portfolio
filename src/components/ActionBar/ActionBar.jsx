@@ -5,6 +5,8 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Box,
+  Grid,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -53,17 +55,37 @@ const ActionBar = (props) => {
     <ElevationScroll elevateOnScroll={elevateOnScroll}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color={navButtonColor}
-            className={classes.navButton}
-            edge="start"
-            onClick={handleNav}
-          >
-            {navButton}
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {title}
-          </Typography>
+          <Box display={{ xs: 'block', sm: 'none' }}>
+            <IconButton
+              color={navButtonColor}
+              className={classes.navButton}
+              edge="start"
+              onClick={handleNav}
+            >
+              {navButton}
+            </IconButton>
+          </Box>
+          <div className={classes.titleContainer}>
+            <Box display={{ xs: 'none', sm: 'block' }}>
+              <Grid container spacing={3} alignItems="center">
+                <Grid item>
+                  <Typography component="a" href="/" variant="h6" className={classes.title}>
+                    {title}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography component="a" href="/images" className={classes.link}>
+                    Images
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography component="a" href="/groups" className={classes.link}>
+                    Groups
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          </div>
           <div className={clsx(showAvatar && classes.actionButtonGroup)}>
             {showDelete && (
               <ActionBarIconButton
