@@ -31,7 +31,7 @@ const ProfilePopover = (props) => {
       }}
     >
       <div className={classes.container}>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" className={classes.title}>
           {name}
         </Typography>
         <Typography variant="subtitle2">

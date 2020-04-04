@@ -39,8 +39,10 @@ const Groups = (props) => {
     title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
-    showAddPhoto: user.isAdmin,
-    showAddGroup: user.isAdmin,
+    actionButtons: {
+      showAddPhoto: user.isAdmin,
+      showAddGroup: user.isAdmin,
+    },
   };
 
   /**
