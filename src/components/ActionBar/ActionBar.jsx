@@ -24,6 +24,7 @@ const ActionBar = (props) => {
   const classes = useStyles();
   const {
     title,
+    routes,
     navButtonColor,
     elevateOnScroll,
     showAvatar,
@@ -35,13 +36,16 @@ const ActionBar = (props) => {
     actionButtons,
   } = props;
 
+  const display = {
+    xs: 'none',
+    sm: 'block',
+  };
+
   return (
     <ElevationScroll elevateOnScroll={elevateOnScroll}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-
-          {/* TODO: Need to make this work with back button and showing all the time */}
-          <Box display={{ xs: 'block', sm: 'none' }}>
+          <Box display={display}>
             <IconButton
               color={navButtonColor}
               className={classes.navButton}
@@ -51,30 +55,33 @@ const ActionBar = (props) => {
               {navButton}
             </IconButton>
           </Box>
-
-          {/* TODO: Need to make this dynamic */}
           <div className={classes.titleContainer}>
-            <Box display={{ xs: 'none', sm: 'block' }}>
+            <Box display={display}>
               <Grid container spacing={3} alignItems="center">
                 <Grid item>
-                  <Typography component="a" href="/" variant="h6" className={classes.title}>
+                  <Typography
+                    component="a"
+                    href="/"
+                    variant="h6"
+                    className={classes.title}
+                  >
                     {title}
                   </Typography>
                 </Grid>
-                <Grid item>
-                  <Typography component="a" href="/images" className={classes.link}>
-                    Images
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography component="a" href="/groups" className={classes.link}>
-                    Groups
-                  </Typography>
-                </Grid>
+                {routes.map(route => (
+                  <Grid item key={route.id}>
+                    <Typography
+                      component="a"
+                      href={`/${route.route}`}
+                      className={classes.link}
+                    >
+                      {route.title}
+                    </Typography>
+                  </Grid>
+                ))}
               </Grid>
             </Box>
           </div>
-
           <div className={clsx(showAvatar && classes.actionButtonGroup)}>
             <ActionButtons {...actionButtons} />
           </div>
@@ -89,6 +96,11 @@ const ActionBar = (props) => {
 
 ActionBar.propTypes = {
   title: PropTypes.string,
+  routes: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
+    route: PropTypes.string,
+  })),
   elevateOnScroll: PropTypes.bool,
   navButtonColor: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
   showAvatar: PropTypes.bool,
@@ -118,6 +130,7 @@ ActionBar.propTypes = {
 
 ActionBar.defaultProps = {
   title: '',
+  routes: [],
   navButtonColor: 'default',
   elevateOnScroll: false,
   showAvatar: false,

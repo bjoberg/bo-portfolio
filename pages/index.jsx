@@ -12,6 +12,7 @@ import AppContainer from '../src/components/AppContainer';
 import { User } from '../src/models';
 import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
+import Routes from '../src/constants/Routes';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
@@ -30,6 +31,7 @@ const Index = (props) => {
     title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
+    routes: Routes,
     actionButtons: {
       showAddPhoto: user.isAdmin,
       showAddGroup: user.isAdmin,
