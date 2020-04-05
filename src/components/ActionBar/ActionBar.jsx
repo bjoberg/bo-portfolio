@@ -36,16 +36,15 @@ const ActionBar = (props) => {
     actionButtons,
   } = props;
 
-  const display = {
-    xs: 'none',
-    sm: 'block',
-  };
-
   return (
     <ElevationScroll elevateOnScroll={elevateOnScroll}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Box display={display}>
+          <Box display={{
+            xs: 'block',
+            sm: 'none',
+          }}
+          >
             <IconButton
               color={navButtonColor}
               className={classes.navButton}
@@ -56,7 +55,11 @@ const ActionBar = (props) => {
             </IconButton>
           </Box>
           <div className={classes.titleContainer}>
-            <Box display={display}>
+            <Box display={{
+              xs: 'none',
+              sm: 'block',
+            }}
+            >
               <Grid container spacing={3} alignItems="center">
                 <Grid item>
                   <Typography
