@@ -1,3 +1,4 @@
+import GroupStyles from './GroupStyles';
 import GroupsStyles from './GroupsStyles';
 import IndexStyles from './IndexStyles';
 import {
@@ -7,5 +8,10 @@ import {
 } from './Theme';
 
 export {
-  GroupsStyles, IndexStyles, Theme, miniDrawerWidth, drawerWidth,
+  GroupStyles,
+  GroupsStyles,
+  IndexStyles,
+  Theme,
+  miniDrawerWidth,
+  drawerWidth,
 };
