@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import {
+  ListItem, ListItemIcon, ListItemText, Typography,
+} from '@material-ui/core';
 
 import NavigationDrawerListItemStyles from './NavigationDrawerListItem.styles';
 
@@ -12,12 +14,11 @@ const NavigationDrawerListItem = (props) => {
   const { item, handleClose } = props;
 
   return (
-    <a
-      activeClassName={classes.linkIsActive}
-      className={classes.link}
+    <Typography
+      component="a"
       href={item.route}
       onClick={handleClose}
-      exact
+      className={classes.link}
     >
       <ListItem button className={classes.listItem}>
         <ListItemIcon className={classes.listIcon}>
@@ -25,7 +26,7 @@ const NavigationDrawerListItem = (props) => {
         </ListItemIcon>
         <ListItemText primary={item.title} />
       </ListItem>
-    </a>
+    </Typography>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Divider, Link } from '@material-ui/core';
+import { Typography, Divider } from '@material-ui/core';
 
 import NavigationDrawerHeaderStyles from './NavigationDrawerHeader.styles';
 
@@ -14,12 +14,23 @@ const NavigationDrawerHeader = (props) => {
   return (
     <Fragment>
       <div className={classes.root}>
-        <Typography variant="h5">
+        <Typography
+          variant="h5"
+          component="a"
+          href="/"
+          className={classes.title}
+          gutterBottom
+        >
           {title}
         </Typography>
-        <Link href={`mailto:${email}`} variant="subtitle2">
+        <Typography
+          variant="subtitle1"
+          component="a"
+          href={`mailto:${email}`}
+          className={classes.link}
+        >
           {email}
-        </Link>
+        </Typography>
       </div>
       <Divider />
     </Fragment>

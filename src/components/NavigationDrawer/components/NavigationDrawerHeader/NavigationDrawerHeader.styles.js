@@ -7,6 +7,18 @@ const NavigationDrawerHeaderStyles = theme => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
+  title: {
+    fontWeight: 700,
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+  link: {
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
 });
 
 export default NavigationDrawerHeaderStyles;
