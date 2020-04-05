@@ -16,6 +16,7 @@ import { User } from '../src/models';
 import { GroupsStyles } from '../src/styles';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
+import Routes from '../src/constants/Routes';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupsStyles);
@@ -39,8 +40,11 @@ const Groups = (props) => {
     title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
-    showAddPhoto: user.isAdmin,
-    showAddGroup: user.isAdmin,
+    routes: Routes,
+    actionButtons: {
+      showAddPhoto: user.isAdmin,
+      showAddGroup: user.isAdmin,
+    },
   };
 
   /**

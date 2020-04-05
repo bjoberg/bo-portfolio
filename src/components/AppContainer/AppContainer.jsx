@@ -1,48 +1,50 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { ClickAwayListener } from '@material-ui/core';
 
+import SEO from '../../../next-seo.config';
+import NavigationDrawer from '../NavigationDrawer';
 import AppContainerStyles from './AppContainer.styles';
 import ActionBar from '../ActionBar/ActionBar';
 import User from '../../models/User';
+import { PersonalData } from '../../constants';
 
 const useStyles = makeStyles(AppContainerStyles);
 
 const AppContainer = (props) => {
   const classes = useStyles();
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const { children, user, actionBarOptions } = props;
 
+  const openDrawer = () => setDrawerIsOpen(true);
+  const closeDrawer = () => setDrawerIsOpen(false);
   const handleLogin = () => { window.location.href = '/api/login'; };
   const handleLogout = () => { window.location.href = '/api/logout'; };
 
   return (
     <Fragment>
-      <ActionBar
-        user={user}
-        title={actionBarOptions.title}
-        navButtonColor={actionBarOptions.navButtonColor}
-        actionButtonColor={actionBarOptions.actionButtonColor}
-        isDisabled={actionBarOptions.isDisabled}
-        elevateOnScroll={actionBarOptions.elevateOnScroll}
-        showDelete={actionBarOptions.showDelete}
-        showInfo={actionBarOptions.showInfo}
-        showAddPhoto={actionBarOptions.showAddPhoto}
-        showSave={actionBarOptions.showSave}
-        showAddGroup={actionBarOptions.showAddGroup}
-        showAvatar={actionBarOptions.showAvatar}
-        saveButtonText={actionBarOptions.saveButtonText}
-        navButton={actionBarOptions.navButton}
-        handleNav={actionBarOptions.handleNav}
-        handleDelete={actionBarOptions.handleDelete}
-        handleInfo={actionBarOptions.handleInfo}
-        handleAddPhoto={actionBarOptions.handleAddPhoto}
-        handleAddGroup={actionBarOptions.handleAddGroup}
-        handleSave={actionBarOptions.handleSave}
-        handleLogout={handleLogout}
-        handleLogin={handleLogin}
-      />
-      <div className={classes.toolbar} />
-      <main>{children}</main>
+      <ClickAwayListener onClickAway={closeDrawer}>
+        {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
+        <div>
+          <ActionBar
+            user={user}
+            handleLogout={handleLogout}
+            handleLogin={handleLogin}
+            handleNav={openDrawer}
+            {...actionBarOptions}
+          />
+          <NavigationDrawer
+            title={SEO.title}
+            email={PersonalData.email}
+            items={actionBarOptions.routes}
+            isOpen={drawerIsOpen}
+            handleClose={closeDrawer}
+          />
+          <div className={classes.toolbar} />
+          <main>{children}</main>
+        </div>
+      </ClickAwayListener>
     </Fragment>
   );
 };
@@ -53,27 +55,8 @@ AppContainer.propTypes = {
     profile: PropTypes.instanceOf(User),
     isFetching: PropTypes.bool,
   }),
-  actionBarOptions: PropTypes.shape({
-    title: PropTypes.string,
-    navButtonColor: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
-    actionButtonColor: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
-    isDisabled: PropTypes.bool,
-    elevateOnScroll: PropTypes.bool,
-    showDelete: PropTypes.bool,
-    showInfo: PropTypes.bool,
-    showAddPhoto: PropTypes.bool,
-    showSave: PropTypes.bool,
-    showAddGroup: PropTypes.bool,
-    showAvatar: PropTypes.bool,
-    saveButtonText: PropTypes.string,
-    navButton: PropTypes.element,
-    handleNav: PropTypes.func,
-    handleDelete: PropTypes.func,
-    handleInfo: PropTypes.func,
-    handleAddPhoto: PropTypes.func,
-    handleAddGroup: PropTypes.func,
-    handleSave: PropTypes.func,
-  }),
+  // eslint-disable-next-line react/forbid-prop-types
+  actionBarOptions: PropTypes.object,
 };
 
 AppContainer.defaultProps = {

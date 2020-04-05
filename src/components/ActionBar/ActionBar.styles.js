@@ -9,8 +9,20 @@ const ActionBarStyles = theme => ({
   actionButtonGroup: {
     marginRight: theme.spacing(2),
   },
-  title: {
+  titleContainer: {
     flexGrow: 1,
+  },
+  title: {
+    textDecoration: 'none',
+    fontWeight: 800,
+    color: 'inherit',
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   },
 });
 
