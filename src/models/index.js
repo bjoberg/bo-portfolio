@@ -1,5 +1,4 @@
 import User from './User';
-import Group from './Group';
-import Image from './Image';
 
-export { User, Group, Image };
+// eslint-disable-next-line import/prefer-default-export
+export { User };
