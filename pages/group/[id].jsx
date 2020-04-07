@@ -17,8 +17,8 @@ const useStyles = makeStyles(GroupStyles);
 
 const Group = (props) => {
   const classes = useStyles();
-  const { user, group, images } = props;
-  const { title, description } = group.group;
+  const { user, hasError, group } = props;
+
   const actionBarOptions = {
     elevateOnScroll: true,
     showAvatar: true,
@@ -27,14 +27,16 @@ const Group = (props) => {
       showAddGroup: user.isAdmin,
     },
   };
+
+  // TODO: What if group is undefined?
   const seoTitle = `${group.title} - ${SEO.title}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/group/${group.id}`;
 
   return (
     <Fragment>
       <NextSeo
-        noindex={group.hasError}
-        nofollow={group.hasError}
+        noindex={hasError}
+        nofollow={hasError}
         title={seoTitle}
         description={group.description}
         canonical={url}
@@ -53,8 +55,8 @@ const Group = (props) => {
       <AppContainer user={user} actionBarOptions={actionBarOptions}>
         <div className={classes.root}>
           <div className={classes.container}>
-            <Typography variant="h1" gutterBottom>{title}</Typography>
-            <Typography variant="subtitle1">{description}</Typography>
+            <Typography variant="h1" gutterBottom>{group.title}</Typography>
+            <Typography variant="subtitle1">{group.description}</Typography>
           </div>
         </div>
       </AppContainer>
@@ -68,21 +70,26 @@ Group.propTypes = {
     isFetching: PropTypes.bool,
     isAdmin: PropTypes.bool,
   }),
-  group: PropTypes.shape({
-    hasError: PropTypes.bool,
-    group: PropTypes.instanceOf(GroupModel)
-  }).isRequired,
+  hasError: PropTypes.bool,
+  group: PropTypes.instanceOf(GroupModel).isRequired
 };
 
 Group.defaultProps = {
   user: undefined,
+  hasError: false,
 };
 
 Group.getInitialProps = async ({ query }) => {
   const { id } = query;
-  const group = await getGroup(id);
-  const images = await getGroupImages(id);
-  return { group, images };
+  let hasError = false;
+  let group;
+  try {
+    group = await getGroup(id);
+    group.images = await getGroupImages(id);
+  } catch (error) {
+    hasError = true;
+  }
+  return { hasError, group };
 };
 
 export default Group;
