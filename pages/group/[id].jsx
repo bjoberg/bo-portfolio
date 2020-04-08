@@ -121,7 +121,7 @@ Group.propTypes = {
     description: PropTypes.string,
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
-  }),
+  }).isRequired,
   images: PropTypes.shape({
     limit: PropTypes.number,
     page: PropTypes.number,
@@ -139,7 +139,7 @@ Group.propTypes = {
       createdAt: PropTypes.string,
       updatedAt: PropTypes.string,
     }))
-  }),
+  }).isRequired,
 };
 
 Group.defaultProps = {
