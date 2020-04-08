@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { createRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import SEO from '../../next-seo.config';
 import AppContainer from '../../src/components/AppContainer';
+import { ImageGrid } from '../../src/components/ImageGrid';
 import { GroupStyles } from '../../src/styles';
 import { User } from '../../src/models';
 import { getGroup, getGroupImages } from '../../src/services/group';
@@ -26,13 +27,24 @@ const getSeoConfig = (group) => {
   let seoDescription = SEO.description;
   if (group.title) seoTitle = `${group.title} - ${SEO.title}`;
   if (group.description) seoDescription = group.description;
-  return { seoUrl, seoTitle, seoDescription };
+  const seoImages = [
+    {
+      url: group.thumbnailUrl,
+      alt: `${group.title}`,
+    },
+    {
+      url: group.imageUrl,
+      alt: `${group.title}`,
+    }
+  ]
+  return { seoUrl, seoTitle, seoDescription, seoImages };
 }
 
 const Group = (props) => {
   const classes = useStyles();
+  const imageGridRef = createRef();
   const { user, hasError, group, images } = props;
-  const { seoUrl, seoTitle, seoDescription } = getSeoConfig(group);
+  const { seoUrl, seoTitle, seoDescription, seoImages } = getSeoConfig(group);
 
   const actionBarOptions = {
     elevateOnScroll: true,
@@ -55,20 +67,23 @@ const Group = (props) => {
           url: seoUrl,
           title: seoTitle,
           description: seoDescription,
-          // TODO: Add this to the export config
-          images: [
-            {
-              url: group.thumbnailUrl,
-              alt: `${group.title} Brett Oberg Group`,
-            },
-          ],
+          images: seoImages,
         }}
       />
       <AppContainer user={user} actionBarOptions={actionBarOptions}>
         <div className={classes.root}>
           <div className={classes.container}>
-            <Typography variant="h1" gutterBottom>{group.title}</Typography>
-            <Typography variant="subtitle1">{group.description}</Typography>
+            <Typography variant="h1">{group.title}</Typography>
+            <Typography variant="subtitle2">{images.totalItems} images</Typography>
+            <div className={classes.subheader}>
+              <Typography>{group.description}</Typography>
+            </div>
+            <div className={classes.imageGridContainer}>
+              <ImageGrid
+                domRef={imageGridRef}
+                images={images.rows}
+              />
+            </div>
           </div>
         </div>
       </AppContainer>

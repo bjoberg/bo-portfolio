@@ -8,6 +8,12 @@ const GroupStyles = theme => ({
     margin: 'auto',
     overflow: 'hidden',
   },
+  subheader: {
+    marginTop: theme.spacing(4),
+  },
+  imageGridContainer: {
+    marginTop: theme.spacing(8),
+  },
 });
 
 export default GroupStyles;
