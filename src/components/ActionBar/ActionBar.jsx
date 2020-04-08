@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import ProfileMenu from './components/ProfileMenu';
 import ElevationScroll from './components/ElevationScroll';
@@ -25,12 +26,13 @@ const ActionBar = (props) => {
   const {
     title,
     routes,
-    navButtonColor,
     elevateOnScroll,
+    showMenuButton,
+    showBackButton,
     showAvatar,
     user,
-    navButton,
     handleNav,
+    handleBack,
     handleLogout,
     handleLogin,
     actionButtons,
@@ -40,20 +42,30 @@ const ActionBar = (props) => {
     <ElevationScroll elevateOnScroll={elevateOnScroll}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Box display={{
-            xs: 'block',
-            sm: 'none',
-          }}
-          >
-            <IconButton
-              color={navButtonColor}
-              className={classes.navButton}
-              edge="start"
-              onClick={handleNav}
+          {showMenuButton && (
+            <Box display={{
+              xs: 'block',
+              sm: 'none',
+            }}
             >
-              {navButton}
+              <IconButton
+                className={classes.menuButton}
+                edge="start"
+                onClick={handleNav}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+          )}
+          {showBackButton && (
+            <IconButton
+              className={classes.menuButton}
+              edge="start"
+              onClick={handleBack}
+            >
+              <ArrowBackIcon />
             </IconButton>
-          </Box>
+          )}
           <div className={classes.titleContainer}>
             <Box display={{
               xs: 'none',
@@ -105,13 +117,14 @@ ActionBar.propTypes = {
     route: PropTypes.string,
   })),
   elevateOnScroll: PropTypes.bool,
-  navButtonColor: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
   showAvatar: PropTypes.bool,
+  showMenuButton: PropTypes.bool,
+  showBackButton: PropTypes.bool,
   user: PropTypes.shape({
     profile: PropTypes.instanceOf(User),
     isFetching: PropTypes.bool,
   }),
-  navButton: PropTypes.element,
+  handleBack: PropTypes.func,
   handleNav: PropTypes.func,
   handleLogout: PropTypes.func,
   handleLogin: PropTypes.func,
@@ -134,11 +147,12 @@ ActionBar.propTypes = {
 ActionBar.defaultProps = {
   title: '',
   routes: [],
-  navButtonColor: 'default',
   elevateOnScroll: false,
   showAvatar: false,
+  showMenuButton: false,
+  showBackButton: false,
   user: undefined,
-  navButton: <MenuIcon />,
+  handleBack: () => { },
   handleNav: () => { },
   handleLogout: () => { },
   handleLogin: () => { },

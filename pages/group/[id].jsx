@@ -46,9 +46,24 @@ const Group = (props) => {
   const { user, hasError, group, images } = props;
   const { seoUrl, seoTitle, seoDescription, seoImages } = getSeoConfig(group);
 
+  /**
+   * Navigate on page back in history
+   */
+  const goBack = () => {
+    try {
+      const url = new URL(document.referrer);
+      if (!url || url.pathname !== '/groups') window.location.replace('/groups');
+      else window.history.back();
+    } catch (error) {
+      window.location.replace('/groups');
+    }
+  };
+
   const actionBarOptions = {
     elevateOnScroll: true,
     showAvatar: true,
+    showBackButton: true,
+    handleBack: goBack,
     actionButtons: {
       showAddPhoto: user.isAdmin,
       showAddGroup: user.isAdmin,
