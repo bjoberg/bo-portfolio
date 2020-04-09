@@ -8,7 +8,6 @@ const { publicRuntimeConfig } = getConfig();
  * Retrieve a single group based on id
  *
  * @param {string} id of the group to retrieve
- * @returns {Group}
  * @throws {Error} if there is something wrong with the request
  */
 export const getGroup = async (id) => {
