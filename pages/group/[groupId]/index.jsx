@@ -8,14 +8,14 @@ import { NextSeo } from 'next-seo';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import AppContainer from '../../src/components/AppContainer';
-import { ImageGrid } from '../../src/components/ImageGrid';
-import { GroupStyles } from '../../src/styles';
-import { User } from '../../src/models';
-import { getGroup, getGroupImages } from '../../src/services/group';
-import { getSEOConfigForGroup } from '../../src/utils/seo';
-import { isAtEnd } from '../../src/utils/helpers';
-import { useInfiniteScroll } from '../../src/hooks';
+import AppContainer from '../../../src/components/AppContainer';
+import { ImageGrid } from '../../../src/components/ImageGrid';
+import { GroupStyles } from '../../../src/styles';
+import { User } from '../../../src/models';
+import { getGroup, getGroupImages } from '../../../src/services/group';
+import { getSEOConfigForGroup } from '../../../src/utils/seo';
+import { isAtEnd } from '../../../src/utils/helpers';
+import { useInfiniteScroll } from '../../../src/hooks';
 
 const useStyles = makeStyles(GroupStyles);
 
@@ -177,13 +177,13 @@ Group.defaultProps = {
 };
 
 Group.getInitialProps = async ({ query }) => {
-  const { id } = query;
+  const { groupId } = query;
   let hasError = false;
   let group;
   let images;
   try {
-    group = await getGroup(id);
-    images = await getGroupImages(id);
+    group = await getGroup(groupId);
+    images = await getGroupImages(groupId);
   } catch (error) {
     hasError = true;
   }
