@@ -125,6 +125,7 @@ const Group = (props) => {
               <ImageGrid
                 domRef={imageGridRef}
                 images={items}
+                routeBase={`/group/${group.id}/image/`}
                 isLoading={isLoadingImages}
               />
             </div>
