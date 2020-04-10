@@ -5,8 +5,8 @@ const { publicRuntimeConfig } = getConfig();
 
 /**
  * Get the seo config based on the provided group
- * 
- * @param {{id: string, title: string, description: string}} group 
+ *
+ * @param {{id: string, title: string, description: string}} group
  * @returns {{ seoUrl: string, seoTitle: string, seoDescription: string }} seo config variables
  */
 const getSEOConfigForGroup = (group) => {
@@ -23,9 +23,12 @@ const getSEOConfigForGroup = (group) => {
     {
       url: group.imageUrl,
       alt: `${group.title}`,
-    }
-  ]
-  return { seoUrl, seoTitle, seoDescription, seoImages };
-}
+    },
+  ];
+  return {
+    seoUrl, seoTitle, seoDescription, seoImages,
+  };
+};
 
+// eslint-disable-next-line import/prefer-default-export
 export { getSEOConfigForGroup };
