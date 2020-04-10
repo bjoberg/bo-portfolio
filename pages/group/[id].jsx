@@ -1,5 +1,9 @@
-import React, { createRef, Fragment } from 'react';
+import React, {
+  createRef, Fragment, useState, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
+import fetch from 'isomorphic-unfetch';
+import httpStatus from 'http-status';
 import { NextSeo } from 'next-seo';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,11 +14,13 @@ import { GroupStyles } from '../../src/styles';
 import { User } from '../../src/models';
 import { getGroup, getGroupImages } from '../../src/services/group';
 import { getSEOConfigForGroup } from '../../src/utils/seo';
+import { isAtEnd } from '../../src/utils/helpers';
+import { useInfiniteScroll } from '../../src/hooks';
 
 const useStyles = makeStyles(GroupStyles);
 
 /**
- * Navigate on page back in history
+ * Navigate one page back in history
  */
 const goBack = () => {
   try {
@@ -31,8 +37,8 @@ const Group = (props) => {
   const imageGridRef = createRef();
   const {
     user,
-    hasError,
     group,
+    hasError,
     images,
   } = props;
   const {
@@ -41,6 +47,13 @@ const Group = (props) => {
     seoDescription,
     seoImages,
   } = getSEOConfigForGroup(group);
+  const hasMoreData = isAtEnd(images.totalItems, images.limit, images.page + 1);
+
+  const [pageHasError, setPageHasError] = useState(hasError);
+  const [isEnd, setIsEnd] = useState(hasMoreData);
+  const [page, setPage] = useState(images.page);
+  const [items, setItems] = useState(images.rows);
+
   const actionBarOptions = {
     elevateOnScroll: true,
     showAvatar: true,
@@ -52,11 +65,40 @@ const Group = (props) => {
     },
   };
 
+  /**
+   * Request next page of images
+   * @param {Function} isFetching set the status of the fetching state
+   */
+  const handlePaginateImages = useCallback((isFetching) => {
+    const paginateImages = async () => {
+      const next = page + 1;
+      const result = await fetch(`/api/group/${group.id}/images?limit=${images.limit}&page=${next}`);
+      if (result.status === httpStatus.OK) {
+        const json = await result.json();
+        setItems(prevState => [...prevState, ...json.rows]);
+        setIsEnd(isAtEnd(json.totalItems, json.limit, next + 1));
+        isFetching(false);
+        setPage(next);
+      } else {
+        setPageHasError(true);
+        isFetching(false);
+      }
+    };
+    paginateImages();
+  }, [group.id, images.limit, page]);
+
+  const [isLoadingImages] = useInfiniteScroll(
+    handlePaginateImages,
+    isEnd,
+    pageHasError,
+    imageGridRef,
+  );
+
   return (
     <Fragment>
       <NextSeo
-        noindex={hasError}
-        nofollow={hasError}
+        noindex={pageHasError}
+        nofollow={pageHasError}
         title={seoTitle}
         description={seoDescription}
         canonical={seoUrl}
@@ -82,7 +124,8 @@ const Group = (props) => {
             <div className={classes.imageGridContainer}>
               <ImageGrid
                 domRef={imageGridRef}
-                images={images.rows}
+                images={items}
+                isLoading={isLoadingImages}
               />
             </div>
           </div>
