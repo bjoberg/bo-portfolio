@@ -40,6 +40,7 @@ const Groups = (props) => {
     title: SEO.title,
     elevateOnScroll: true,
     showAvatar: true,
+    showMenuButton: true,
     routes: Routes,
     actionButtons: {
       showAddPhoto: user.isAdmin,

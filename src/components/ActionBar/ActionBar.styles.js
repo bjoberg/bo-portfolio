@@ -3,7 +3,7 @@ const ActionBarStyles = theme => ({
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
   },
-  navButton: {
+  menuButton: {
     marginRight: theme.spacing(2),
   },
   actionButtonGroup: {
