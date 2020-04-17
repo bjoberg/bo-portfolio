@@ -46,7 +46,7 @@ export const getGroupImages = async (id, limit = 30, page = 0) => {
  * @param {string} imageId id of the image to search for within the group
  */
 export const getGroupImage = async (groupId, imageId) => {
-  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/group/${groupId}/image/${imageId}`;
+  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/image/${imageId}`;
   const res = await fetch(route);
   if (res.status === httpStatus.OK) {
     const json = await res.json();
