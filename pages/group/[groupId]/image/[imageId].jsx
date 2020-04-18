@@ -6,6 +6,7 @@ import {
   Typography, Grid, IconButton, Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
@@ -82,6 +83,18 @@ const GroupImage = (props) => {
         alignItems="center"
         className={clsx(classes.root, classes.background)}
       >
+        <Grid
+          item
+          className={clsx(classes.navIcon, classes.backIcon)}
+        >
+          <IconButton
+            aria-label="close"
+            className={classes.iconButton}
+            onClick={() => goBack(`/group/${groupId}`)}
+          >
+            <ArrowBackIcon color="inherit" />
+          </IconButton>
+        </Grid>
         <Grid
           item
           className={clsx(classes.navIcon, classes.navIconLeft)}

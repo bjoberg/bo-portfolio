@@ -20,6 +20,12 @@ const GroupImageStyles = theme => ({
     zIndex: theme.zIndex.appBar - 1,
     position: 'absolute',
   },
+  backIcon: {
+    top: 0,
+    left: 0,
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
   navIconLeft: {
     left: 0,
     marginLeft: theme.spacing(2),
