@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { NextSeo } from 'next-seo';
 import {
   Typography, Grid, IconButton, Button,
 } from '@material-ui/core';
@@ -12,12 +13,19 @@ import { GroupImageStyles } from '../../../../src/styles';
 import { getGroupImage } from '../../../../src/services/group';
 import { useKeyPress } from '../../../../src/hooks';
 import { goBack } from '../../../../src/utils/helpers';
+import { getSEOConfigForImage } from '../../../../src/utils/seo';
 
 const useStyles = makeStyles(GroupImageStyles);
 
 const GroupImage = (props) => {
   const classes = useStyles();
   const { hasError, groupId, image } = props;
+  const {
+    seoUrl,
+    seoTitle,
+    seoDescription,
+    seoImages,
+  } = getSEOConfigForImage(image);
   const escPressed = useKeyPress(27);
 
   useEffect(() => {
@@ -53,43 +61,58 @@ const GroupImage = (props) => {
   }
 
   return (
-    <Grid
-      container
-      justify="center"
-      alignContent="center"
-      alignItems="center"
-      className={clsx(classes.root, classes.background)}
-    >
+    <Fragment>
+      <NextSeo
+        noindex={hasError}
+        nofollow={hasError}
+        title={seoTitle}
+        description={seoDescription}
+        canonical={seoUrl}
+        openGraph={{
+          url: seoUrl,
+          title: seoTitle,
+          description: seoDescription,
+          images: seoImages,
+        }}
+      />
       <Grid
-        item
-        className={clsx(classes.navIcon, classes.navIconLeft)}
+        container
+        justify="center"
+        alignContent="center"
+        alignItems="center"
+        className={clsx(classes.root, classes.background)}
       >
-        <IconButton
-          aria-label="back"
-          className={classes.iconButton}
+        <Grid
+          item
+          className={clsx(classes.navIcon, classes.navIconLeft)}
         >
-          <ArrowBackIosIcon color="inherit" />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <img
-          className={classes.image}
-          src={image.imageUrl}
-          alt={image.description}
-        />
-      </Grid>
-      <Grid
-        item
-        className={clsx(classes.navIcon, classes.navIconRight)}
-      >
-        <IconButton
-          aria-label="forward"
-          className={classes.iconButton}
+          <IconButton
+            aria-label="back"
+            className={classes.iconButton}
+          >
+            <ArrowBackIosIcon color="inherit" />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <img
+            className={classes.image}
+            src={image.imageUrl}
+            alt={image.description}
+          />
+        </Grid>
+        <Grid
+          item
+          className={clsx(classes.navIcon, classes.navIconRight)}
         >
-          <ArrowForwardIosIcon color="inherit" />
-        </IconButton>
+          <IconButton
+            aria-label="forward"
+            className={classes.iconButton}
+          >
+            <ArrowForwardIosIcon color="inherit" />
+          </IconButton>
+        </Grid>
       </Grid>
-    </Grid>
+    </Fragment>
   );
 };
 
