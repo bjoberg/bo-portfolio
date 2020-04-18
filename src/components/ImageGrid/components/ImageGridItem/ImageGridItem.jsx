@@ -17,7 +17,15 @@ const ImageGridItem = (props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
-    id, imageUrl, title, imageHeight, imageWidth, isSelected, isEditable, handleImageSelect,
+    id,
+    imageUrl,
+    title,
+    imageHeight,
+    imageWidth,
+    routeBase,
+    isSelected,
+    isEditable,
+    handleImageSelect,
   } = props;
 
   let height = theme.image.height.large;
@@ -40,7 +48,7 @@ const ImageGridItem = (props) => {
           />
         </div>
       )}
-      <a key={id} href={`/image/${id}`} className={classes.link}>
+      <a key={id} href={`${routeBase}${id}`} className={classes.link}>
         <img
           className={classes.img}
           id={id}
@@ -58,6 +66,7 @@ ImageGridItem.propTypes = {
   title: PropTypes.string,
   imageHeight: PropTypes.number,
   imageWidth: PropTypes.number,
+  routeBase: PropTypes.string,
   isSelected: PropTypes.bool,
   isEditable: PropTypes.bool,
   handleImageSelect: PropTypes.func,
@@ -67,6 +76,7 @@ ImageGridItem.defaultProps = {
   title: '',
   imageHeight: 100,
   imageWidth: 100,
+  routeBase: '',
   isSelected: false,
   isEditable: false,
   handleImageSelect: () => { },

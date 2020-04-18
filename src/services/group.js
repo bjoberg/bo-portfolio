@@ -38,3 +38,19 @@ export const getGroupImages = async (id, limit = 30, page = 0) => {
   }
   throw new Error(`Unable to retrieve images in group ${id}`);
 };
+
+/**
+ * Get image associated with provided group
+ *
+ * @param {string} groupId id of the group the image is in
+ * @param {string} imageId id of the image to search for within the group
+ */
+export const getGroupImage = async (groupId, imageId) => {
+  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/image/${imageId}`;
+  const res = await fetch(route);
+  if (res.status === httpStatus.OK) {
+    const json = await res.json();
+    return json;
+  }
+  throw new Error(`Unable to retrieve image ${imageId} from group ${groupId}`);
+};
