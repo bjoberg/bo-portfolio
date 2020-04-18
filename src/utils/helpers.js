@@ -8,6 +8,20 @@
 export const isAtEnd = (total, offset, nextPage) => (total / offset) <= nextPage;
 
 /**
+ * Navigate one page back in history
+ * @param {string} prevRoute the expected previous route to naviate back to
+ */
+export const goBack = (prevRoute) => {
+  try {
+    const url = new URL(document.referrer);
+    if (!url || url.pathname !== prevRoute) window.location.href = prevRoute;
+    else window.history.back();
+  } catch (error) {
+    window.location.href = prevRoute;
+  }
+};
+
+/**
  * Create a query string with the provided dictionary.
  *
  * @param {object} dictionary key value pair of query items

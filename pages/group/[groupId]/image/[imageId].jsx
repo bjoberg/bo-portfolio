@@ -1,20 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import {
+  Typography, Grid, IconButton, Button,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-import {
-  Typography, Grid, IconButton, Button,
-} from '@material-ui/core';
-import clsx from 'clsx';
 import { GroupImageStyles } from '../../../../src/styles';
 import { getGroupImage } from '../../../../src/services/group';
+import { useKeyPress } from '../../../../src/hooks';
+import { goBack } from '../../../../src/utils/helpers';
 
 const useStyles = makeStyles(GroupImageStyles);
 
 const GroupImage = (props) => {
   const classes = useStyles();
-  const { hasError, image } = props;
+  const { hasError, groupId, image } = props;
+  const escPressed = useKeyPress(27);
+
+  useEffect(() => {
+    if (escPressed) goBack(`/group/${groupId}`);
+  }, [escPressed, groupId]);
 
   if (hasError) {
     return (
@@ -85,6 +93,26 @@ const GroupImage = (props) => {
   );
 };
 
+GroupImage.propTypes = {
+  hasError: PropTypes.bool,
+  groupId: PropTypes.string.isRequired,
+  image: PropTypes.shape({
+    id: PropTypes.string,
+    thumbnailUrl: PropTypes.string,
+    imageUrl: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    location: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }),
+};
+
+GroupImage.defaultProps = {
+  hasError: false,
+  image: undefined,
+};
+
 GroupImage.getInitialProps = async ({ query }) => {
   const { groupId, imageId } = query;
   let hasError = false;
@@ -94,7 +122,7 @@ GroupImage.getInitialProps = async ({ query }) => {
   } catch (error) {
     hasError = true;
   }
-  return { hasError, image };
+  return { hasError, groupId, image };
 };
 
 export default GroupImage;

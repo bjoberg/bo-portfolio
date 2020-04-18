@@ -14,23 +14,10 @@ import { GroupStyles } from '../../../src/styles';
 import { User } from '../../../src/models';
 import { getGroup, getGroupImages } from '../../../src/services/group';
 import { getSEOConfigForGroup } from '../../../src/utils/seo';
-import { isAtEnd } from '../../../src/utils/helpers';
+import { isAtEnd, goBack } from '../../../src/utils/helpers';
 import { useInfiniteScroll } from '../../../src/hooks';
 
 const useStyles = makeStyles(GroupStyles);
-
-/**
- * Navigate one page back in history
- */
-const goBack = () => {
-  try {
-    const url = new URL(document.referrer);
-    if (!url || url.pathname !== '/groups') window.location.replace('/groups');
-    else window.history.back();
-  } catch (error) {
-    window.location.replace('/groups');
-  }
-};
 
 const Group = (props) => {
   const classes = useStyles();
@@ -58,7 +45,7 @@ const Group = (props) => {
     elevateOnScroll: true,
     showAvatar: true,
     showBackButton: true,
-    handleBack: goBack,
+    handleBack: () => goBack('/groups'),
     actionButtons: {
       showAddPhoto: user.isAdmin,
       showAddGroup: user.isAdmin,
