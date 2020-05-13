@@ -6,11 +6,11 @@ import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
-import { IndexStyles } from '../src/styles';
 import AppContainer from '../src/components/AppContainer';
+import Routes from '../src/constants/Routes';
+import { IndexStyles } from '../src/styles';
 import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
-import Routes from '../src/constants/Routes';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
@@ -20,7 +20,10 @@ const url = `${publicRuntimeConfig.ROOT_URL}`;
 const Index = () => {
   const classes = useStyles();
   const {
-    firstName, lastName, bio, avatar,
+    firstName,
+    lastName,
+    bio,
+    avatar,
   } = PersonalData;
   const fullName = `${firstName} ${lastName}`;
 
