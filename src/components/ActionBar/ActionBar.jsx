@@ -9,15 +9,11 @@ import {
   Grid,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import ProfileMenu from './components/ProfileMenu';
 import ElevationScroll from './components/ElevationScroll';
 import ActionBarStyles from './ActionBar.styles';
-import User from '../../models/User';
-import ActionButtons from './components/ActionButtons/ActionButtons';
 
 const useStyles = makeStyles(ActionBarStyles);
 
@@ -29,13 +25,8 @@ const ActionBar = (props) => {
     elevateOnScroll,
     showMenuButton,
     showBackButton,
-    showAvatar,
-    user,
     handleNav,
     handleBack,
-    handleLogout,
-    handleLogin,
-    actionButtons,
   } = props;
 
   return (
@@ -97,12 +88,6 @@ const ActionBar = (props) => {
               </Grid>
             </Box>
           </div>
-          <div className={clsx(showAvatar && classes.actionButtonGroup)}>
-            <ActionButtons {...actionButtons} />
-          </div>
-          {showAvatar && (
-            <ProfileMenu user={user} handleLogout={handleLogout} handleLogin={handleLogin} />
-          )}
         </Toolbar>
       </AppBar>
     </ElevationScroll>
@@ -117,17 +102,10 @@ ActionBar.propTypes = {
     route: PropTypes.string,
   })),
   elevateOnScroll: PropTypes.bool,
-  showAvatar: PropTypes.bool,
   showMenuButton: PropTypes.bool,
   showBackButton: PropTypes.bool,
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-  }),
   handleBack: PropTypes.func,
   handleNav: PropTypes.func,
-  handleLogout: PropTypes.func,
-  handleLogin: PropTypes.func,
   actionButtons: PropTypes.shape({
     isDisabled: PropTypes.bool,
     color: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
@@ -148,14 +126,10 @@ ActionBar.defaultProps = {
   title: '',
   routes: [],
   elevateOnScroll: false,
-  showAvatar: false,
   showMenuButton: false,
   showBackButton: false,
-  user: undefined,
   handleBack: () => { },
   handleNav: () => { },
-  handleLogout: () => { },
-  handleLogin: () => { },
   actionButtons: PropTypes.shape({
     isDisabled: false,
     color: 'default',

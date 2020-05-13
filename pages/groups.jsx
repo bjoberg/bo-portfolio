@@ -12,7 +12,6 @@ import { NextSeo } from 'next-seo';
 import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
 import { GroupGrid } from '../src/components/GroupGrid';
-import { User } from '../src/models';
 import { GroupsStyles } from '../src/styles';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
@@ -28,7 +27,7 @@ const url = `${publicRuntimeConfig.ROOT_URL}/groups`;
 const Groups = (props) => {
   const classes = useStyles();
   const groupGridRef = createRef();
-  const { user, groups } = props;
+  const { groups } = props;
   const hasMoreData = isAtEnd(groups.totalItems, groups.limit, groups.page + 1);
 
   const [hasError, setHasError] = useState(groups.hasError);
@@ -42,10 +41,6 @@ const Groups = (props) => {
     showAvatar: true,
     showMenuButton: true,
     routes: Routes,
-    actionButtons: {
-      showAddPhoto: user.isAdmin,
-      showAddGroup: user.isAdmin,
-    },
   };
 
   /**
@@ -99,7 +94,7 @@ const Groups = (props) => {
           ],
         }}
       />
-      <AppContainer user={user} actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions}>
         <div className={classes.root}>
           <div className={classes.container}>
             <div className={classes.title}>
@@ -109,8 +104,6 @@ const Groups = (props) => {
             <GroupGrid
               domRef={groupGridRef}
               groups={items}
-              showActionMenu={user.isAdmin}
-              isRemovable={user.isAdmin}
               isLoading={isLoadingGroups}
               hasError={hasError}
             />
@@ -122,11 +115,6 @@ const Groups = (props) => {
 };
 
 Groups.propTypes = {
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-    isAdmin: PropTypes.bool,
-  }),
   groups: PropTypes.shape({
     hasError: PropTypes.bool,
     limit: PropTypes.number,
@@ -143,10 +131,6 @@ Groups.propTypes = {
       updatedAt: PropTypes.string,
     })),
   }).isRequired,
-};
-
-Groups.defaultProps = {
-  user: undefined,
 };
 
 Groups.getInitialProps = async () => {

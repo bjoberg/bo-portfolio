@@ -7,7 +7,6 @@ import SEO from '../../../next-seo.config';
 import NavigationDrawer from '../NavigationDrawer';
 import AppContainerStyles from './AppContainer.styles';
 import ActionBar from '../ActionBar/ActionBar';
-import User from '../../models/User';
 import { PersonalData } from '../../constants';
 
 const useStyles = makeStyles(AppContainerStyles);
@@ -51,16 +50,11 @@ const AppContainer = (props) => {
 
 AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-  }),
   // eslint-disable-next-line react/forbid-prop-types
   actionBarOptions: PropTypes.object,
 };
 
 AppContainer.defaultProps = {
-  user: undefined,
   actionBarOptions: undefined,
 };
 

@@ -7,18 +7,10 @@ import { DefaultSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
 import { Theme } from '../src/styles';
-import { useFetchUser } from '../src/hooks';
 import { PersonalData } from '../src/constants';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
-  const { user, isFetchingUser, isAdmin } = useFetchUser();
-
-  const userObj = {
-    profile: user,
-    isFetching: isFetchingUser,
-    isAdmin,
-  };
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -34,7 +26,7 @@ const MyApp = (props) => {
       </Head>
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <Component {...pageProps} user={userObj} />
+        <Component {...pageProps} />
       </ThemeProvider>
     </Fragment>
   );

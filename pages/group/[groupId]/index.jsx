@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppContainer from '../../../src/components/AppContainer';
 import { ImageGrid } from '../../../src/components/ImageGrid';
 import { GroupStyles } from '../../../src/styles';
-import { User } from '../../../src/models';
 import { getGroup, getGroupImages } from '../../../src/services/group';
 import { getSEOConfigForGroup } from '../../../src/utils/seo';
 import { isAtEnd, goBack } from '../../../src/utils/helpers';
@@ -23,7 +22,6 @@ const Group = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    user,
     group,
     hasError,
     images,
@@ -46,10 +44,6 @@ const Group = (props) => {
     showAvatar: true,
     showBackButton: true,
     handleBack: () => goBack('/groups'),
-    actionButtons: {
-      showAddPhoto: user.isAdmin,
-      showAddGroup: user.isAdmin,
-    },
   };
 
   /**
@@ -96,7 +90,7 @@ const Group = (props) => {
           images: seoImages,
         }}
       />
-      <AppContainer user={user} actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions}>
         <div className={classes.root}>
           <div className={classes.container}>
             <Typography variant="h1">{group.title}</Typography>
@@ -124,11 +118,6 @@ const Group = (props) => {
 };
 
 Group.propTypes = {
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-    isAdmin: PropTypes.bool,
-  }),
   hasError: PropTypes.bool,
   group: PropTypes.shape({
     id: PropTypes.string,
@@ -160,7 +149,6 @@ Group.propTypes = {
 };
 
 Group.defaultProps = {
-  user: undefined,
   hasError: false,
 };
 
