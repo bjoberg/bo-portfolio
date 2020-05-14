@@ -14,7 +14,7 @@ const useStyles = makeStyles(AppContainerStyles);
 const AppContainer = (props) => {
   const classes = useStyles();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-  const { children, user, actionBarOptions } = props;
+  const { children, actionBarOptions } = props;
 
   const openDrawer = () => setDrawerIsOpen(true);
   const closeDrawer = () => setDrawerIsOpen(false);
@@ -27,7 +27,6 @@ const AppContainer = (props) => {
         {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
         <div>
           <ActionBar
-            user={user}
             handleLogout={handleLogout}
             handleLogin={handleLogin}
             handleNav={openDrawer}

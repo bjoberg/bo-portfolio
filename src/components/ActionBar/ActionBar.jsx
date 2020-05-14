@@ -106,20 +106,6 @@ ActionBar.propTypes = {
   showBackButton: PropTypes.bool,
   handleBack: PropTypes.func,
   handleNav: PropTypes.func,
-  actionButtons: PropTypes.shape({
-    isDisabled: PropTypes.bool,
-    color: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
-    showDelete: PropTypes.bool,
-    showInfo: PropTypes.bool,
-    showAddPhoto: PropTypes.bool,
-    showSave: PropTypes.bool,
-    showAddGroup: PropTypes.bool,
-    handleDelete: PropTypes.func,
-    handleInfo: PropTypes.func,
-    handleAddPhoto: PropTypes.func,
-    handleAddGroup: PropTypes.func,
-    handleSave: PropTypes.func,
-  }),
 };
 
 ActionBar.defaultProps = {
@@ -130,20 +116,6 @@ ActionBar.defaultProps = {
   showBackButton: false,
   handleBack: () => { },
   handleNav: () => { },
-  actionButtons: PropTypes.shape({
-    isDisabled: false,
-    color: 'default',
-    showDelete: false,
-    showInfo: false,
-    showAddPhoto: false,
-    showSave: false,
-    showAddGroup: false,
-    handleDelete: () => { },
-    handleInfo: () => { },
-    handleAddPhoto: () => { },
-    handleAddGroup: () => { },
-    handleSave: () => { },
-  }),
 };
 
 export default ActionBar;
