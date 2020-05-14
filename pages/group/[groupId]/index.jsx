@@ -99,7 +99,6 @@ const Group = (props) => {
             <ImageGrid
               domRef={imageGridRef}
               images={imageItems}
-              routeBase={`/group/${id}/image/`}
               isLoading={isLoadingImages}
             />
           </Grid>

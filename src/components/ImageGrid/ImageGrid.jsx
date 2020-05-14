@@ -15,7 +15,6 @@ const ImageGrid = (props) => {
   const {
     domRef,
     images,
-    routeBase,
     selectedImages,
     isLoading,
     isEditable,
@@ -49,7 +48,6 @@ const ImageGrid = (props) => {
               imageUrl={item.imageUrl}
               imageHeight={item.height}
               imageWidth={item.width}
-              routeBase={routeBase}
               isEditable={isEditable}
               isSelected={getIsSelected(item.id)}
               handleImageSelect={handleImageSelect}
@@ -75,7 +73,6 @@ ImageGrid.propTypes = {
     height: PropTypes.number,
     width: PropTypes.number,
   })),
-  routeBase: PropTypes.string,
   selectedImages: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
   isEditable: PropTypes.bool,
@@ -85,7 +82,6 @@ ImageGrid.propTypes = {
 ImageGrid.defaultProps = {
   domRef: null,
   images: [],
-  routeBase: '',
   selectedImages: [],
   isLoading: false,
   isEditable: false,

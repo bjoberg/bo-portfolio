@@ -22,7 +22,6 @@ const ImageGridItem = (props) => {
     title,
     imageHeight,
     imageWidth,
-    routeBase,
     isSelected,
     isEditable,
     handleImageSelect,
@@ -48,14 +47,12 @@ const ImageGridItem = (props) => {
           />
         </div>
       )}
-      <a key={id} href={`${routeBase}${id}`} className={classes.link}>
-        <img
-          className={classes.img}
-          id={id}
-          src={imageUrl}
-          alt={title}
-        />
-      </a>
+      <img
+        className={classes.img}
+        id={id}
+        src={imageUrl}
+        alt={title}
+      />
     </div>
   );
 };
@@ -66,7 +63,6 @@ ImageGridItem.propTypes = {
   title: PropTypes.string,
   imageHeight: PropTypes.number,
   imageWidth: PropTypes.number,
-  routeBase: PropTypes.string,
   isSelected: PropTypes.bool,
   isEditable: PropTypes.bool,
   handleImageSelect: PropTypes.func,
@@ -76,7 +72,6 @@ ImageGridItem.defaultProps = {
   title: '',
   imageHeight: 100,
   imageWidth: 100,
-  routeBase: '',
   isSelected: false,
   isEditable: false,
   handleImageSelect: () => { },
