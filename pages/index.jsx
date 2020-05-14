@@ -92,7 +92,7 @@ const Index = () => {
                   <SocialButtons />
                 </Grid>
                 <Grid item className={classes.actionButton}>
-                  <Button href="/groups" variant="outlined" color="primary">Portfolio</Button>
+                  <Button href="/groups" variant="outlined" size="large" color="primary">Portfolio</Button>
                 </Grid>
                 <Grid item>
                   <BodyContent />
