@@ -16,7 +16,6 @@ import Routes from '../src/constants/Routes';
 import { getImages } from '../src/services/image';
 import { ImagesStyles } from '../src/styles';
 import { ImageGrid } from '../src/components/ImageGrid';
-
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
 
