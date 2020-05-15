@@ -1,4 +1,4 @@
-import GroupImageStyles from './GroupImageStyles';
+
 import GroupStyles from './GroupStyles';
 import GroupsStyles from './GroupsStyles';
 import IndexStyles from './IndexStyles';
@@ -9,7 +9,6 @@ import {
 } from './Theme';
 
 export {
-  GroupImageStyles,
   GroupStyles,
   GroupsStyles,
   IndexStyles,

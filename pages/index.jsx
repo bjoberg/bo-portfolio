@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import {
   makeStyles, Grid, Avatar, Typography, Button,
 } from '@material-ui/core';
@@ -7,23 +6,24 @@ import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
 
 import SEO from '../next-seo.config';
-import { IndexStyles } from '../src/styles';
 import AppContainer from '../src/components/AppContainer';
-import { User } from '../src/models';
+import Routes from '../src/constants/Routes';
+import { IndexStyles } from '../src/styles';
 import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
-import Routes from '../src/constants/Routes';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
 const seoTitle = SEO.title;
 const url = `${publicRuntimeConfig.ROOT_URL}`;
 
-const Index = (props) => {
+const Index = () => {
   const classes = useStyles();
-  const { user } = props;
   const {
-    firstName, lastName, bio, avatar,
+    firstName,
+    lastName,
+    bio,
+    avatar,
   } = PersonalData;
   const fullName = `${firstName} ${lastName}`;
 
@@ -33,10 +33,6 @@ const Index = (props) => {
     showAvatar: true,
     showMenuButton: true,
     routes: Routes,
-    actionButtons: {
-      showAddPhoto: user.isAdmin,
-      showAddGroup: user.isAdmin,
-    },
   };
 
   return (
@@ -57,7 +53,7 @@ const Index = (props) => {
           ],
         }}
       />
-      <AppContainer user={user} actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions}>
         <div className={classes.background}>
           <div className={classes.placeholder} />
           <Grid
@@ -85,7 +81,7 @@ const Index = (props) => {
                 </Grid>
                 <Grid item>
                   <Typography
-                    variant="subtitle2"
+                    variant="subtitle1"
                     align="center"
                     gutterBottom
                   >
@@ -96,7 +92,7 @@ const Index = (props) => {
                   <SocialButtons />
                 </Grid>
                 <Grid item className={classes.actionButton}>
-                  <Button href="/groups" variant="outlined">Portfolio</Button>
+                  <Button href="/groups" variant="outlined" size="large" color="primary">Portfolio</Button>
                 </Grid>
                 <Grid item>
                   <BodyContent />
@@ -109,18 +105,5 @@ const Index = (props) => {
     </Fragment>
   );
 };
-
-Index.propTypes = {
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-    isAdmin: PropTypes.bool,
-  }),
-};
-
-Index.defaultProps = {
-  user: undefined,
-};
-
 
 export default Index;

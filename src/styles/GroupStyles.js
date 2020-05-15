@@ -1,12 +1,8 @@
 const GroupStyles = theme => ({
   root: {
-    margin: theme.spacing(4),
-  },
-  container: {
-    width: '100%',
+    padding: theme.spacing(4),
     maxWidth: theme.breakpoints.values.lg,
     margin: 'auto',
-    overflow: 'hidden',
   },
   subheader: {
     marginTop: theme.spacing(4),

@@ -7,7 +7,6 @@ import SEO from '../../../next-seo.config';
 import NavigationDrawer from '../NavigationDrawer';
 import AppContainerStyles from './AppContainer.styles';
 import ActionBar from '../ActionBar/ActionBar';
-import User from '../../models/User';
 import { PersonalData } from '../../constants';
 
 const useStyles = makeStyles(AppContainerStyles);
@@ -15,7 +14,7 @@ const useStyles = makeStyles(AppContainerStyles);
 const AppContainer = (props) => {
   const classes = useStyles();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-  const { children, user, actionBarOptions } = props;
+  const { children, actionBarOptions } = props;
 
   const openDrawer = () => setDrawerIsOpen(true);
   const closeDrawer = () => setDrawerIsOpen(false);
@@ -28,7 +27,6 @@ const AppContainer = (props) => {
         {/* This div is needed because the ClickAwayListener needs a ref to bind to */}
         <div>
           <ActionBar
-            user={user}
             handleLogout={handleLogout}
             handleLogin={handleLogin}
             handleNav={openDrawer}
@@ -51,16 +49,11 @@ const AppContainer = (props) => {
 
 AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
-  user: PropTypes.shape({
-    profile: PropTypes.instanceOf(User),
-    isFetching: PropTypes.bool,
-  }),
   // eslint-disable-next-line react/forbid-prop-types
   actionBarOptions: PropTypes.object,
 };
 
 AppContainer.defaultProps = {
-  user: undefined,
   actionBarOptions: undefined,
 };
 

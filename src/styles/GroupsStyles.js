@@ -1,12 +1,8 @@
 const GroupsStyles = theme => ({
   root: {
-    margin: theme.spacing(4),
-  },
-  container: {
-    width: '100%',
+    padding: theme.spacing(4),
     maxWidth: theme.breakpoints.values.lg,
     margin: 'auto',
-    overflow: 'hidden',
   },
   title: {
     marginBottom: theme.spacing(8),
