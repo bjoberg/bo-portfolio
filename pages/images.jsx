@@ -19,7 +19,6 @@ import { ImageGrid } from '../src/components/ImageGrid';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
 
-
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(ImagesStyles);
 
