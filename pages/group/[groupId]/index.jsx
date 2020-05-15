@@ -47,7 +47,6 @@ const Group = (props) => {
 
   const actionBarOptions = {
     elevateOnScroll: true,
-    showAvatar: true,
     showBackButton: true,
     handleBack: () => goBack('/groups'),
   };
