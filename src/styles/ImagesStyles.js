@@ -7,6 +7,9 @@ const ImagesStyles = theme => ({
   title: {
     marginBottom: theme.spacing(8),
   },
+  subheader: {
+    marginTop: theme.spacing(4),
+  },
 });
 
 export default ImagesStyles;
