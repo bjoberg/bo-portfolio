@@ -34,7 +34,7 @@ const GroupGrid = (props) => {
               <GroupItem
                 id={item.id}
                 title={item.title}
-                imageUrl={item.imageUrl}
+                imageUrl={item.thumbnailUrl}
                 showActionMenu={showActionMenu}
                 isRemovable={isRemovable}
                 handleRemoveOnClick={handleRemoveOnClick}

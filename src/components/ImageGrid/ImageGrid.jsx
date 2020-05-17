@@ -45,7 +45,7 @@ const ImageGrid = (props) => {
               id={item.id}
               key={item.id}
               title={item.title}
-              imageUrl={item.imageUrl}
+              imageUrl={item.thumbnailUrl}
               imageHeight={item.height}
               imageWidth={item.width}
               isEditable={isEditable}
