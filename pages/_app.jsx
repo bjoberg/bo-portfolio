@@ -13,6 +13,7 @@ const MyApp = (props) => {
   const { Component, pageProps } = props;
 
   console.log(SEO);
+  console.log(process.env.APP_ENV);
 
   useEffect(() => {
     // Remove the server-side injected CSS.
