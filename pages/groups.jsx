@@ -9,7 +9,6 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
 import Routes from '../src/constants/Routes';
 import SeoConfig from '../src/models/SeoConfig';
@@ -27,7 +26,7 @@ const Groups = (props) => {
   const { groups } = props;
   const pageTitle = 'Groups';
   const pageSubtitle = 'Collections of different images curated to display my best work, favorite moments, and photographic style.';
-  const seoTitle = `${pageTitle} - ${SEO.title}`;
+  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.title}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/groups`;
   const {
     totalItems,
@@ -46,7 +45,7 @@ const Groups = (props) => {
   const [groupItems, setGroupItems] = useState(rows);
 
   const actionBarOptions = {
-    title: SEO.title,
+    title: publicRuntimeConfig.title,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,

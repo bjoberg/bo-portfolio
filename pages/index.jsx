@@ -5,7 +5,6 @@ import {
 import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
 import Routes from '../src/constants/Routes';
 import { IndexStyles } from '../src/styles';
@@ -14,7 +13,7 @@ import { SocialButtons, BodyContent } from '../src/containers/Index';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
-const seoTitle = SEO.title;
+const seoTitle = publicRuntimeConfig.title;
 const url = `${publicRuntimeConfig.ROOT_URL}`;
 
 const Index = () => {
@@ -28,7 +27,7 @@ const Index = () => {
   const fullName = `${firstName} ${lastName}`;
 
   const actionBarOptions = {
-    title: SEO.title,
+    title: publicRuntimeConfig.title,
     elevateOnScroll: true,
     showAvatar: true,
     showMenuButton: true,
