@@ -12,6 +12,8 @@ import { PersonalData } from '../src/constants';
 const MyApp = (props) => {
   const { Component, pageProps } = props;
 
+  console.log(SEO);
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
