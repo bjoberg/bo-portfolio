@@ -1,0 +1,35 @@
+import React from 'react';
+import { Grid, Typography } from '@material-ui/core';
+
+import Emoji from '../../../components/Emoji';
+import { PersonalData } from '../../../constants';
+
+const BodyContent = () => (
+  <Grid container spacing={4}>
+    <Grid item>
+      <Typography variant="body1" gutterBottom>
+        Hey there
+        <Emoji symbol=" 👋🏼" label="waving hand" />
+        , thanks for taking the time to visit my photography portfolio.
+        My name is Brett Oberg, and in my spare time I take photos.
+        I am inspired by nature and I use photography as an excuse to experience its beauty.
+        Photography has helped give direction and purpose to my life, and I hope my images
+        inspire you to go out and find what is special for you.
+      </Typography>
+    </Grid>
+    <Grid item>
+      <Typography variant="body1" gutterBottom>
+        Aside from developing software (like this website), I spend my time taking photos, cycling,
+        golfing, playing tennis, and spending time with family. I hope you enjoy my work and would
+        like to collaborate on a project or chat over coffee
+        <Emoji symbol=" ☕️" label="hot beverage" />
+        , please email me at
+        {' '}
+        <a href={PersonalData.email}>{PersonalData.email}</a>
+        .
+      </Typography>
+    </Grid>
+  </Grid>
+);
+
+export default BodyContent;
