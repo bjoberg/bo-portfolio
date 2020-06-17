@@ -9,7 +9,6 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../../../next-seo.config';
 import AppContainer from '../../../src/components/AppContainer';
 import SeoConfig from '../../../src/models/SeoConfig';
 import { ImageGrid } from '../../../src/components/ImageGrid';
@@ -34,7 +33,7 @@ const Group = (props) => {
     page,
     rows,
   } = images;
-  const seoTitle = `${title} - ${SEO.title}`;
+  const seoTitle = `${title} - ${publicRuntimeConfig.title}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/group/${id}`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, description, url);
   seoConfig.pushOpenGraphImage(thumbnailUrl, undefined, undefined, `Brett Oberg ${title}`);

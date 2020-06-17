@@ -9,7 +9,6 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
 import SeoConfig from '../src/models/SeoConfig';
 import AppContainer from '../src/components/AppContainer';
 import Routes from '../src/constants/Routes';
@@ -34,7 +33,7 @@ const Images = (props) => {
   } = images;
   const pageTitle = 'Images';
   const pageSubtitle = 'Unfiltered list of all my favorite images.';
-  const seoTitle = `${pageTitle} - ${SEO.title}`;
+  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.title}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/images`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, pageSubtitle, url);
   seoConfig.pushOpenGraphImage('/media/og/images.jpg', 1200, 675, 'Brett Oberg Images');
@@ -46,7 +45,7 @@ const Images = (props) => {
   const [imageItems, setImageItems] = useState(rows);
 
   const actionBarOptions = {
-    title: SEO.title,
+    title: publicRuntimeConfig.title,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,
