@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import getConfig from 'next/config';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -9,11 +8,9 @@ import { DefaultSeo } from 'next-seo';
 import { Theme } from '../src/styles';
 import { PersonalData } from '../src/constants';
 
-const { publicRuntimeConfig } = getConfig();
-
 const MyApp = (props) => {
   const { Component, pageProps } = props;
-  const { TITLE, APP_ENV } = publicRuntimeConfig;
+  const { TITLE, APP_ENV } = process.env;
 
   console.log(TITLE, APP_ENV);
 

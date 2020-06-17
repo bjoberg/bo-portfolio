@@ -2,7 +2,6 @@ import React, {
   createRef, Fragment, useState, useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
-import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
 import httpStatus from 'http-status';
 import { Typography, Grid } from '@material-ui/core';
@@ -17,7 +16,6 @@ import { getGroup, getGroupImages } from '../../../src/services/group';
 import { isAtEnd, goBack } from '../../../src/utils/helpers';
 import { useInfiniteScroll } from '../../../src/hooks';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupStyles);
 
 const Group = (props) => {
@@ -33,8 +31,8 @@ const Group = (props) => {
     page,
     rows,
   } = images;
-  const seoTitle = `${title} - ${publicRuntimeConfig.TITLE}`;
-  const url = `${publicRuntimeConfig.ROOT_URL}/group/${id}`;
+  const seoTitle = `${title} - ${process.env.TITLE}`;
+  const url = `${process.env.ROOT_URL}/group/${id}`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, description, url);
   seoConfig.pushOpenGraphImage(thumbnailUrl, undefined, undefined, `Brett Oberg ${title}`);
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);

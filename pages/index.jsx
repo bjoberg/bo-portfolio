@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import {
   makeStyles, Grid, Avatar, Typography, Button,
 } from '@material-ui/core';
-import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
 
 import AppContainer from '../src/components/AppContainer';
@@ -11,10 +10,9 @@ import { IndexStyles } from '../src/styles';
 import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
-const seoTitle = publicRuntimeConfig.TITLE;
-const url = `${publicRuntimeConfig.ROOT_URL}`;
+const seoTitle = process.env.TITLE;
+const url = `${process.env.ROOT_URL}`;
 
 const Index = () => {
   const classes = useStyles();
@@ -27,7 +25,7 @@ const Index = () => {
   const fullName = `${firstName} ${lastName}`;
 
   const actionBarOptions = {
-    title: publicRuntimeConfig.TITLE,
+    title: process.env.TITLE,
     elevateOnScroll: true,
     showAvatar: true,
     showMenuButton: true,

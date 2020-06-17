@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import getConfig from 'next/config';
 import { makeStyles } from '@material-ui/core/styles';
 import { ClickAwayListener } from '@material-ui/core';
 
@@ -10,7 +9,6 @@ import ActionBar from '../ActionBar/ActionBar';
 import { PersonalData } from '../../constants';
 
 const useStyles = makeStyles(AppContainerStyles);
-const { publicRuntimeConfig } = getConfig();
 
 const AppContainer = (props) => {
   const classes = useStyles();
@@ -34,7 +32,7 @@ const AppContainer = (props) => {
             {...actionBarOptions}
           />
           <NavigationDrawer
-            title={publicRuntimeConfig.TITLE}
+            title={process.env.TITLE}
             email={PersonalData.email}
             items={actionBarOptions.routes}
             isOpen={drawerIsOpen}

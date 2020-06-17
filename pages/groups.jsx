@@ -26,8 +26,8 @@ const Groups = (props) => {
   const { groups } = props;
   const pageTitle = 'Groups';
   const pageSubtitle = 'Collections of different images curated to display my best work, favorite moments, and photographic style.';
-  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.TITLE}`;
-  const url = `${publicRuntimeConfig.ROOT_URL}/groups`;
+  const seoTitle = `${pageTitle} - ${process.env.TITLE}`;
+  const url = `${process.env.ROOT_URL}/groups`;
   const {
     totalItems,
     limit,
@@ -45,7 +45,7 @@ const Groups = (props) => {
   const [groupItems, setGroupItems] = useState(rows);
 
   const actionBarOptions = {
-    title: publicRuntimeConfig.TITLE,
+    title: process.env.TITLE,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,

@@ -2,7 +2,6 @@ import React, {
   Fragment, createRef, useCallback, useState,
 } from 'react';
 import PropTypes from 'prop-types';
-import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
 import httpStatus from 'http-status';
 import { Typography, Grid } from '@material-ui/core';
@@ -18,7 +17,6 @@ import { ImageGrid } from '../src/components/ImageGrid';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(ImagesStyles);
 
 const Images = (props) => {
@@ -33,8 +31,8 @@ const Images = (props) => {
   } = images;
   const pageTitle = 'Images';
   const pageSubtitle = 'Unfiltered list of all my favorite images.';
-  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.TITLE}`;
-  const url = `${publicRuntimeConfig.ROOT_URL}/images`;
+  const seoTitle = `${pageTitle} - ${process.env.TITLE}`;
+  const url = `${process.env.ROOT_URL}/images`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, pageSubtitle, url);
   seoConfig.pushOpenGraphImage('/media/og/images.jpg', 1200, 675, 'Brett Oberg Images');
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
@@ -45,7 +43,7 @@ const Images = (props) => {
   const [imageItems, setImageItems] = useState(rows);
 
   const actionBarOptions = {
-    title: publicRuntimeConfig.TITLE,
+    title: process.env.TITLE,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,
