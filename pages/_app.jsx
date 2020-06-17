@@ -15,6 +15,8 @@ const MyApp = (props) => {
   const { Component, pageProps } = props;
   const { TITLE, APP_ENV } = publicRuntimeConfig;
 
+  console.log(TITLE, APP_ENV);
+
   const dangerouslySetAllPagesToNoIndex = APP_ENV !== 'production' ? true : undefined;
   const dangerouslySetAllPagesToNoFollow = APP_ENV !== 'production' ? true : undefined;
 

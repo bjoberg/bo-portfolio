@@ -13,7 +13,7 @@ import { SocialButtons, BodyContent } from '../src/containers/Index';
 
 const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
-const seoTitle = publicRuntimeConfig.title;
+const seoTitle = publicRuntimeConfig.TITLE;
 const url = `${publicRuntimeConfig.ROOT_URL}`;
 
 const Index = () => {
@@ -27,7 +27,7 @@ const Index = () => {
   const fullName = `${firstName} ${lastName}`;
 
   const actionBarOptions = {
-    title: publicRuntimeConfig.title,
+    title: publicRuntimeConfig.TITLE,
     elevateOnScroll: true,
     showAvatar: true,
     showMenuButton: true,

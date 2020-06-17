@@ -33,7 +33,7 @@ const Images = (props) => {
   } = images;
   const pageTitle = 'Images';
   const pageSubtitle = 'Unfiltered list of all my favorite images.';
-  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.title}`;
+  const seoTitle = `${pageTitle} - ${publicRuntimeConfig.TITLE}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/images`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, pageSubtitle, url);
   seoConfig.pushOpenGraphImage('/media/og/images.jpg', 1200, 675, 'Brett Oberg Images');
@@ -45,7 +45,7 @@ const Images = (props) => {
   const [imageItems, setImageItems] = useState(rows);
 
   const actionBarOptions = {
-    title: publicRuntimeConfig.title,
+    title: publicRuntimeConfig.TITLE,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,

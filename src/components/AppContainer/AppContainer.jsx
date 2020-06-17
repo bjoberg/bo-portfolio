@@ -34,7 +34,7 @@ const AppContainer = (props) => {
             {...actionBarOptions}
           />
           <NavigationDrawer
-            title={publicRuntimeConfig.title}
+            title={publicRuntimeConfig.TITLE}
             email={PersonalData.email}
             items={actionBarOptions.routes}
             isOpen={drawerIsOpen}

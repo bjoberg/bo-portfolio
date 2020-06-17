@@ -33,7 +33,7 @@ const Group = (props) => {
     page,
     rows,
   } = images;
-  const seoTitle = `${title} - ${publicRuntimeConfig.title}`;
+  const seoTitle = `${title} - ${publicRuntimeConfig.TITLE}`;
   const url = `${publicRuntimeConfig.ROOT_URL}/group/${id}`;
   const seoConfig = new SeoConfig(hasError, hasError, seoTitle, description, url);
   seoConfig.pushOpenGraphImage(thumbnailUrl, undefined, undefined, `Brett Oberg ${title}`);
