@@ -4,6 +4,9 @@ const GroupStyles = theme => ({
     maxWidth: theme.breakpoints.values.lg,
     margin: 'auto',
   },
+  title: {
+    marginBottom: theme.spacing(8),
+  },
   subheader: {
     marginTop: theme.spacing(4),
   },

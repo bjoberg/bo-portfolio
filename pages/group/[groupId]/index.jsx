@@ -84,8 +84,8 @@ const Group = (props) => {
     <Fragment>
       <NextSeo {...seoConfig.getConfig()} />
       <AppContainer actionBarOptions={actionBarOptions}>
-        <Grid container className={classes.root} spacing={4}>
-          <Grid item xs={12}>
+        <Grid container className={classes.root}>
+          <Grid item xs={12} className={classes.title}>
             <Typography variant="h1">{title}</Typography>
             <Typography variant="subtitle2">
               {`${totalItems} images`}
