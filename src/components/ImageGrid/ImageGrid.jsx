@@ -4,32 +4,47 @@ import {
   RootRef, CircularProgress, Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Gallery from 'react-photo-gallery';
 
 import ImageGridStyles from './ImageGrid.styles';
-import ImageGridItem from './components/ImageGridItem';
 
 const useStyles = makeStyles(ImageGridStyles);
 
 const ImageGrid = (props) => {
   const classes = useStyles();
-  const {
-    domRef,
-    images,
-    selectedImages,
-    isLoading,
-    isEditable,
-    handleImageSelect,
-  } = props;
+  const { domRef, images, isLoading } = props;
 
   /**
-   * Determine if image is selected or not
+   * Get alt text for provided image.
    *
-   * @param {string} imageId id of image to find
+   * @param {string} title title of the image
+   * @param {string} description description of the image
+   * @returns {String} alt text for image
    */
-  const getIsSelected = (imageId) => {
-    const isFound = selectedImages.find(el => el === imageId);
-    if (isFound) return true;
-    return false;
+  const getAltText = ({ title, description }) => {
+    const alt = [];
+    if (title && title !== null) alt.push(title);
+    if (description && description !== null) alt.push(description);
+    if (alt.length === 0) alt.push('Brett Oberg Photography');
+    return alt.join(' ');
+  };
+
+  /**
+   * Convert images into the format required by the Gallery.
+   *
+   * @returns {[object]} list of images formatted for the Gallery.
+   */
+  const getPhotos = () => {
+    const photos = [];
+    images.forEach((el) => {
+      photos.push({
+        src: el.thumbnailUrl,
+        height: el.height,
+        width: el.width,
+        alt: getAltText(el),
+      });
+    });
+    return photos;
   };
 
   if (images.length === 0) {
@@ -39,21 +54,7 @@ const ImageGrid = (props) => {
   return (
     <Fragment>
       <RootRef rootRef={domRef}>
-        <div className={classes.root}>
-          {images.map(item => (
-            <ImageGridItem
-              id={item.id}
-              key={item.id}
-              title={item.title}
-              imageUrl={item.thumbnailUrl}
-              imageHeight={item.height}
-              imageWidth={item.width}
-              isEditable={isEditable}
-              isSelected={getIsSelected(item.id)}
-              handleImageSelect={handleImageSelect}
-            />
-          ))}
-        </div>
+        <Gallery photos={getPhotos()} />
       </RootRef>
       {isLoading && (
         <div className={classes.circularProgressContainer}>
@@ -69,23 +70,18 @@ ImageGrid.propTypes = {
   images: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
-    imageUrl: PropTypes.string,
+    description: PropTypes.string,
+    thumbnailUrl: PropTypes.string,
     height: PropTypes.number,
     width: PropTypes.number,
   })),
-  selectedImages: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
-  isEditable: PropTypes.bool,
-  handleImageSelect: PropTypes.func,
 };
 
 ImageGrid.defaultProps = {
   domRef: null,
   images: [],
-  selectedImages: [],
   isLoading: false,
-  isEditable: false,
-  handleImageSelect: () => { },
 };
 
 export default ImageGrid;

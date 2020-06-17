@@ -1,10 +1,4 @@
 const ImageGridStyles = theme => ({
-  root: {
-    width: '100%',
-    overflow: 'hidden',
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
   circularProgressContainer: {
     display: 'flex',
     flexDirection: 'column',
