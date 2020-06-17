@@ -31,6 +31,7 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder /usr/src/app/next.config.js ./next.config.js
+COPY --from=builder /usr/src/app/next-seo.config.js ./next-seo.config.js
 
 # Set app configuration
 ENV NODE_ENV production
