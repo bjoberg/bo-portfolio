@@ -15,7 +15,7 @@ const ImageGrid = (props) => {
   const { domRef, images, isLoading } = props;
 
   /**
-   * Get all text for provided image.
+   * Get alt text for provided image.
    *
    * @param {string} title title of the image
    * @param {string} description description of the image
