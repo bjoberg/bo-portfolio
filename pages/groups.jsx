@@ -17,7 +17,6 @@ import { GroupsStyles } from '../src/styles';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupsStyles);
 const pageTitle = 'Groups';
 const pageSubtitle = 'Collections of different images curated to display my best work, favorite moments, and photographic style.';
@@ -90,7 +89,7 @@ const Groups = (props) => {
   return (
     <Fragment>
       <NextSeo {...seoConfig.getConfig()} />
-      <AppContainer actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions} title={appTitle}>
         <Grid container className={classes.root}>
           <Grid item xs={12} className={classes.title}>
             <Typography variant="h1" gutterBottom>{pageTitle}</Typography>
@@ -133,6 +132,8 @@ Groups.propTypes = {
 };
 
 Groups.getInitialProps = async () => {
+  const { publicRuntimeConfig } = getConfig();
+
   const paginationQuery = `limit=${30}&page=${0}`;
   const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/groups?${paginationQuery}`;
   const res = await fetch(route);

@@ -1,24 +1,23 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import getConfig from 'next/config';
 import {
   makeStyles, Grid, Avatar, Typography, Button,
 } from '@material-ui/core';
-import getConfig from 'next/config';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
 import AppContainer from '../src/components/AppContainer';
 import Routes from '../src/constants/Routes';
+import SeoConfig from '../src/models/SeoConfig';
 import { IndexStyles } from '../src/styles';
 import { PersonalData } from '../src/constants';
 import { SocialButtons, BodyContent } from '../src/containers/Index';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(IndexStyles);
-const seoTitle = SEO.title;
-const url = `${publicRuntimeConfig.ROOT_URL}`;
 
-const Index = () => {
+const Index = (props) => {
   const classes = useStyles();
+  const { appTitle, appEnv, rootUrl } = props;
   const {
     firstName,
     lastName,
@@ -27,8 +26,16 @@ const Index = () => {
   } = PersonalData;
   const fullName = `${firstName} ${lastName}`;
 
+  // configure seo properties
+  const url = rootUrl;
+  const seoTitle = appTitle;
+  const noIndex = SeoConfig.isNoIndexNoFollow(appEnv);
+  const noFollow = SeoConfig.isNoIndexNoFollow(appEnv);
+  const seoConfig = new SeoConfig(noIndex, noFollow, seoTitle, bio, url);
+  seoConfig.pushOpenGraphImage('/media/og/about.jpg', 1200, 900, 'About Brett Oberg');
+
   const actionBarOptions = {
-    title: SEO.title,
+    title: appTitle,
     elevateOnScroll: true,
     showAvatar: true,
     showMenuButton: true,
@@ -37,23 +44,8 @@ const Index = () => {
 
   return (
     <Fragment>
-      <NextSeo
-        title={seoTitle}
-        openGraph={{
-          url,
-          title: seoTitle,
-          description: bio,
-          images: [
-            {
-              url: '/media/og/about.jpg',
-              width: 1200,
-              height: 900,
-              alt: 'About Brett Oberg',
-            },
-          ],
-        }}
-      />
-      <AppContainer actionBarOptions={actionBarOptions}>
+      <NextSeo {...seoConfig.getConfig()} />
+      <AppContainer actionBarOptions={actionBarOptions} title={appTitle}>
         <div className={classes.background}>
           <div className={classes.placeholder} />
           <Grid
@@ -104,6 +96,21 @@ const Index = () => {
       </AppContainer>
     </Fragment>
   );
+};
+
+Index.propTypes = {
+  appEnv: PropTypes.string.isRequired,
+  appTitle: PropTypes.string.isRequired,
+  rootUrl: PropTypes.string.isRequired,
+};
+
+Index.getInitialProps = () => {
+  const { publicRuntimeConfig } = getConfig();
+  return {
+    appEnv: publicRuntimeConfig.APP_ENV,
+    appTitle: publicRuntimeConfig.TITLE,
+    rootUrl: publicRuntimeConfig.ROOT_URL,
+  };
 };
 
 export default Index;

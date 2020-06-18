@@ -9,7 +9,6 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../../../next-seo.config';
 import AppContainer from '../../../src/components/AppContainer';
 import SeoConfig from '../../../src/models/SeoConfig';
 import { ImageGrid } from '../../../src/components/ImageGrid';
@@ -18,13 +17,14 @@ import { getGroup, getGroupImages } from '../../../src/services/group';
 import { isAtEnd, goBack } from '../../../src/utils/helpers';
 import { useInfiniteScroll } from '../../../src/hooks';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(GroupStyles);
 
 const Group = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
-  const { group, hasError, images } = props;
+  const {
+    appTitle, appEnv, rootUrl, group, hasError, images,
+  } = props;
   const {
     id, title, description, thumbnailUrl,
   } = group;
@@ -34,12 +34,17 @@ const Group = (props) => {
     page,
     rows,
   } = images;
-  const seoTitle = `${title} - ${SEO.title}`;
-  const url = `${publicRuntimeConfig.ROOT_URL}/group/${id}`;
-  const seoConfig = new SeoConfig(hasError, hasError, seoTitle, description, url);
-  seoConfig.pushOpenGraphImage(thumbnailUrl, undefined, undefined, `Brett Oberg ${title}`);
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
 
+  // configure seo properties
+  const url = `${rootUrl}/group/${id}`;
+  const seoTitle = `${title} - ${appTitle}`;
+  const noIndex = SeoConfig.isNoIndexNoFollow(appEnv, hasError);
+  const noFollow = SeoConfig.isNoIndexNoFollow(appEnv, hasError);
+  const seoConfig = new SeoConfig(noIndex, noFollow, seoTitle, description, url);
+  seoConfig.pushOpenGraphImage(thumbnailUrl, undefined, undefined, `Brett Oberg ${title}`);
+
+  // page state
   const [pageHasError, setPageHasError] = useState(hasError);
   const [isAtEndOfImageList, setIsAtEndOfImageList] = useState(hasMoreData);
   const [currImagePage, setCurrImagePage] = useState(images.page);
@@ -83,7 +88,7 @@ const Group = (props) => {
   return (
     <Fragment>
       <NextSeo {...seoConfig.getConfig()} />
-      <AppContainer actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions} title={appTitle}>
         <Grid container className={classes.root}>
           <Grid item xs={12} className={classes.title}>
             <Typography variant="h1">{title}</Typography>
@@ -108,6 +113,9 @@ const Group = (props) => {
 };
 
 Group.propTypes = {
+  appEnv: PropTypes.string.isRequired,
+  appTitle: PropTypes.string.isRequired,
+  rootUrl: PropTypes.string.isRequired,
   hasError: PropTypes.bool,
   group: PropTypes.shape({
     id: PropTypes.string,
@@ -143,6 +151,7 @@ Group.defaultProps = {
 };
 
 Group.getInitialProps = async ({ query }) => {
+  const { publicRuntimeConfig } = getConfig();
   const { groupId } = query;
   let hasError = false;
   let group;
@@ -153,7 +162,14 @@ Group.getInitialProps = async ({ query }) => {
   } catch (error) {
     hasError = true;
   }
-  return { hasError, group, images };
+  return {
+    appEnv: publicRuntimeConfig.APP_ENV,
+    appTitle: publicRuntimeConfig.TITLE,
+    rootUrl: publicRuntimeConfig.ROOT_URL,
+    hasError,
+    group,
+    images,
+  };
 };
 
 export default Group;
