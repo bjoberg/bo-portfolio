@@ -33,4 +33,17 @@ export default class SeoConfig {
       });
     }
   }
+
+  /**
+   * Determine if the page should be indexed or not.
+   *
+   * @param {string} appEnv application environment
+   * @param {boolean} hasError flag determining if page has error or not
+   * @returns {boolean} true if it should not be indexed; otherwise, false
+   */
+  static isNoIndexNoFollow(appEnv, hasError) {
+    if (hasError) return true;
+    if (appEnv !== 'production') return true;
+    return false;
+  }
 }
