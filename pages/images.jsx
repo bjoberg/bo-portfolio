@@ -9,44 +9,49 @@ import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
-import SeoConfig from '../src/models/SeoConfig';
 import AppContainer from '../src/components/AppContainer';
 import Routes from '../src/constants/Routes';
-import { getImages } from '../src/services/image';
-import { ImagesStyles } from '../src/styles';
+import SeoConfig from '../src/models/SeoConfig';
 import { ImageGrid } from '../src/components/ImageGrid';
+import { ImagesStyles } from '../src/styles';
+import { getImages } from '../src/services/image';
 import { isAtEnd } from '../src/utils/helpers';
 import { useInfiniteScroll } from '../src/hooks';
 
-const { publicRuntimeConfig } = getConfig();
 const useStyles = makeStyles(ImagesStyles);
+const pageTitle = 'Images';
+const pageSubtitle = 'Unfiltered list of all my favorite images.';
 
 const Images = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
-  const { hasError, images } = props;
+  const {
+    appTitle, appEnv, rootUrl, hasError, images,
+  } = props;
   const {
     totalItems,
     limit,
     page,
     rows,
   } = images;
-  const pageTitle = 'Images';
-  const pageSubtitle = 'Unfiltered list of all my favorite images.';
-  const seoTitle = `${pageTitle} - ${SEO.title}`;
-  const url = `${publicRuntimeConfig.ROOT_URL}/images`;
-  const seoConfig = new SeoConfig(hasError, hasError, seoTitle, pageSubtitle, url);
-  seoConfig.pushOpenGraphImage('/media/og/images.jpg', 1200, 675, 'Brett Oberg Images');
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
 
+  // configure seo properties
+  const url = `${rootUrl}/images`;
+  const seoTitle = `${pageTitle} - ${appTitle}`;
+  const noIndex = SeoConfig.isNoIndexNoFollow(appEnv, hasError);
+  const noFollow = SeoConfig.isNoIndexNoFollow(appEnv, hasError);
+  const seoConfig = new SeoConfig(noIndex, noFollow, seoTitle, pageSubtitle, url);
+  seoConfig.pushOpenGraphImage('/media/og/images.jpg', 1200, 675, 'Brett Oberg Images');
+
+  // page state
   const [pageHasError, setPageHasError] = useState(hasError);
   const [isAtEndOfImageList, setIsAtEndOfImageList] = useState(hasMoreData);
   const [currImagePage, setCurrImagePage] = useState(page);
   const [imageItems, setImageItems] = useState(rows);
 
   const actionBarOptions = {
-    title: SEO.title,
+    title: appTitle,
     elevateOnScroll: true,
     showMenuButton: true,
     routes: Routes,
@@ -80,7 +85,7 @@ const Images = (props) => {
   return (
     <Fragment>
       <NextSeo {...seoConfig.getConfig()} />
-      <AppContainer actionBarOptions={actionBarOptions}>
+      <AppContainer actionBarOptions={actionBarOptions} title={appTitle}>
         <Grid container className={classes.root}>
           <Grid item xs={12} className={classes.title}>
             <Typography variant="h1">{pageTitle}</Typography>
@@ -105,6 +110,9 @@ const Images = (props) => {
 };
 
 Images.propTypes = {
+  appEnv: PropTypes.string.isRequired,
+  appTitle: PropTypes.string.isRequired,
+  rootUrl: PropTypes.string.isRequired,
   hasError: PropTypes.bool,
   images: PropTypes.shape({
     limit: PropTypes.number,
@@ -129,6 +137,8 @@ Images.defaultProps = {
 };
 
 Images.getInitialProps = async () => {
+  const { publicRuntimeConfig } = getConfig();
+
   let hasError = false;
   let images;
   try {
@@ -136,7 +146,13 @@ Images.getInitialProps = async () => {
   } catch (error) {
     hasError = true;
   }
-  return { hasError, images };
+  return {
+    appEnv: publicRuntimeConfig.APP_ENV,
+    appTitle: publicRuntimeConfig.TITLE,
+    rootUrl: publicRuntimeConfig.ROOT_URL,
+    hasError,
+    images,
+  };
 };
 
 export default Images;

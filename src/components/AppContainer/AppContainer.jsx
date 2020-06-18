@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { ClickAwayListener } from '@material-ui/core';
 
-import SEO from '../../../next-seo.config';
 import NavigationDrawer from '../NavigationDrawer';
 import AppContainerStyles from './AppContainer.styles';
 import ActionBar from '../ActionBar/ActionBar';
@@ -14,7 +13,7 @@ const useStyles = makeStyles(AppContainerStyles);
 const AppContainer = (props) => {
   const classes = useStyles();
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-  const { children, actionBarOptions } = props;
+  const { children, actionBarOptions, title } = props;
 
   const openDrawer = () => setDrawerIsOpen(true);
   const closeDrawer = () => setDrawerIsOpen(false);
@@ -33,7 +32,7 @@ const AppContainer = (props) => {
             {...actionBarOptions}
           />
           <NavigationDrawer
-            title={SEO.title}
+            title={title}
             email={PersonalData.email}
             items={actionBarOptions.routes}
             isOpen={drawerIsOpen}
@@ -49,11 +48,13 @@ const AppContainer = (props) => {
 
 AppContainer.propTypes = {
   children: PropTypes.element.isRequired,
+  title: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   actionBarOptions: PropTypes.object,
 };
 
 AppContainer.defaultProps = {
+  title: '',
   actionBarOptions: undefined,
 };
 

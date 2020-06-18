@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { DefaultSeo } from 'next-seo';
 
-import SEO from '../next-seo.config';
 import { Theme } from '../src/styles';
-import { PersonalData } from '../src/constants';
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
@@ -20,7 +17,6 @@ const MyApp = (props) => {
 
   return (
     <Fragment>
-      <DefaultSeo {...SEO} description={PersonalData.bio} />
       <Head>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
