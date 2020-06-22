@@ -1,8 +1,8 @@
 # Brett Oberg Photography
 
-Web application displaying images captured by Brett Oberg Photography.
+![Production](https://github.com/bjoberg/bo-portfolio/workflows/Production/badge.svg)
 
-[https://www.brettoberg.com](https://www.brettoberg.com)
+Web application displaying images captured by Brett Oberg Photography.
 
 ## Installation
 
