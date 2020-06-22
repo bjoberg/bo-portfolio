@@ -15,7 +15,7 @@ Create `.env` file.
 
 ```txt
 APP_ENV=local
-BO_API_ENDPOINT=https://bo-portfolio-api.herokuapp.com/api/v1
+BO_API_ENDPOINT=https://bo-portfolio-api-staging.herokuapp.com/api/v1
 ```
 
 ## Deploy
