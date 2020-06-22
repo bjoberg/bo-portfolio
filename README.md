@@ -1,6 +1,7 @@
 # Brett Oberg Photography
 
 ![Production](https://github.com/bjoberg/bo-portfolio/workflows/Production/badge.svg)
+![Release](https://github.com/bjoberg/bo-portfolio/workflows/Release/badge.svg)
 
 Web application displaying images captured by Brett Oberg Photography.
 
