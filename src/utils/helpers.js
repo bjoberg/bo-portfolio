@@ -30,16 +30,13 @@ export const goBack = (prevRoute) => {
  * @returns {string} query string
  */
 export const getQueryString = (dictionary) => {
-  // TODO: Update with new query param constructor;
-
   if (!dictionary) return '';
   if (typeof dictionary !== 'object') return '';
-  let queryString = '';
-  Object.keys(dictionary).forEach((key, index) => {
-    if (index === 0) queryString = `?${key}=${dictionary[key]}`;
-    else queryString = `${queryString}&${key}=${dictionary[key]}`;
+  const queryString = new URLSearchParams();
+  Object.keys(dictionary).forEach((key) => {
+    queryString.append(key, dictionary[key]);
   });
-  return queryString;
+  return queryString.toString();
 };
 
 /**

@@ -26,11 +26,12 @@ const useStyles = makeStyles(ImagesStyles);
 const pageTitle = 'Images';
 const pageSubtitle = 'Unfiltered list of all my favorite images.';
 
+// TODO: Clean this up
 const fetchImages = async (sortQuery, limitQuery, pageQuery) => {
   const searchParams = new URLSearchParams();
-  if (limitQuery) searchParams.append('limit', limitQuery);
-  if (pageQuery) searchParams.append('page', pageQuery);
-  if (sortQuery) searchParams.append('sort', sortQuery);
+  if (limitQuery !== undefined) searchParams.append('limit', limitQuery);
+  if (pageQuery !== undefined) searchParams.append('page', pageQuery);
+  if (sortQuery !== undefined) searchParams.append('sort', sortQuery);
   const route = `/api/images?${searchParams.toString()}`;
   const res = await fetch(route);
   return res;
@@ -106,7 +107,7 @@ const Images = (props) => {
       { shallow: true },
     );
 
-    // TODO: Make request for more images
+    // TODO: Clean this up
     const res = await fetchImages(sort, limit, page);
     if (res.status === httpStatus.OK) {
       const json = await res.json();
