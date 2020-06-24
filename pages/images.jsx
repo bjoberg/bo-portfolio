@@ -18,7 +18,7 @@ import SeoConfig from '../src/models/SeoConfig';
 import { ImageGrid } from '../src/components/ImageGrid';
 import { ImagesStyles } from '../src/styles';
 import { getImages } from '../src/services/image';
-import { isAtEnd } from '../src/utils/helpers';
+import { SortController, isAtEnd } from '../src/utils/helpers';
 import { SortMappings } from '../src/constants';
 import { useInfiniteScroll } from '../src/hooks';
 
@@ -26,11 +26,21 @@ const useStyles = makeStyles(ImagesStyles);
 const pageTitle = 'Images';
 const pageSubtitle = 'Unfiltered list of all my favorite images.';
 
+const fetchImages = async (sortQuery, limitQuery, pageQuery) => {
+  const searchParams = new URLSearchParams();
+  if (limitQuery) searchParams.append('limit', limitQuery);
+  if (pageQuery) searchParams.append('page', pageQuery);
+  if (sortQuery) searchParams.append('sort', sortQuery);
+  const route = `/api/images?${searchParams.toString()}`;
+  const res = await fetch(route);
+  return res;
+};
+
 const Images = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    appTitle, appEnv, rootUrl, hasError, sortOptions, defaultSortId, images,
+    appTitle, appEnv, rootUrl, hasError, sortOptions, defaultSort, images,
   } = props;
   const {
     totalItems,
@@ -38,6 +48,7 @@ const Images = (props) => {
     page,
     rows,
   } = images;
+  let sort = defaultSort.query;
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
   const actionBarOptions = {
     title: appTitle,
@@ -63,7 +74,7 @@ const Images = (props) => {
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
       const next = currImagePage + 1;
-      const result = await fetch(`/api/images?limit=${limit}&page=${next}`);
+      const result = await fetchImages(sort, limit, next);
       if (result.status === httpStatus.OK) {
         const json = await result.json();
         setImageItems(prevState => [...prevState, ...json.rows]);
@@ -76,7 +87,7 @@ const Images = (props) => {
       }
     };
     paginateImages();
-  }, [currImagePage, limit]);
+  }, [currImagePage, limit, sort]);
 
   const [isLoadingImages] = useInfiniteScroll(
     handlePaginateImages,
@@ -85,9 +96,10 @@ const Images = (props) => {
     imageGridRef,
   );
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { value } = e.target;
     const sortItem = sortOptions.find(el => el.id === value);
+    sort = sortItem.query;
     Router.push(
       { pathname: '/images', query: { sort: sortItem.query } },
       undefined,
@@ -95,6 +107,15 @@ const Images = (props) => {
     );
 
     // TODO: Make request for more images
+    const res = await fetchImages(sort, limit, page);
+    if (res.status === httpStatus.OK) {
+      const json = await res.json();
+      setImageItems(json.rows);
+      setIsAtEndOfImageList(isAtEnd(json.totalItems, json.limit, page));
+      setCurrImagePage(page);
+    } else {
+      setPageHasError(true);
+    }
   };
 
   return (
@@ -118,7 +139,7 @@ const Images = (props) => {
                 <Select
                   onChange={handleChange}
                   label="Sort"
-                  defaultValue={defaultSortId}
+                  defaultValue={defaultSort.id}
                 >
                   {sortOptions.map(option => (
                     <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
@@ -150,7 +171,11 @@ Images.propTypes = {
     query: PropTypes.string,
     value: PropTypes.string,
   })).isRequired,
-  defaultSortId: PropTypes.string.isRequired,
+  defaultSort: PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
   images: PropTypes.shape({
     limit: PropTypes.number,
     page: PropTypes.number,
@@ -173,31 +198,6 @@ Images.defaultProps = {
   hasError: false,
 };
 
-// TODO: Make this generic and move it to the utils
-const isValidSortQuery = (sortQuery, sortOptions) => {
-  let isValid = false;
-  sortOptions.forEach((option) => {
-    if (option.query === sortQuery) isValid = true;
-  });
-  return isValid;
-};
-
-// TODO: Make this generic and move it to the utils
-const getSortQuery = (requestedSortQuery, defaultSortQuery, sortOptions) => {
-  let sortQuery = requestedSortQuery;
-  if (!sortQuery || !isValidSortQuery(sortQuery, sortOptions)) sortQuery = defaultSortQuery;
-  return sortQuery;
-};
-
-// TODO: Make this generic and move it to the utils
-const getSortIdByQuery = (sortQuery) => {
-  let id;
-  Object.keys(SortMappings).forEach((key) => {
-    if (SortMappings[key].query === sortQuery) ({ id } = SortMappings[key]);
-  });
-  return id;
-};
-
 Images.getInitialProps = async (req) => {
   let hasError = false;
   let images;
@@ -206,8 +206,8 @@ Images.getInitialProps = async (req) => {
 
   const { captureDateAsc, captureDateDesc } = SortMappings;
   const sortOptions = [captureDateDesc, captureDateAsc];
-  const sort = getSortQuery(req.query.sort, SortMappings.captureDateDesc.query, sortOptions);
-  const defaultSortId = getSortIdByQuery(sort);
+  const sort = SortController.getSortQuery(req.query.sort, SortMappings.captureDateDesc.query, sortOptions);
+  const defaultSort = SortController.getSortByQuery(sort);
 
   try {
     images = await getImages(sort);
@@ -222,7 +222,7 @@ Images.getInitialProps = async (req) => {
     hasError,
     images,
     sortOptions,
-    defaultSortId,
+    defaultSort,
   };
 };
 
