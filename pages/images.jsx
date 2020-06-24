@@ -1,11 +1,14 @@
 import React, {
   Fragment, createRef, useCallback, useState,
 } from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
 import httpStatus from 'http-status';
-import { Typography, Grid } from '@material-ui/core';
+import {
+  Typography, Grid, Select, FormControl, InputLabel, MenuItem,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
@@ -16,6 +19,7 @@ import { ImageGrid } from '../src/components/ImageGrid';
 import { ImagesStyles } from '../src/styles';
 import { getImages } from '../src/services/image';
 import { isAtEnd } from '../src/utils/helpers';
+import { SortMappings } from '../src/constants';
 import { useInfiniteScroll } from '../src/hooks';
 
 const useStyles = makeStyles(ImagesStyles);
@@ -26,7 +30,7 @@ const Images = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    appTitle, appEnv, rootUrl, hasError, images,
+    appTitle, appEnv, rootUrl, hasError, sortOptions, defaultSortId, images,
   } = props;
   const {
     totalItems,
@@ -35,6 +39,12 @@ const Images = (props) => {
     rows,
   } = images;
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
+  const actionBarOptions = {
+    title: appTitle,
+    elevateOnScroll: true,
+    showMenuButton: true,
+    routes: Routes,
+  };
 
   // configure seo properties
   const url = `${rootUrl}/images`;
@@ -49,13 +59,6 @@ const Images = (props) => {
   const [isAtEndOfImageList, setIsAtEndOfImageList] = useState(hasMoreData);
   const [currImagePage, setCurrImagePage] = useState(page);
   const [imageItems, setImageItems] = useState(rows);
-
-  const actionBarOptions = {
-    title: appTitle,
-    elevateOnScroll: true,
-    showMenuButton: true,
-    routes: Routes,
-  };
 
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
@@ -82,6 +85,18 @@ const Images = (props) => {
     imageGridRef,
   );
 
+  const handleChange = (e) => {
+    const { value } = e.target;
+    const sortItem = sortOptions.find(el => el.id === value);
+    Router.push(
+      { pathname: '/images', query: { sort: sortItem.query } },
+      undefined,
+      { shallow: true },
+    );
+
+    // TODO: Make request for more images
+  };
+
   return (
     <Fragment>
       <NextSeo {...seoConfig.getConfig()} />
@@ -95,6 +110,22 @@ const Images = (props) => {
             <div className={classes.subheader}>
               <Typography>{pageSubtitle}</Typography>
             </div>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container direction="row-reverse">
+              <FormControl>
+                <InputLabel>Sort</InputLabel>
+                <Select
+                  onChange={handleChange}
+                  label="Sort"
+                  defaultValue={defaultSortId}
+                >
+                  {sortOptions.map(option => (
+                    <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <ImageGrid
@@ -114,6 +145,12 @@ Images.propTypes = {
   appTitle: PropTypes.string.isRequired,
   rootUrl: PropTypes.string.isRequired,
   hasError: PropTypes.bool,
+  sortOptions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  })).isRequired,
+  defaultSortId: PropTypes.string.isRequired,
   images: PropTypes.shape({
     limit: PropTypes.number,
     page: PropTypes.number,
@@ -136,22 +173,56 @@ Images.defaultProps = {
   hasError: false,
 };
 
-Images.getInitialProps = async () => {
-  const { publicRuntimeConfig } = getConfig();
+// TODO: Make this generic and move it to the utils
+const isValidSortQuery = (sortQuery, sortOptions) => {
+  let isValid = false;
+  sortOptions.forEach((option) => {
+    if (option.query === sortQuery) isValid = true;
+  });
+  return isValid;
+};
 
+// TODO: Make this generic and move it to the utils
+const getSortQuery = (requestedSortQuery, defaultSortQuery, sortOptions) => {
+  let sortQuery = requestedSortQuery;
+  if (!sortQuery || !isValidSortQuery(sortQuery, sortOptions)) sortQuery = defaultSortQuery;
+  return sortQuery;
+};
+
+// TODO: Make this generic and move it to the utils
+const getSortIdByQuery = (sortQuery) => {
+  let id;
+  Object.keys(SortMappings).forEach((key) => {
+    if (SortMappings[key].query === sortQuery) ({ id } = SortMappings[key]);
+  });
+  return id;
+};
+
+Images.getInitialProps = async (req) => {
   let hasError = false;
   let images;
+
+  const { publicRuntimeConfig } = getConfig();
+
+  const { captureDateAsc, captureDateDesc } = SortMappings;
+  const sortOptions = [captureDateDesc, captureDateAsc];
+  const sort = getSortQuery(req.query.sort, SortMappings.captureDateDesc.query, sortOptions);
+  const defaultSortId = getSortIdByQuery(sort);
+
   try {
-    images = await getImages();
+    images = await getImages(sort);
   } catch (error) {
     hasError = true;
   }
+
   return {
     appEnv: publicRuntimeConfig.APP_ENV,
     appTitle: publicRuntimeConfig.TITLE,
     rootUrl: publicRuntimeConfig.ROOT_URL,
     hasError,
     images,
+    sortOptions,
+    defaultSortId,
   };
 };
 

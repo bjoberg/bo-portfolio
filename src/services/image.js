@@ -5,15 +5,19 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
 /**
- * Retrieve list of images
+ * Retrieve list of images.
  *
-* @param {number} limit number of items to retrieve
+ * @param {string} sort field and direction to sort on. (Ex: capture_date:desc)
+ * @param {number} limit number of items to retrieve
  * @param {number} page offset of items
  * @throws {Error} if there is something wrong with the request
  */
-const getImages = async (limit = 30, page = 0) => {
-  const paginationQuery = `?limit=${limit}&page=${page}`;
-  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/images${paginationQuery}`;
+const getImages = async (sort, limit = 30, page = 0) => {
+  const searchParams = new URLSearchParams();
+  searchParams.append('limit', limit);
+  searchParams.append('page', page);
+  if (sort) searchParams.append('sort', sort);
+  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/images?${searchParams.toString()}`;
   const res = await fetch(route);
   if (res.status === httpStatus.OK) {
     const json = await res.json();
