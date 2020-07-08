@@ -68,7 +68,9 @@ export class SortController {
    */
   static getSortQuery(requestedSortQuery, defaultSortQuery, sortOptions) {
     let sortQuery = requestedSortQuery;
-    if (!sortQuery || !SortController.isValidSortQuery(sortQuery, sortOptions)) sortQuery = defaultSortQuery;
+    if (!sortQuery || !SortController.isValidSortQuery(sortQuery, sortOptions)) {
+      sortQuery = defaultSortQuery;
+    }
     return sortQuery;
   }
 
