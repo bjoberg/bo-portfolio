@@ -57,7 +57,7 @@ const Images = (props) => {
     page,
     rows,
   } = images;
-  let sort = defaultSort.query;
+  let sortQuery = defaultSort.query;
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
   const actionBarOptions = {
     title: appTitle,
@@ -83,7 +83,7 @@ const Images = (props) => {
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
       const next = currImagePage + 1;
-      const result = await fetchImages(sort, limit, next);
+      const result = await fetchImages(sortQuery, limit, next);
       if (result.status === httpStatus.OK) {
         const json = await result.json();
         setImageItems(prevState => [...prevState, ...json.rows]);
@@ -96,7 +96,7 @@ const Images = (props) => {
       }
     };
     paginateImages();
-  }, [currImagePage, limit, sort]);
+  }, [currImagePage, limit, sortQuery]);
 
   const [isLoadingImages] = useInfiniteScroll(
     handlePaginateImages,
@@ -112,18 +112,18 @@ const Images = (props) => {
    */
   const handleSortSelectChange = async (e) => {
     const { value } = e.target;
-    const sortItem = sortOptions.find(el => el.id === value);
-    sort = sortItem.query;
+    const sortObj = SortController.getSortById(value);
+    sortQuery = sortObj.query;
 
     // Update the url
     Router.push(
-      { pathname: '/images', query: { sort: sortItem.query } },
+      { pathname: '/images', query: { sort: sortQuery } },
       undefined,
       { shallow: true },
     );
 
     // Request new data
-    const res = await fetchImages(sort, limit, page);
+    const res = await fetchImages(sortQuery, limit, page);
     if (res.status === httpStatus.OK) {
       const json = await res.json();
       setImageItems(json.rows);
@@ -213,16 +213,14 @@ Images.getInitialProps = async (req) => {
   let hasError = false;
   let images = null;
   const { publicRuntimeConfig } = getConfig();
-  const {
-    captureDateAsc,
-    captureDateDesc,
-    createdAtAsc,
-    createdAtDesc,
-  } = SortMappings;
-
-  const sortOptions = [captureDateDesc, captureDateAsc, createdAtDesc, createdAtAsc];
-  const defaultSortQuery = captureDateDesc.query;
-  const sortQuery = SortController.getSortQuery(req.query.sort, defaultSortQuery, sortOptions);
+  const sortOptions = [
+    SortMappings.captureDateDesc,
+    SortMappings.captureDateAsc,
+    SortMappings.createdAtDesc,
+    SortMappings.createdAtAsc,
+  ];
+  const fallBackSortQuery = SortMappings.captureDateDesc.query;
+  const sortQuery = SortController.getSortQuery(req.query.sort, fallBackSortQuery, sortOptions);
 
   try {
     images = await getImages(sortQuery);

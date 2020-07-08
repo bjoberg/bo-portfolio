@@ -6,13 +6,14 @@ import {
 
 const SortSelect = (props) => {
   const { handleChange, defaultSort, sortOptions } = props;
+  const label = 'Sort';
 
   return (
     <FormControl>
-      <InputLabel>Sort</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
         onChange={handleChange}
-        label="Sort"
+        label={label}
         defaultValue={defaultSort.id}
       >
         {sortOptions.map(option => (

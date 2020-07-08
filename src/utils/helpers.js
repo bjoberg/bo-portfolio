@@ -62,14 +62,14 @@ export class SortController {
    * Get the sort query based on the request.
    *
    * @param {string} requestedSortQuery sort query requested
-   * @param {string} defaultSortQuery default sort query to fallback on if something fails
+   * @param {string} fallbackSortQuery sort query to fallback on if something fails
    * @param {[{query: string}]} sortOptions list of sort options to validate against
    * @returns {string} sort query string
    */
-  static getSortQuery(requestedSortQuery, defaultSortQuery, sortOptions) {
+  static getSortQuery(requestedSortQuery, fallbackSortQuery, sortOptions) {
     let sortQuery = requestedSortQuery;
     if (!sortQuery || !SortController.isValidSortQuery(sortQuery, sortOptions)) {
-      sortQuery = defaultSortQuery;
+      sortQuery = fallbackSortQuery;
     }
     return sortQuery;
   }
@@ -77,13 +77,27 @@ export class SortController {
   /**
    * Get sort object based on provided query.
    *
-   * @param {string} sortQuery sort query to retrieve id for
-   * @returns {string} sort object of the provided sort query; otherwise undefined
+   * @param {string} sortQuery sort query to search for
+   * @returns {object|undefined} sort object of the provided sort query; otherwise undefined
    */
   static getSortByQuery(sortQuery) {
     let sort;
     Object.keys(SortMappings).forEach((key) => {
       if (SortMappings[key].query === sortQuery) sort = SortMappings[key];
+    });
+    return sort;
+  }
+
+  /**
+   * Get sort object based on provided id.
+   *
+   * @param {string} sortId sort id to search for
+   * @returns {object|undefined} sort object of the provided sort query; otherwise undefined
+   */
+  static getSortById(sortId) {
+    let sort;
+    Object.keys(SortMappings).forEach((key) => {
+      if (SortMappings[key].id === sortId) sort = SortMappings[key];
     });
     return sort;
   }
