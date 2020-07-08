@@ -211,20 +211,21 @@ Images.defaultProps = {
 
 Images.getInitialProps = async (req) => {
   let hasError = false;
-  let images;
-
+  let images = null;
   const { publicRuntimeConfig } = getConfig();
-
   const {
-    captureDateAsc, captureDateDesc, createdAtAsc, createdAtDesc,
+    captureDateAsc,
+    captureDateDesc,
+    createdAtAsc,
+    createdAtDesc,
   } = SortMappings;
+
   const sortOptions = [captureDateDesc, captureDateAsc, createdAtDesc, createdAtAsc];
-  const sort = SortController.getSortQuery(req.query.sort, SortMappings.captureDateDesc.query,
-    sortOptions);
-  const defaultSort = SortController.getSortByQuery(sort);
+  const defaultSortQuery = captureDateDesc.query;
+  const sortQuery = SortController.getSortQuery(req.query.sort, defaultSortQuery, sortOptions);
 
   try {
-    images = await getImages(sort);
+    images = await getImages(sortQuery);
   } catch (error) {
     hasError = true;
   }
@@ -236,7 +237,7 @@ Images.getInitialProps = async (req) => {
     hasError,
     images,
     sortOptions,
-    defaultSort,
+    defaultSort: SortController.getSortByQuery(sortQuery),
   };
 };
 
