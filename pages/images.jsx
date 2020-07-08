@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
 import httpStatus from 'http-status';
-import {
-  Typography, Grid, Select, FormControl, InputLabel, MenuItem,
-} from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { NextSeo } from 'next-seo';
 
@@ -21,6 +19,7 @@ import { getImages } from '../src/services/image';
 import { SortController, isAtEnd } from '../src/utils/helpers';
 import { SortMappings } from '../src/constants';
 import { useInfiniteScroll } from '../src/hooks';
+import { SortSelect } from '../src/components/SortSelect';
 
 const useStyles = makeStyles(ImagesStyles);
 const pageTitle = 'Images';
@@ -133,20 +132,15 @@ const Images = (props) => {
               <Typography>{pageSubtitle}</Typography>
             </div>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.filters}>
             <Grid container direction="row-reverse">
-              <FormControl>
-                <InputLabel>Sort</InputLabel>
-                <Select
-                  onChange={handleChange}
-                  label="Sort"
-                  defaultValue={defaultSort.id}
-                >
-                  {sortOptions.map(option => (
-                    <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Grid item>
+                <SortSelect
+                  handleChange={handleChange}
+                  sortOptions={sortOptions}
+                  defaultSort={defaultSort}
+                />
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -205,9 +199,12 @@ Images.getInitialProps = async (req) => {
 
   const { publicRuntimeConfig } = getConfig();
 
-  const { captureDateAsc, captureDateDesc } = SortMappings;
-  const sortOptions = [captureDateDesc, captureDateAsc];
-  const sort = SortController.getSortQuery(req.query.sort, SortMappings.captureDateDesc.query, sortOptions);
+  const {
+    captureDateAsc, captureDateDesc, createdAtAsc, createdAtDesc,
+  } = SortMappings;
+  const sortOptions = [captureDateDesc, captureDateAsc, createdAtDesc, createdAtAsc];
+  const sort = SortController.getSortQuery(req.query.sort, SortMappings.captureDateDesc.query,
+    sortOptions);
   const defaultSort = SortController.getSortByQuery(sort);
 
   try {
