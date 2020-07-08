@@ -1,6 +1,7 @@
 import React, {
   Fragment, createRef, useCallback, useState,
 } from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
@@ -15,18 +16,40 @@ import SeoConfig from '../src/models/SeoConfig';
 import { ImageGrid } from '../src/components/ImageGrid';
 import { ImagesStyles } from '../src/styles';
 import { getImages } from '../src/services/image';
-import { isAtEnd } from '../src/utils/helpers';
+import { SortController, isAtEnd, getQueryString } from '../src/utils/helpers';
+import { SortMappings } from '../src/constants';
 import { useInfiniteScroll } from '../src/hooks';
+import { SortSelect } from '../src/components/SortSelect';
 
 const useStyles = makeStyles(ImagesStyles);
 const pageTitle = 'Images';
 const pageSubtitle = 'Unfiltered list of all my favorite images.';
 
+/**
+ * Fetch a list of images.
+ *
+ * @param {string} sortQuery sort field and direction of request
+ * @param {number} limitQuery limit number of pagination request
+ * @param {number} pageQuery offset number of pagination request
+ */
+const fetchImages = async (sortQuery, limitQuery, pageQuery) => {
+  const queryDict = { sort: sortQuery, page: pageQuery, limit: limitQuery };
+  const route = `/api/images?${getQueryString(queryDict)}`;
+  const res = await fetch(route);
+  return res;
+};
+
 const Images = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    appTitle, appEnv, rootUrl, hasError, images,
+    appTitle,
+    appEnv,
+    rootUrl,
+    hasError,
+    sortOptions,
+    defaultSort,
+    images,
   } = props;
   const {
     totalItems,
@@ -34,7 +57,14 @@ const Images = (props) => {
     page,
     rows,
   } = images;
+  let sortQuery = defaultSort.query;
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
+  const actionBarOptions = {
+    title: appTitle,
+    elevateOnScroll: true,
+    showMenuButton: true,
+    routes: Routes,
+  };
 
   // configure seo properties
   const url = `${rootUrl}/images`;
@@ -50,17 +80,10 @@ const Images = (props) => {
   const [currImagePage, setCurrImagePage] = useState(page);
   const [imageItems, setImageItems] = useState(rows);
 
-  const actionBarOptions = {
-    title: appTitle,
-    elevateOnScroll: true,
-    showMenuButton: true,
-    routes: Routes,
-  };
-
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
       const next = currImagePage + 1;
-      const result = await fetch(`/api/images?limit=${limit}&page=${next}`);
+      const result = await fetchImages(sortQuery, limit, next);
       if (result.status === httpStatus.OK) {
         const json = await result.json();
         setImageItems(prevState => [...prevState, ...json.rows]);
@@ -73,7 +96,7 @@ const Images = (props) => {
       }
     };
     paginateImages();
-  }, [currImagePage, limit]);
+  }, [currImagePage, limit, sortQuery]);
 
   const [isLoadingImages] = useInfiniteScroll(
     handlePaginateImages,
@@ -81,6 +104,35 @@ const Images = (props) => {
     pageHasError,
     imageGridRef,
   );
+
+  /**
+   * Update the UI based on sort select change.
+   *
+   * @param {Event} e Event that triggered the change
+   */
+  const handleSortSelectChange = async (e) => {
+    const { value } = e.target;
+    const sortObj = SortController.getSortById(value);
+    sortQuery = sortObj.query;
+
+    // Update the url
+    Router.push(
+      { pathname: '/images', query: { sort: sortQuery } },
+      undefined,
+      { shallow: true },
+    );
+
+    // Request new data
+    const res = await fetchImages(sortQuery, limit, page);
+    if (res.status === httpStatus.OK) {
+      const json = await res.json();
+      setImageItems(json.rows);
+      setIsAtEndOfImageList(isAtEnd(json.totalItems, json.limit, page));
+      setCurrImagePage(page);
+    } else {
+      setPageHasError(true);
+    }
+  };
 
   return (
     <Fragment>
@@ -95,6 +147,17 @@ const Images = (props) => {
             <div className={classes.subheader}>
               <Typography>{pageSubtitle}</Typography>
             </div>
+          </Grid>
+          <Grid item xs={12} className={classes.filters}>
+            <Grid container direction="row-reverse">
+              <Grid item>
+                <SortSelect
+                  handleChange={handleSortSelectChange}
+                  sortOptions={sortOptions}
+                  defaultSort={defaultSort}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <ImageGrid
@@ -114,6 +177,16 @@ Images.propTypes = {
   appTitle: PropTypes.string.isRequired,
   rootUrl: PropTypes.string.isRequired,
   hasError: PropTypes.bool,
+  sortOptions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  })).isRequired,
+  defaultSort: PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
   images: PropTypes.shape({
     limit: PropTypes.number,
     page: PropTypes.number,
@@ -136,22 +209,33 @@ Images.defaultProps = {
   hasError: false,
 };
 
-Images.getInitialProps = async () => {
-  const { publicRuntimeConfig } = getConfig();
-
+Images.getInitialProps = async (req) => {
   let hasError = false;
-  let images;
+  let images = null;
+  const { publicRuntimeConfig } = getConfig();
+  const sortOptions = [
+    SortMappings.captureDateDesc,
+    SortMappings.captureDateAsc,
+    SortMappings.createdAtDesc,
+    SortMappings.createdAtAsc,
+  ];
+  const fallBackSortQuery = SortMappings.captureDateDesc.query;
+  const sortQuery = SortController.getSortQuery(req.query.sort, fallBackSortQuery, sortOptions);
+
   try {
-    images = await getImages();
+    images = await getImages(sortQuery);
   } catch (error) {
     hasError = true;
   }
+
   return {
     appEnv: publicRuntimeConfig.APP_ENV,
     appTitle: publicRuntimeConfig.TITLE,
     rootUrl: publicRuntimeConfig.ROOT_URL,
     hasError,
     images,
+    sortOptions,
+    defaultSort: SortController.getSortByQuery(sortQuery),
   };
 };
 

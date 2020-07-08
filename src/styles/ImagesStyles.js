@@ -10,6 +10,9 @@ const ImagesStyles = theme => ({
   subheader: {
     marginTop: theme.spacing(4),
   },
+  filters: {
+    marginBottom: theme.spacing(2),
+  },
 });
 
 export default ImagesStyles;
