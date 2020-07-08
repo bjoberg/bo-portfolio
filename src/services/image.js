@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 import httpStatus from 'http-status';
 import getConfig from 'next/config';
+import { getQueryString } from '../utils/helpers';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -13,11 +14,8 @@ const { publicRuntimeConfig } = getConfig();
  * @throws {Error} if there is something wrong with the request
  */
 const getImages = async (sort, limit = 30, page = 0) => {
-  const searchParams = new URLSearchParams();
-  searchParams.append('limit', limit);
-  searchParams.append('page', page);
-  if (sort) searchParams.append('sort', sort);
-  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/images?${searchParams.toString()}`;
+  const queryDict = { sort, limit, page };
+  const route = `${publicRuntimeConfig.BO_API_ENDPOINT}/images?${getQueryString(queryDict)}`;
   const res = await fetch(route);
   if (res.status === httpStatus.OK) {
     const json = await res.json();
