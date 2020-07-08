@@ -25,7 +25,13 @@ const useStyles = makeStyles(ImagesStyles);
 const pageTitle = 'Images';
 const pageSubtitle = 'Unfiltered list of all my favorite images.';
 
-// TODO: Clean this up
+/**
+ * Fetch a list of images.
+ *
+ * @param {string} sortQuery sort field and direction of request
+ * @param {number} limitQuery limit number of pagination request
+ * @param {number} pageQuery offset number of pagination request
+ */
 const fetchImages = async (sortQuery, limitQuery, pageQuery) => {
   const searchParams = new URLSearchParams();
   if (limitQuery !== undefined) searchParams.append('limit', limitQuery);
@@ -40,7 +46,13 @@ const Images = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    appTitle, appEnv, rootUrl, hasError, sortOptions, defaultSort, images,
+    appTitle,
+    appEnv,
+    rootUrl,
+    hasError,
+    sortOptions,
+    defaultSort,
+    images,
   } = props;
   const {
     totalItems,
@@ -96,17 +108,24 @@ const Images = (props) => {
     imageGridRef,
   );
 
-  const handleChange = async (e) => {
+  /**
+   * Update the UI based on sort select change.
+   *
+   * @param {Event} e Event that triggered the change
+   */
+  const handleSortSelectChange = async (e) => {
     const { value } = e.target;
     const sortItem = sortOptions.find(el => el.id === value);
     sort = sortItem.query;
+
+    // Update the url
     Router.push(
       { pathname: '/images', query: { sort: sortItem.query } },
       undefined,
       { shallow: true },
     );
 
-    // TODO: Clean this up
+    // Request new data
     const res = await fetchImages(sort, limit, page);
     if (res.status === httpStatus.OK) {
       const json = await res.json();
@@ -136,7 +155,7 @@ const Images = (props) => {
             <Grid container direction="row-reverse">
               <Grid item>
                 <SortSelect
-                  handleChange={handleChange}
+                  handleChange={handleSortSelectChange}
                   sortOptions={sortOptions}
                   defaultSort={defaultSort}
                 />
