@@ -7,8 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export default async (req, res) => {
   try {
-    const queryString = getQueryString(req.query);
-    const url = `${publicRuntimeConfig.BO_API_ENDPOINT}/images?${queryString}`;
+    const url = `${publicRuntimeConfig.BO_API_ENDPOINT}/images?${getQueryString(req.query)}`;
     const result = await fetch(url);
     const json = await result.json();
     res.status(200).json(json);

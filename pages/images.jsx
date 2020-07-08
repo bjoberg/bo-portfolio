@@ -16,7 +16,7 @@ import SeoConfig from '../src/models/SeoConfig';
 import { ImageGrid } from '../src/components/ImageGrid';
 import { ImagesStyles } from '../src/styles';
 import { getImages } from '../src/services/image';
-import { SortController, isAtEnd } from '../src/utils/helpers';
+import { SortController, isAtEnd, getQueryString } from '../src/utils/helpers';
 import { SortMappings } from '../src/constants';
 import { useInfiniteScroll } from '../src/hooks';
 import { SortSelect } from '../src/components/SortSelect';
@@ -33,11 +33,8 @@ const pageSubtitle = 'Unfiltered list of all my favorite images.';
  * @param {number} pageQuery offset number of pagination request
  */
 const fetchImages = async (sortQuery, limitQuery, pageQuery) => {
-  const searchParams = new URLSearchParams();
-  if (limitQuery !== undefined) searchParams.append('limit', limitQuery);
-  if (pageQuery !== undefined) searchParams.append('page', pageQuery);
-  if (sortQuery !== undefined) searchParams.append('sort', sortQuery);
-  const route = `/api/images?${searchParams.toString()}`;
+  const queryDict = { sort: sortQuery, page: pageQuery, limit: limitQuery };
+  const route = `/api/images?${getQueryString(queryDict)}`;
   const res = await fetch(route);
   return res;
 };
