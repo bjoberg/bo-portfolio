@@ -57,7 +57,7 @@ const Images = (props) => {
     page,
     rows,
   } = images;
-  let sortQuery = defaultSort.query;
+
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
   const actionBarOptions = {
     title: appTitle,
@@ -79,6 +79,7 @@ const Images = (props) => {
   const [isAtEndOfImageList, setIsAtEndOfImageList] = useState(hasMoreData);
   const [currImagePage, setCurrImagePage] = useState(page);
   const [imageItems, setImageItems] = useState(rows);
+  const [sortQuery, setSortQuery] = useState(defaultSort.query);
 
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
@@ -113,22 +114,22 @@ const Images = (props) => {
   const handleSortSelectChange = async (e) => {
     const { value } = e.target;
     const sortObj = SortController.getSortById(value);
-    sortQuery = sortObj.query;
+    setSortQuery(sortObj.query);
 
     // Update the url
     Router.push(
-      { pathname: '/images', query: { sort: sortQuery } },
+      { pathname: '/images', query: { sort: sortObj.query } },
       undefined,
       { shallow: true },
     );
 
     // Request new data
-    const res = await fetchImages(sortQuery, limit, page);
+    const res = await fetchImages(sortObj.query, limit, 0);
     if (res.status === httpStatus.OK) {
       const json = await res.json();
       setImageItems(json.rows);
-      setIsAtEndOfImageList(isAtEnd(json.totalItems, json.limit, page));
-      setCurrImagePage(page);
+      setIsAtEndOfImageList(isAtEnd(json.totalItems, json.limit, 0));
+      setCurrImagePage(0);
     } else {
       setPageHasError(true);
     }
