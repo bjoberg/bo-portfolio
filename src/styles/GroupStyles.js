@@ -10,6 +10,9 @@ const GroupStyles = theme => ({
   subheader: {
     marginTop: theme.spacing(4),
   },
+  filters: {
+    marginBottom: theme.spacing(2),
+  },
   imageGridContainer: {
     marginTop: theme.spacing(8),
   },
