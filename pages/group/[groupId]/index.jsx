@@ -25,7 +25,7 @@ import { SortMappings } from '../../../src/constants';
 const useStyles = makeStyles(GroupStyles);
 
 /**
- * Fet a list of images in a group.
+ * Fetch a list of images in a group.
  *
  * @param {string} groupId id of the group to fetch image for
  * @param {string} sortQuery sort field and direction of request
