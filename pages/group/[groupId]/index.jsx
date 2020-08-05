@@ -128,11 +128,10 @@ const Group = (props) => {
     setSortQuery(sortObj.query);
 
     // update the url
-    Router.push(
-      { pathname: `/group/${id}`, query: { sort: sortObj.query } },
-      undefined,
-      { shallow: true },
-    );
+    const href = '/group/[groupId]';
+    const as = `/group/${id}?${sortObj.query}`;
+    const options = { shallow: true };
+    Router.replace(href, as, options);
 
     // Request new data
     const res = await fetchGroupImages(id, sortObj.query, limit, 0);

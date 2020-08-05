@@ -117,7 +117,7 @@ const Images = (props) => {
     setSortQuery(sortObj.query);
 
     // Update the url
-    Router.push(
+    Router.replace(
       { pathname: '/images', query: { sort: sortObj.query } },
       undefined,
       { shallow: true },
