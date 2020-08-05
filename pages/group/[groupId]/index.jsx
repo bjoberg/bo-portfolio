@@ -1,6 +1,7 @@
 import React, {
   createRef, Fragment, useState, useCallback,
 } from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import getConfig from 'next/config';
 import fetch from 'isomorphic-unfetch';
@@ -14,19 +15,48 @@ import SeoConfig from '../../../src/models/SeoConfig';
 import { ImageGrid } from '../../../src/components/ImageGrid';
 import { GroupStyles } from '../../../src/styles';
 import { getGroup, getGroupImages } from '../../../src/services/group';
-import { isAtEnd, goBack } from '../../../src/utils/helpers';
+import {
+  isAtEnd, goBack, getQueryString, SortController,
+} from '../../../src/utils/helpers';
 import { useInfiniteScroll } from '../../../src/hooks';
+import { SortSelect } from '../../../src/components/SortSelect';
+import { SortMappings } from '../../../src/constants';
 
 const useStyles = makeStyles(GroupStyles);
+
+/**
+ * Fetch a list of images in a group.
+ *
+ * @param {string} groupId id of the group to fetch image for
+ * @param {string} sortQuery sort field and direction of request
+ * @param {number} limitQuery limit number of pagination request
+ * @param {number} pageQuery limit number of pagination request
+ */
+const fetchGroupImages = async (groupId, sortQuery, limitQuery, pageQuery) => {
+  const queryDict = { sort: sortQuery, page: pageQuery, limit: limitQuery };
+  const route = `/api/group/${groupId}/images?${getQueryString(queryDict)}`;
+  const res = await fetch(route);
+  return res;
+};
 
 const Group = (props) => {
   const classes = useStyles();
   const imageGridRef = createRef();
   const {
-    appTitle, appEnv, rootUrl, group, hasError, images,
+    appTitle,
+    appEnv,
+    rootUrl,
+    group,
+    hasError,
+    sortOptions,
+    defaultSort,
+    images,
   } = props;
   const {
-    id, title, description, thumbnailUrl,
+    id,
+    title,
+    description,
+    thumbnailUrl,
   } = group;
   const {
     totalItems,
@@ -34,7 +64,13 @@ const Group = (props) => {
     page,
     rows,
   } = images;
+
   const hasMoreData = isAtEnd(totalItems, limit, page + 1);
+  const actionBarOptions = {
+    elevateOnScroll: true,
+    showBackButton: true,
+    handleBack: () => goBack('/groups'),
+  };
 
   // configure seo properties
   const url = `${rootUrl}/group/${id}`;
@@ -49,21 +85,17 @@ const Group = (props) => {
   const [isAtEndOfImageList, setIsAtEndOfImageList] = useState(hasMoreData);
   const [currImagePage, setCurrImagePage] = useState(images.page);
   const [imageItems, setImageItems] = useState(rows);
-
-  const actionBarOptions = {
-    elevateOnScroll: true,
-    showBackButton: true,
-    handleBack: () => goBack('/groups'),
-  };
+  const [sortQuery, setSortQuery] = useState(defaultSort.query);
 
   /**
-   * Request next page of images
+   * Request next page of images.
+   *
    * @param {Function} isFetching set the status of the fetching state
    */
   const handlePaginateImages = useCallback((isFetching) => {
     const paginateImages = async () => {
       const next = currImagePage + 1;
-      const result = await fetch(`/api/group/${id}/images?limit=${limit}&page=${next}`);
+      const result = await fetchGroupImages(id, sortQuery, limit, next);
       if (result.status === httpStatus.OK) {
         const json = await result.json();
         setImageItems(prevState => [...prevState, ...json.rows]);
@@ -76,7 +108,7 @@ const Group = (props) => {
       }
     };
     paginateImages();
-  }, [currImagePage, id, limit]);
+  }, [currImagePage, id, limit, sortQuery]);
 
   const [isLoadingImages] = useInfiniteScroll(
     handlePaginateImages,
@@ -84,6 +116,35 @@ const Group = (props) => {
     pageHasError,
     imageGridRef,
   );
+
+  /**
+   * Update the UI based on sort select change.
+   *
+   * @param {Event} e Event that triggered the change
+   */
+  const handleSortSelectChange = async (e) => {
+    const { value } = e.target;
+    const sortObj = SortController.getSortById(value);
+    setSortQuery(sortObj.query);
+
+    // update the url
+    Router.push(
+      { pathname: `/group/${id}`, query: { sort: sortObj.query } },
+      undefined,
+      { shallow: true },
+    );
+
+    // Request new data
+    const res = await fetchGroupImages(id, sortObj.query, limit, 0);
+    if (res.status === httpStatus.OK) {
+      const json = await res.json();
+      setImageItems(json.rows);
+      setIsAtEndOfImageList(json.totalItems, json.limit, 0);
+      setCurrImagePage(0);
+    } else {
+      setPageHasError(true);
+    }
+  };
 
   return (
     <Fragment>
@@ -98,6 +159,17 @@ const Group = (props) => {
             <div className={classes.subheader}>
               <Typography>{description}</Typography>
             </div>
+          </Grid>
+          <Grid item xs={12} className={classes.filters}>
+            <Grid container direction="row-reverse">
+              <Grid item>
+                <SortSelect
+                  handleChange={handleSortSelectChange}
+                  sortOptions={sortOptions}
+                  defaultSort={defaultSort}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <ImageGrid
@@ -117,6 +189,16 @@ Group.propTypes = {
   appTitle: PropTypes.string.isRequired,
   rootUrl: PropTypes.string.isRequired,
   hasError: PropTypes.bool,
+  sortOptions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  })).isRequired,
+  defaultSort: PropTypes.shape({
+    id: PropTypes.string,
+    query: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
   group: PropTypes.shape({
     id: PropTypes.string,
     thumbnailUrl: PropTypes.string,
@@ -151,14 +233,23 @@ Group.defaultProps = {
 };
 
 Group.getInitialProps = async ({ query }) => {
+  let hasError = false;
+  let group = null;
+  let images = null;
   const { publicRuntimeConfig } = getConfig();
   const { groupId } = query;
-  let hasError = false;
-  let group;
-  let images;
+  const sortOptions = [
+    SortMappings.captureDateDesc,
+    SortMappings.captureDateAsc,
+    SortMappings.createdAtDesc,
+    SortMappings.createdAtAsc,
+  ];
+  const fallBackSortQuery = SortMappings.captureDateDesc.query;
+  const sortQuery = SortController.getSortQuery(query.sort, fallBackSortQuery, sortOptions);
+
   try {
     group = await getGroup(groupId);
-    images = await getGroupImages(groupId);
+    images = await getGroupImages(groupId, sortQuery);
   } catch (error) {
     hasError = true;
   }
@@ -169,6 +260,8 @@ Group.getInitialProps = async ({ query }) => {
     hasError,
     group,
     images,
+    sortOptions,
+    defaultSort: SortController.getSortByQuery(sortQuery),
   };
 };
 
