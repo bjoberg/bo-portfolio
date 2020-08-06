@@ -34,11 +34,7 @@ const ActionBar = (props) => {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           {showMenuButton && (
-            <Box display={{
-              xs: 'block',
-              sm: 'none',
-            }}
-            >
+            <Box display={{ xs: 'block', sm: 'none' }}>
               <IconButton
                 className={classes.menuButton}
                 edge="start"
@@ -57,37 +53,35 @@ const ActionBar = (props) => {
               <ArrowBackIcon />
             </IconButton>
           )}
-          <div className={classes.titleContainer}>
-            <Box display={{
-              xs: 'none',
-              sm: 'block',
-            }}
-            >
-              <Grid container spacing={3} alignItems="center">
-                <Grid item>
-                  <Typography
-                    component="a"
-                    href="/"
-                    variant="h6"
-                    className={classes.title}
-                  >
-                    {title}
-                  </Typography>
+          <Grid container className="titleContainer" spacing={3} alignItems="center">
+            <Grid item>
+              <Typography
+                component="a"
+                href="/"
+                variant="h6"
+                className={classes.title}
+              >
+                {title}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Box display={{ xs: 'none', sm: 'block' }}>
+                <Grid container spacing={3} alignItems="center">
+                  {routes.map(route => (
+                    <Grid item key={route.id}>
+                      <Typography
+                        component="a"
+                        href={`/${route.route}`}
+                        className={classes.link}
+                      >
+                        {route.title}
+                      </Typography>
+                    </Grid>
+                  ))}
                 </Grid>
-                {routes.map(route => (
-                  <Grid item key={route.id}>
-                    <Typography
-                      component="a"
-                      href={`/${route.route}`}
-                      className={classes.link}
-                    >
-                      {route.title}
-                    </Typography>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          </div>
+              </Box>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     </ElevationScroll>

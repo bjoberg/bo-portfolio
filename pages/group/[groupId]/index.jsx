@@ -138,7 +138,7 @@ const Group = (props) => {
     if (res.status === httpStatus.OK) {
       const json = await res.json();
       setImageItems(json.rows);
-      setIsAtEndOfImageList(json.totalItems, json.limit, 0);
+      setIsAtEndOfImageList(isAtEnd(json.totalItems, json.limit, 0));
       setCurrImagePage(0);
     } else {
       setPageHasError(true);
