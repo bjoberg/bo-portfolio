@@ -7,12 +7,12 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          <link rel="shortcut icon" href="favicon.ico" />
-          <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-          <link rel="android-chrome" sizes="512x512" href="android-chrome-512x512.png" />
-          <link rel="android-chrome" sizes="192x192" href="android-chrome-192x192.png" />
-          <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link rel="android-chrome" sizes="512x512" href="/android-chrome-512x512.png" />
+          <link rel="android-chrome" sizes="192x192" href="/android-chrome-192x192.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
           <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet" as="font" />
         </Head>
         <body>
