@@ -1,6 +1,6 @@
 {
   "name": "bo-portfolio",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "description": "Brett Oberg's portfolio website",
   "scripts": {
     "dev": "next",
